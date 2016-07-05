@@ -75,7 +75,7 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
   }
 
   private void disableSecurityOnAssets(HttpSecurity http) throws Exception {
-    http.authorizeRequests().antMatchers("/img/**").permitAll();
+    http.authorizeRequests().antMatchers("/img/**", "/font/**").permitAll();
   }
 
   private void disableSecForDBConsole(HttpSecurity http) throws Exception {
