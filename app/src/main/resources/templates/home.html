@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <th:block th:include="fragments/header-head :: head"></th:block>
+</head>
+<header role="banner">
+    <!-- Primary navigation bar -->
+    <nav role="navigation" class="navbar navbar-inverse" id="main_nav">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button data-target="#orange-navbar-collapse" data-toggle="collapse" class="navbar-toggle"
+                        type="button">
+                    <span class="sr-only">Toggle navigation</span>
+                    <div class="menu_detail"></div>
+                    <!--<span class="icon-bar"></span>-->
+                    <!--<span class="icon-bar"></span>-->
+                </button>
+                <div class="navbar-toggle-complement">
+                    <ul role="tablist" class="nav navbar-nav">
+                        <li role="presentation">
+                            <a title="Search signe" href="#" data-toggle="modal" data-target="#search_modal">
+                                <div class="search_signe text-center"></div>
+                                <span class="text-hide">Search signe</span></a>
+                        </li>
+                        <!--<li role="presentation">-->
+                        <!--<a  title="Share signe" href="#"><div class="share_signe text-center"></div><span class="text-hide">Share signe</span></a>-->
+                        <!--</li>-->
+                    </ul>
+                </div>
+                <a href="/" class="text-center">
+                    <div class="logo_app pull-left"></div>
+                    <!--<h1 class="text-nowrap navbar_title">Signs@Work<span class="sr-only">Homepage</span> </h1>-->
+                </a>
+            </div>
+            <div class=" col-lg-12 navbar-right collapse navbar-collapse" id="orange-navbar-collapse">
+                <ul class=" nav navbar-nav" role="tablist">
+                    <li role="presentation" class="hidden-xs">
+                        <input type="search" placeholder="Rechercher&hellip;" class="border form-control">
+                    </li>
+                    <!--<li role="presentation" class="hidden-xs">-->
+                    <!--<a href="#">-->
+                    <!--<div class="  containerLeft_signes share_signe"></div>-->
+                    <!--<h4>Partager<span-->
+                    <!--class="hidden-lg form-group glyphicon glyphicon-menu-right pull-right"></span></h4>-->
+                    <!--</a>-->
+                    <!--</li>-->
+                    <li role="presentation" class="active"><a href="profil.html">
+                        <div class="  profil_signe pull-left"></div>
+                        <div class="pull-right">
+                            <div class="containerRight_signes">
+                                <div class="hidden-lg pull-right chevron_right    "></div>
+                            </div>
+                        </div>
+                        <h4>Profil</h4></a></li>
+                    <li role="presentation"><a href="communaute.html">
+                        <div class="  community_signe pull-left"></div>
+                        <div class="pull-right">
+                            <div class="containerRight_signes">
+                                <div class="hidden-lg pull-right chevron_right    "></div>
+                            </div>
+                        </div>
+                        <h4>Communauté</h4></a></li>
+                    <li role="presentation"><a href="#" data-toggle="modal" data-target="#add_favorite">
+                        <div class="  favorite_signe pull-left"></div>
+                        <div class="pull-right">
+                            <div class="containerRight_signes">
+                                <div class="hidden-lg pull-right chevron_right    "></div>
+                            </div>
+                        </div>
+                        <h4>Favoris</h4></a></li>
+                    <li role="presentation"><a href="#">
+                        <div class="  parameters_signe pull-left"></div>
+                        <div class="pull-right">
+                            <div class="containerRight_signes">
+                                <div class="hidden-lg pull-right chevron_right    "></div>
+                            </div>
+                        </div>
+                        <h4>Paramètres</h4></a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<body class="container-fluid">
+<div class="row ">
+
+    <div class="col-md-4 col-xs-12">
+        <aside class="sidebar">
+            <ul class="nav nav-list primary left-menu">
+                <li class="aside_bckg_li"><a href="listSignes.html">
+                    <div class="signe"></div>
+                    <div class="pull-right">
+                        <div class="containerRight_signes recent_signe">
+                            <!--<div class="pull-right chevron_right    "></div>-->
+                            <div id="container_badge_new_signe" class="  ">2</div>
+                        </div>
+                    </div>
+                    <h2>Signes</h2></a></li>
+                <li class="aside_bckg_li"><a data-target="#add_video" data-toggle="modal" href="#">
+                    <div class="pull-left suggest"></div>
+                    <div class="pull-right">
+                        <div class="containerRight_signes">
+                            <!--<div class="pull-right chevron_right    "></div>-->
+                            <div class="pull-right add_whith_chevron "></div>
+                        </div>
+                    </div>
+                    <h2>Proposer</h2></a></li>
+                <li class="aside_bckg_li"><a href="request.html">
+                    <div class="pull-left require"></div>
+                    <div class="pull-right">
+                        <div class="containerRight_signes">
+                            <!--<div class="pull-right chevron_right    "></div>-->
+                            <div class="pull-right add_whith_chevron "></div>
+                        </div>
+                    </div>
+                    <h2>Demander</h2></a></li>
+            </ul>
+        </aside>
+    </div>
+
+    <div class="text-center title_middle col-md-8 col-xs-12 middle-col ">
+        <a href="listSignes.html" type="text/html"><h2 class="backgroundColor">Liste des Signes</h2></a>
+
+        <div class="row ">
+            <div class="col-lg-3 col-md-4 col-xs-6 col-sm-4 ">
+                <div class="containerTooltip">
+                    <div class="pull-right tooltip_newSigne"></div>
+                </div>
+                <a href="signe.html" type="text/html">
+                    <object data="http://www.dailymotion.com/thumbnail/video/k66HURcmAzhyDaaNjFy"
+                            type="text/html"></object>
+                </a>
+                <p>Enregistrer dans Contacts par telsignes</p>
+            </div>
+            <div class="col-lg-3 col-md-4 col-xs-6 col-sm-4 ">
+                <div class="containerTooltip">
+                    <div class="pull-right tooltip_comment"></div>
+                </div>
+                <a href="detailed_signe.html" type="text/html">
+                    <object data="http://www.dailymotion.com/thumbnail/video/k4C2xFpONVs3xkaMEi0"
+                            type="text/html"></object>
+                </a>
+                <p>Architecture dans Contacts par telsignes</p>
+            </div>
+            <div class="col-lg-3 col-md-4 col-xs-6 col-sm-4 ">
+                <div class="containerTooltip">
+                    <div class="pull-right tooltip_newSigne"></div>
+                </div>
+                <a href="detailed_signe.html" type="text/html">
+                    <object data="http://www.dailymotion.com/thumbnail/video/k4C2xFpONVs3xkaMEi0"
+                            type="text/html"></object>
+                </a>
+                <p>Architecture dans Contacts par telsignes</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="search_modal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <div class="pull-left">
+                        <div class="search_signe pull-left"></div>
+                        <h4 class="  pull-right  ">Rechercher</h4>
+                    </div>
+                </div>
+                <div class="modal-body text-center ">
+                    <div class="picto_search"></div>
+                    <input type="text" class="text-center border form-control" placeholder="Saisir un mot">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="">Rechercher</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!--ajout du'une video-->
+    <div id="add_video" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <div class="pull-left">
+                        <div class="require pull-left"></div>
+                        <h4 class="  pull-right  ">Proposer un signe</h4>
+                    </div>
+                </div>
+                <div class="modal-body text-center">
+                    <input type="text" class="text-center border form-control" placeholder="Saisir le nom"></br>
+                    <input type="text" class="text-center border form-control" placeholder="Saisir URL de la video">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="">Continuer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--modal add favorite or list -->
+    <div id="add_favorite" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class=" modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <div class="pull-left">
+                        <div class="add_favorite_signe pull-left"></div>
+                        <h4 class="  pull-right">Ajouter à</h4>
+                    </div>
+                    <!--<div   class="add_favorite_signe"><h4 class="text-center modal-title"> Ajouter à</h4></div>-->
+                </div>
+                <div class="modal-body text-center">
+                    <ul class="nav nav-list primary left-menu">
+                        <li class="aside_bckg_li"><a href="#" data-toggle="modal" data-target="#create">
+                            <div class="pull-right">
+                                <div class="containerRight_signes">
+                                    <div class="pull-right add    "></div>
+                                </div>
+                            </div>
+                            <h4>Créer nouvelle liste</h4></a></li>
+
+                        <li class="aside_bckg_li"><a href="favorite.html">
+                            <div class="pull-right">
+                                <div class="containerRight_signes">
+                                    <div class="pull-right add_favorite_signe    "></div>
+                                </div>
+                            </div>
+                            <h4>Favoris</h4></a></li>
+                        <li class="aside_bckg_li"><a href="favorite.html">
+                            <div class="pull-right">
+                                <div class="containerRight_signes">
+                                    <div class="pull-right   "></div>
+                                </div>
+                            </div>
+                            <h4>Interfaces</h4></a></li>
+                        <li class="aside_bckg_li"><a href="favorite.html">
+                            <div class="pull-right">
+                                <div class="containerRight_signes">
+                                    <div class="pull-right     "></div>
+                                </div>
+                            </div>
+                            <h4>Discussion</h4></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>
