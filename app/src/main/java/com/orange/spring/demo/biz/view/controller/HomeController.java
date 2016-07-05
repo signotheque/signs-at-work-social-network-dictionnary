@@ -72,7 +72,7 @@ public class HomeController {
   @RequestMapping("/")
   public String index(Principal principal, Model model) {
     setAuthenticated(principal, model);
-    model.addAttribute("title", messageByLocaleService.getMessage("welcome"));
+    model.addAttribute("title", messageByLocaleService.getMessage("app_name"));
     return "index";
   }
 
