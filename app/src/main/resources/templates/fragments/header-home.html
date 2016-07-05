@@ -55,6 +55,61 @@
                     <li role="presentation" class="hidden-xs">
                         <input type="search" placeholder="Rechercher&hellip;" class="border form-control"/>
                     </li>
+                    <li th:if="${!isAuthenticated}" role="presentation" class="active">
+                        <a th:href="@{/login}">
+                            <h4 th:text="#{signin}"/>
+                        </a>
+                    </li>
+                    <li th:if="${isAuthenticated}" role="presentation" class="active">
+                        <form th:action="@{/logout}" method = "post">
+                            <button class="btn btn-secondary" type="submit" th:text="#{logout}"></button>
+                        </form>
+                    </li>
+                    <li th:if="${isAuthenticated}" role="presentation" class="active">
+                        <a href="profil.html">
+                            <div class="  profil_signe pull-left"></div>
+                            <div class="pull-right">
+                                <div class="containerRight_signes">
+                                    <div class="hidden-lg pull-right chevron_right"></div>
+                                </div>
+                            </div>
+                            <h4>Profil</h4>
+                        </a>
+                    </li>
+                    <li th:if="${isAuthenticated}" role="presentation">
+                        <a href="communaute.html">
+                            <div class="  community_signe pull-left"></div>
+                            <div class="pull-right">
+                                <div class="containerRight_signes">
+                                    <div class="hidden-lg pull-right chevron_right"></div>
+                                </div>
+                            </div>
+                            <h4>Communauté</h4>
+                        </a>
+                    </li>
+                    <li th:if="${isAuthenticated}" role="presentation">
+                        <a href="#" data-toggle="modal"
+                           data-target="#add_favorite">
+                            <div class="  favorite_signe pull-left"></div>
+                            <div class="pull-right">
+                                <div class="containerRight_signes">
+                                    <div class="hidden-lg pull-right chevron_right"></div>
+                                </div>
+                            </div>
+                            <h4>Favoris</h4>
+                        </a>
+                    </li>
+                    <li th:if="${isAuthenticated}" role="presentation">
+                        <a href="#">
+                            <div class="  parameters_signe pull-left"></div>
+                            <div class="pull-right">
+                                <div class="containerRight_signes">
+                                    <div class="hidden-lg pull-right chevron_right"></div>
+                                </div>
+                            </div>
+                            <h4>Paramètres</h4>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>

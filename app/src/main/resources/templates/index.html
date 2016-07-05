@@ -4,12 +4,7 @@
     <th:block th:include="fragments/header-head :: head"></th:block>
 </head>
 
-<div th:if="${isAuthenticated}">
-<header role="banner" th:replace="fragments/header-home-authenticated :: header">&nbsp;</header>
-</div>
-<div th:if="${!isAuthenticated}">
 <header role="banner" th:replace="fragments/header-home :: header">&nbsp;</header>
-</div>
 
 <body class="container-fluid">
 <div class="row ">
@@ -21,25 +16,24 @@
                     <div class="signe"></div>
                     <div class="pull-right">
                         <div class="containerRight_signes recent_signe">
-                            <!--<div class="pull-right chevron_right    "></div>-->
-                            <div id="container_badge_new_signe" class="  ">2</div>
+                            <div id="container_badge_new_signe">2</div>
                         </div>
                     </div>
                     <h2>Signes</h2></a></li>
-                <li class="aside_bckg_li"><a data-target="#add_video" data-toggle="modal" href="#">
+                <li th:if="${isAuthenticated}" class="aside_bckg_li">
+                    <a data-target="#add_video" data-toggle="modal" href="#">
                     <div class="pull-left suggest"></div>
                     <div class="pull-right">
                         <div class="containerRight_signes">
-                            <!--<div class="pull-right chevron_right    "></div>-->
-                            <div class="pull-right add_whith_chevron "></div>
+                            <div class="pull-right add_whith_chevron"></div>
                         </div>
                     </div>
                     <h2>Proposer</h2></a></li>
-                <li class="aside_bckg_li"><a href="request.html">
+                <li th:if="${isAuthenticated}" class="aside_bckg_li">
+                    <a href="request.html">
                     <div class="pull-left require"></div>
                     <div class="pull-right">
                         <div class="containerRight_signes">
-                            <!--<div class="pull-right chevron_right    "></div>-->
                             <div class="pull-right add_whith_chevron "></div>
                         </div>
                     </div>
@@ -49,7 +43,9 @@
     </div>
 
     <div class="text-center title_middle col-md-8 col-xs-12 middle-col ">
-        <a href="listSignes.html" type="text/html"><h2 class="backgroundColor">Liste des Signes</h2></a>
+        <a href="listSignes.html" type="text/html">
+            <h2 class="backgroundColor">Liste des Signes</h2>
+        </a>
 
         <div class="row ">
             <div class="col-lg-3 col-md-4 col-xs-6 col-sm-4 ">
@@ -110,7 +106,7 @@
         </div>
     </div>
     <!--ajout du'une video-->
-    <div id="add_video" class="modal fade" role="dialog">
+    <div th:if="${isAuthenticated}" id="add_video" class="modal fade" role="dialog">
         <div class="modal-dialog">
 
             <!-- Modal content-->
@@ -134,7 +130,7 @@
     </div>
 
     <!--modal add favorite or list -->
-    <div id="add_favorite" class="modal fade" role="dialog">
+    <div th:if="${isAuthenticated}" id="add_favorite" class="modal fade" role="dialog">
         <div class="modal-dialog">
             <!-- Modal content-->
             <div class="modal-content">
