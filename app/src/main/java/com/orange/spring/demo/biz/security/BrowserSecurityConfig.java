@@ -45,6 +45,7 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 
   private void configureRoutes(HttpSecurity http) throws Exception {
     disableSecurityOnWebJars(http);
+    disableSecurityOnAssets(http);
     disableSecForDBConsole(http);
 
     http
@@ -71,6 +72,10 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 
   private void disableSecurityOnWebJars(HttpSecurity http) throws Exception {
     http.authorizeRequests().antMatchers("/webjars/**").permitAll();
+  }
+
+  private void disableSecurityOnAssets(HttpSecurity http) throws Exception {
+    http.authorizeRequests().antMatchers("/img/**").permitAll();
   }
 
   private void disableSecForDBConsole(HttpSecurity http) throws Exception {
