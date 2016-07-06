@@ -12,167 +12,142 @@
     <div class="col-md-4 col-xs-12">
         <aside class="sidebar">
             <ul class="nav nav-list primary left-menu">
-                <li class="aside_bckg_li"><a href="listSignes.html">
-                    <div class="signe"></div>
-                    <div class="pull-right">
-                        <div class="containerRight_signes recent_signe">
-                            <div id="container_badge_new_signe">2</div>
+                <li class="aside_bckg_li">
+                    <a href="listSignes.html">
+                        <div class="signe"></div>
+                        <div class="pull-right">
+                            <div class="containerRight_signes recent_signe">
+                                <div id="container_badge_new_signe" th:text="${#lists.size(signs)}">2</div>
+                            </div>
                         </div>
-                    </div>
-                    <h2>Signes</h2></a></li>
+                        <h2>Signes (FIXME: pas traduit !)</h2>
+                    </a>
+                </li>
                 <li th:if="${isAuthenticated}" class="aside_bckg_li">
                     <a data-target="#add_video" data-toggle="modal" href="#">
-                    <div class="pull-left suggest"></div>
-                    <div class="pull-right">
-                        <div class="containerRight_signes">
-                            <div class="pull-right add_whith_chevron"></div>
+                        <div class="pull-left suggest"></div>
+                        <div class="pull-right">
+                            <div class="containerRight_signes">
+                                <div class="pull-right add_whith_chevron"></div>
+                            </div>
                         </div>
-                    </div>
-                    <h2>Proposer</h2></a></li>
+                        <h2>Proposer (FIXME: pas traduit !)</h2>
+                    </a>
+                </li>
                 <li th:if="${isAuthenticated}" class="aside_bckg_li">
                     <a href="request.html">
-                    <div class="pull-left require"></div>
-                    <div class="pull-right">
-                        <div class="containerRight_signes">
-                            <div class="pull-right add_whith_chevron "></div>
+                        <div class="pull-left require"></div>
+                        <div class="pull-right">
+                            <div class="containerRight_signes">
+                                <div class="pull-right add_whith_chevron "></div>
+                            </div>
                         </div>
-                    </div>
-                    <h2>Demander</h2></a></li>
+                        <h2>Demander (FIXME: pas traduit !)</h2>
+                    </a>
+                </li>
             </ul>
         </aside>
     </div>
 
     <div class="text-center title_middle col-md-8 col-xs-12 middle-col ">
         <a href="listSignes.html" type="text/html">
-            <h2 class="backgroundColor">Liste des Signes</h2>
+            <h2 class="backgroundColor">Liste des Signes (FIXME: pas traduit !)</h2>
         </a>
 
-        <div class="row ">
-            <div class="col-lg-3 col-md-4 col-xs-6 col-sm-4 ">
+        <div th:if="${not #lists.isEmpty(signs)}" class="row">
+            <div th:each="sign:${signs}" class="col-lg-3 col-md-4 col-xs-6 col-sm-4">
                 <div class="containerTooltip">
                     <div class="pull-right tooltip_newSigne"></div>
                 </div>
-                <a href="signe.html" type="text/html">
-                    <object data="http://www.dailymotion.com/thumbnail/video/k66HURcmAzhyDaaNjFy"
-                            type="text/html"></object>
-                </a>
-                <p>Enregistrer dans Contacts par telsignes</p>
-            </div>
-            <div class="col-lg-3 col-md-4 col-xs-6 col-sm-4 ">
-                <div class="containerTooltip">
-                    <div class="pull-right tooltip_comment"></div>
+                <div th:remove="tag" th:each="video, stats:${sign.videos.list()}" th:if="${stats.first}">
+                    <iframe th:src="${video.url}" frameborder="0" width="480" height="270" allowfullscreen=""/>
                 </div>
-                <a href="detailed_signe.html" type="text/html">
-                    <object data="http://www.dailymotion.com/thumbnail/video/k4C2xFpONVs3xkaMEi0"
-                            type="text/html"></object>
-                </a>
-                <p>Architecture dans Contacts par telsignes</p>
+                <p th:text="${sign.name}"/>
             </div>
-            <div class="col-lg-3 col-md-4 col-xs-6 col-sm-4 ">
-                <div class="containerTooltip">
-                    <div class="pull-right tooltip_newSigne"></div>
-                </div>
-                <a href="detailed_signe.html" type="text/html">
-                    <object data="http://www.dailymotion.com/thumbnail/video/k4C2xFpONVs3xkaMEi0"
-                            type="text/html"></object>
-                </a>
-                <p>Architecture dans Contacts par telsignes</p>
-            </div>
+        </div>
+        <div th:if="${#lists.isEmpty(signs)}">
+            <h2>Aucun signe disponible, veuillez en ajouter (FIXME: pas traduit !)</h2>
         </div>
     </div>
 
-    <!-- Modal -->
-    <div id="search_modal" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <div class="pull-left">
-                        <div class="search_signe pull-left"></div>
-                        <h4 class="  pull-right  ">Rechercher</h4>
-                    </div>
-                </div>
-                <div class="modal-body text-center ">
-                    <div class="picto_search"></div>
-                    <input type="text" class="text-center border form-control" placeholder="Saisir un mot"/>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="">Rechercher</button>
-                </div>
-            </div>
-
-        </div>
-    </div>
-    <!--ajout du'une video-->
+    <!-- Modal: add new sign with associated video -->
     <div th:if="${isAuthenticated}" id="add_video" class="modal fade" role="dialog">
         <div class="modal-dialog">
-
-            <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <div class="pull-left">
                         <div class="require pull-left"></div>
-                        <h4 class="  pull-right  ">Proposer un signe</h4>
+                        <h4 class="pull-right">Proposer un signe (FIXME: pas traduit !)</h4>
                     </div>
                 </div>
                 <div class="modal-body text-center">
-                    <input type="text" class="text-center border form-control" placeholder="Saisir le nom"/><br/>
-                    <input type="text" class="text-center border form-control" placeholder="Saisir URL de la video"/>
+                    <input id="signName" type="text" class="text-center border form-control"
+                           placeholder="Saisir le nom (FIXME: pas traduit !)"/><br/>
+                    <input id="videoUrl" type="text" class="text-center border form-control"
+                           placeholder="Saisir URL de la video (FIXME: pas traduit !)"/>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="">Continuer</button>
+                    <button id="addNewSign" type="button" class="btn btn-default" data-dismiss="">Continuer (FIXME: pas traduit !)</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!--modal add favorite or list -->
+    <!-- Modal: add favorite or list -->
     <div th:if="${isAuthenticated}" id="add_favorite" class="modal fade" role="dialog">
         <div class="modal-dialog">
-            <!-- Modal content-->
             <div class="modal-content">
                 <div class=" modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <div class="pull-left">
                         <div class="add_favorite_signe pull-left"></div>
-                        <h4 class="  pull-right">Ajouter à</h4>
+                        <h4 class="pull-right">Ajouter à (FIXME: pas traduit !)</h4>
                     </div>
-                    <!--<div   class="add_favorite_signe"><h4 class="text-center modal-title"> Ajouter à</h4></div>-->
                 </div>
                 <div class="modal-body text-center">
                     <ul class="nav nav-list primary left-menu">
-                        <li class="aside_bckg_li"><a href="#" data-toggle="modal" data-target="#create">
-                            <div class="pull-right">
-                                <div class="containerRight_signes">
-                                    <div class="pull-right add    "></div>
+                        <li class="aside_bckg_li">
+                            <a href="#" data-toggle="modal" data-target="#create">
+                                <div class="pull-right">
+                                    <div class="containerRight_signes">
+                                        <div class="pull-right add"></div>
+                                    </div>
                                 </div>
-                            </div>
-                            <h4>Créer nouvelle liste</h4></a></li>
+                                <h4>Créer nouvelle liste (FIXME: pas traduit !)</h4>
+                            </a>
+                        </li>
 
-                        <li class="aside_bckg_li"><a href="favorite.html">
-                            <div class="pull-right">
-                                <div class="containerRight_signes">
-                                    <div class="pull-right add_favorite_signe    "></div>
+                        <li class="aside_bckg_li">
+                            <a href="favorite.html">
+                                <div class="pull-right">
+                                    <div class="containerRight_signes">
+                                        <div class="pull-right add_favorite_signe"></div>
+                                    </div>
                                 </div>
-                            </div>
-                            <h4>Favoris</h4></a></li>
-                        <li class="aside_bckg_li"><a href="favorite.html">
-                            <div class="pull-right">
-                                <div class="containerRight_signes">
-                                    <div class="pull-right   "></div>
+                                <h4>Favoris (FIXME: pas traduit !)</h4>
+                            </a>
+                        </li>
+                        <li class="aside_bckg_li">
+                            <a href="favorite.html">
+                                <div class="pull-right">
+                                    <div class="containerRight_signes">
+                                        <div class="pull-right"></div>
+                                    </div>
                                 </div>
-                            </div>
-                            <h4>Interfaces</h4></a></li>
-                        <li class="aside_bckg_li"><a href="favorite.html">
-                            <div class="pull-right">
-                                <div class="containerRight_signes">
-                                    <div class="pull-right     "></div>
+                                <h4>Interfaces (FIXME: pas traduit !)</h4>
+                            </a>
+                        </li>
+                        <li class="aside_bckg_li">
+                            <a href="favorite.html">
+                                <div class="pull-right">
+                                    <div class="containerRight_signes">
+                                        <div class="pull-right"></div>
+                                    </div>
                                 </div>
-                            </div>
-                            <h4>Discussion</h4></a></li>
+                                <h4>Discussion (FIXME: pas traduit !)</h4>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -181,4 +156,5 @@
 </div>
 </body>
 
+<script type="text/javascript" src="../public/js/home.js" th:src="@{/js/home.js}"></script>
 </html>

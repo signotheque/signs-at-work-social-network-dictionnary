@@ -22,9 +22,9 @@ package com.orange.spring.demo.biz.webservice.controller;
  * #L%
  */
 
+import com.orange.spring.demo.biz.domain.User;
 import com.orange.spring.demo.biz.persistence.service.UserService;
-import com.orange.spring.demo.biz.view.model.UserCreationView;
-import com.orange.spring.demo.biz.view.model.UserView;
+import com.orange.spring.demo.biz.webservice.model.SignCreationView;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import java.security.Principal;
 
 /**
  * Types that carry this annotation are treated as controllers where @RequestMapping
@@ -42,20 +42,19 @@ import java.util.List;
 @Slf4j
 @RestController
 /** Rest controller: returns a json body */
-public class UserController {
+public class SignController {
 
   @Autowired
-  private UserService userService;
+  UserService userService;
+
+  // FIXME: more logic to have a SignService to create the sign...
 
   @Secured("ROLE_USER")
-  @RequestMapping(RestApi.WS_SEC_GET_USERS)
-  public List<UserView> users() {
-    return UserView.from(userService.all());
-  }
+  @RequestMapping(value = RestApi.WS_SEC_SIGN_CREATE, method = RequestMethod.POST)
+  public void createSign(@RequestBody SignCreationView signCreationView, Principal principal) {
+    User user = userService.withUserName(principal.getName());
+    userService.createUserSignVideo(user.id, signCreationView.getSignName(), signCreationView.getVideoUrl());
 
-  @Secured("ROLE_ADMIN")
-  @RequestMapping(value = RestApi.WS_ADMIN_USER_CREATE, method = RequestMethod.POST)
-  public void user(@RequestBody UserCreationView userCreationView) {
-    userService.create(userCreationView.toUser(), userCreationView.getPassword());
+    log.info("createSign: username = {} / sign name = {} / video url = {}", user.username, signCreationView.getSignName(), signCreationView.getVideoUrl());
   }
 }

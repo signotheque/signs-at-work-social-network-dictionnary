@@ -73,6 +73,9 @@ public class HomeController {
   public String index(Principal principal, Model model) {
     setAuthenticated(principal, model);
     model.addAttribute("title", messageByLocaleService.getMessage("app_name"));
+    List<SignView> signsView = SignView.from(signService.all());
+    model.addAttribute("signs", signsView);
+
     return "index";
   }
 
@@ -94,17 +97,6 @@ public class HomeController {
     model.addAttribute("title", messageByLocaleService.getMessage("communities"));
     model.addAttribute("communities", CommunityView.from(communityService.all()));
     return "communities";
-  }
-
-  @Secured("ROLE_USER")
-  @RequestMapping("/signs")
-  public String signs(Model model) {
-
-    setAuthenticated(true, model);
-    model.addAttribute("title", messageByLocaleService.getMessage("signs"));
-    List<SignView> signsView = SignView.from(signService.all());
-    model.addAttribute("signs", signsView);
-    return "signs";
   }
 
   @Secured("ROLE_USER")

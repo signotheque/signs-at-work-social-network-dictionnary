@@ -19,4 +19,29 @@
  * <http://www.gnu.org/licenses/gpl-2.0.html>.
  * #L%
  */
-console.log("Cool, app.js is loaded :)");
+var addNewSignUrl = "/ws/sec/sign/create";
+
+function addNewSign() {
+    var signName, videoUrl, json, xhr;
+
+    signName = $("#signName").val();
+    videoUrl = $("#videoUrl").val();
+    json = JSON.stringify(
+        { signName: signName, videoUrl: videoUrl }
+    );
+
+    xhr = $.ajax({
+      type: "POST",
+      url: addNewSignUrl,
+      data: json,
+      contentType: "application/json; charset=utf-8",
+    })
+    .success(function () {
+      console.log("success");
+    })
+    .error(function () {
+      console.log("error: " + xhr.responseText);
+    });
+};
+
+$("#addNewSign").click(addNewSign);
