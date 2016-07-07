@@ -32,13 +32,21 @@
         <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
-                <button data-target="#orange-navbar-collapse" data-toggle="collapse" class="navbar-toggle"
+                    <ul class="hidden-lg nav navbar-nav pull-right" role="tablist">
+                        <li th:if="${!isAuthenticated}" role="presentation" class="">
+                        <a th:href="@{/login}">
+                            <h4 th:text="#{signin}"/>
+                        </a>
+                    </li></ul>
+
+                <button th:if="${isAuthenticated}" data-target="#orange-navbar-collapse" data-toggle="collapse" class="navbar-toggle"
                         type="button">
                     <span class="sr-only">Toggle navigation (FIXME: pas traduit !)</span>
                     <div class="menu_detail"></div>
                 </button>
+
                 <div class="navbar-toggle-complement">
-                    <ul role="tablist" class="nav navbar-nav">
+                    <ul th:if="${isAuthenticated}" role="tablist" class="nav navbar-nav">
                         <li role="presentation">
                             <a title="Search signe" href="#" data-toggle="modal" data-target="#search_modal">
                                 <div class="search_signe text-center"></div>
@@ -55,7 +63,7 @@
                     <li role="presentation" class="hidden-xs">
                         <input type="search" placeholder="Rechercher&hellip; (FIXME: pas traduit !)" class="border form-control"/>
                     </li>
-                    <li th:if="${!isAuthenticated}" role="presentation" class="active">
+                    <li th:if="${!isAuthenticated}" role="presentation" class="">
                         <a th:href="@{/login}">
                             <h4 th:text="#{signin}"/>
                         </a>
