@@ -1,4 +1,4 @@
-package com.orange.spring.demo.biz.view.controller;
+package com.orange.spring.demo.biz.view.controller.admin;
 
 /*
  * #%L
@@ -43,7 +43,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
-public class FavoriteController {
+public class FavoriteAdminController {
 
   @Autowired
   private FavoriteService favoriteService;
@@ -52,21 +52,21 @@ public class FavoriteController {
   @Autowired
   MessageByLocaleService messageByLocaleService;
 
-  @Secured("ROLE_USER")
-  @RequestMapping(value = "/sec/favorite/{id}")
+  @Secured("ROLE_ADMIN")
+  @RequestMapping(value = "/sec/admin/favorite/{id}")
   public String favoriteDetails(@PathVariable long id, Model model) {
     Favorite favorite = favoriteService.withId(id);
 
     AuthentModel.addAuthenticatedModel(model, true);
     model.addAttribute("title", messageByLocaleService.getMessage("favorite_details"));
     FavoriteProfileView favoriteProfileView = new FavoriteProfileView(favorite, signService);
-    model.addAttribute("favoriteProfileView", favoriteProfileView);;
+    model.addAttribute("favoriteProfileView", favoriteProfileView);
 
-    return "favorite";
+    return "admin/favorite";
   }
 
-  @Secured("ROLE_USER")
-  @RequestMapping(value = "/sec/favorite/{favoriteId}/add/signs", method = RequestMethod.POST)
+  @Secured("ROLE_ADMIN")
+  @RequestMapping(value = "/sec/admin/favorite/{favoriteId}/add/signs", method = RequestMethod.POST)
   public String changeFavoriteSigns(
           HttpServletRequest req, @PathVariable long favoriteId, Model model) {
 

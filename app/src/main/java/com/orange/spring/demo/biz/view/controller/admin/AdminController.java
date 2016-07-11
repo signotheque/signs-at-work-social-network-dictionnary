@@ -1,4 +1,4 @@
-package com.orange.spring.demo.biz.view.controller;
+package com.orange.spring.demo.biz.view.controller.admin;
 
 /*
  * #%L
@@ -27,6 +27,7 @@ import com.orange.spring.demo.biz.domain.User;
 import com.orange.spring.demo.biz.persistence.service.CommunityService;
 import com.orange.spring.demo.biz.persistence.service.MessageByLocaleService;
 import com.orange.spring.demo.biz.persistence.service.UserService;
+import com.orange.spring.demo.biz.view.controller.UserController;
 import com.orange.spring.demo.biz.view.model.AuthentModel;
 import com.orange.spring.demo.biz.view.model.CommunityView;
 import com.orange.spring.demo.biz.view.model.UserCreationView;
@@ -43,7 +44,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class AdminController {
 
   @Autowired
-  private UserController userController;
+  private UserAdminController userAdminController;
 
   @Autowired
   private UserService userService;
@@ -60,7 +61,7 @@ public class AdminController {
     // for thymeleaf form management
     model.addAttribute("user", new UserCreationView());
     model.addAttribute("community", new CommunityView());
-    return "admin";
+    return "admin/index";
   }
 
   @Secured("ROLE_ADMIN")
@@ -69,7 +70,7 @@ public class AdminController {
     AuthentModel.addAuthenticatedModel(model, true);
     model.addAttribute("title", messageByLocaleService.getMessage("communities"));
     model.addAttribute("communities", CommunityView.from(communityService.all()));
-    return "communities";
+    return "admin/communities";
   }
 
   @Secured("ROLE_ADMIN")
@@ -79,14 +80,14 @@ public class AdminController {
     AuthentModel.addAuthenticatedModel(model, true);
     model.addAttribute("title", messageByLocaleService.getMessage("community_details"));
     model.addAttribute("community", community);
-    return "community";
+    return "admin/community";
   }
 
   @Secured("ROLE_ADMIN")
   @RequestMapping(value = "/sec/admin/user/create", method = RequestMethod.POST)
   public String user(@ModelAttribute UserCreationView userCreationView, Model model) {
     User user = userService.create(userCreationView.toUser(), userCreationView.getPassword());
-    return userController.userDetails(user.id, model);
+    return userAdminController.userDetails(user.id, model);
   }
 
   @Secured("ROLE_ADMIN")

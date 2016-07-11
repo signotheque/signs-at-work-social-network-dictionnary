@@ -1,4 +1,4 @@
-package com.orange.spring.demo.biz.view.controller;
+package com.orange.spring.demo.biz.view.controller.admin;
 
 /*
  * #%L
@@ -45,7 +45,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 
 @Controller
-public class VideoController {
+public class VideoAdminController {
 
   @Autowired
   private UserService userService;
@@ -56,8 +56,8 @@ public class VideoController {
   @Autowired
   MessageByLocaleService messageByLocaleService;
 
-  @Secured("ROLE_USER")
-  @RequestMapping(value = "/sec/video/{id}")
+  @Secured("ROLE_ADMIN")
+  @RequestMapping(value = "/sec/admin/video/{id}")
   public String videoDetails(@PathVariable long id, Model model) {
     Video video = videoService.withId(id);
 
@@ -72,11 +72,11 @@ public class VideoController {
     Comments comments = commentService.forVideo(video.id);
     model.addAttribute("allCommentView", comments.list());
 
-    return "video";
+    return "admin/video";
   }
 
-  @Secured("ROLE_USER")
-  @RequestMapping(value = "/sec/video/{videoId}/add/comment", method = RequestMethod.POST)
+  @Secured("ROLE_ADMIN")
+  @RequestMapping(value = "/sec/admin/video/{videoId}/add/comment", method = RequestMethod.POST)
   public String createVideoComment(
           HttpServletRequest req, @PathVariable long videoId, Model model, Principal principal) {
 
@@ -88,8 +88,8 @@ public class VideoController {
     return videoDetails(videoId, model);
   }
 
-  @Secured("ROLE_USER")
-  @RequestMapping(value = "/sec/video/{videoId}/add/rating", method = RequestMethod.POST)
+  @Secured("ROLE_ADMIN")
+  @RequestMapping(value = "/sec/admin/video/{videoId}/add/rating", method = RequestMethod.POST)
   public String createVideoRating(
           HttpServletRequest req, @PathVariable long videoId, Model model, Principal principal) {
 

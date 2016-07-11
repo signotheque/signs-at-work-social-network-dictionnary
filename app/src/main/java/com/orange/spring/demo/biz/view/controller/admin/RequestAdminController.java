@@ -1,4 +1,4 @@
-package com.orange.spring.demo.biz.view.controller;
+package com.orange.spring.demo.biz.view.controller.admin;
 
 /*
  * #%L
@@ -39,7 +39,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
-public class RequestController {
+public class RequestAdminController {
 
   @Autowired
   private RequestService requestService;
@@ -48,8 +48,8 @@ public class RequestController {
   @Autowired
   MessageByLocaleService messageByLocaleService;
 
-  @Secured("ROLE_USER")
-  @RequestMapping(value = "/sec/request/{id}")
+  @Secured("ROLE_ADMIN")
+  @RequestMapping(value = "/sec/admin/request/{id}")
   public String requestDetails(@PathVariable long id, Model model) {
     Request request = requestService.withId(id);
 
@@ -58,11 +58,11 @@ public class RequestController {
     RequestProfileView requestProfileView = new RequestProfileView(request, signService);
     model.addAttribute("requestProfileView", requestProfileView);
 
-    return "request";
+    return "admin/request";
   }
 
-  @Secured("ROLE_USER")
-  @RequestMapping(value = "/sec/request/{requestId}/add/sign", method = RequestMethod.POST)
+  @Secured("ROLE_ADMIN")
+  @RequestMapping(value = "/sec/admin/request/{requestId}/add/sign", method = RequestMethod.POST)
   public String changeSignRequest(
           HttpServletRequest req, @PathVariable long requestId, Model model) {
 
