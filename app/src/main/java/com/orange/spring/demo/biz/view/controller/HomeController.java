@@ -23,10 +23,6 @@ package com.orange.spring.demo.biz.view.controller;
  */
 
 import com.orange.spring.demo.biz.domain.*;
-import com.orange.spring.demo.biz.persistence.model.RequestDB;
-import com.orange.spring.demo.biz.persistence.model.UserDB;
-import com.orange.spring.demo.biz.persistence.repository.RequestRepository;
-import com.orange.spring.demo.biz.persistence.repository.UserRepository;
 import com.orange.spring.demo.biz.persistence.service.*;
 import com.orange.spring.demo.biz.security.AppSecurityAdmin;
 import com.orange.spring.demo.biz.view.model.*;
@@ -34,7 +30,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -43,11 +38,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static java.lang.String.valueOf;
 
 @Controller
 public class HomeController {
@@ -71,7 +63,7 @@ public class HomeController {
 
   @RequestMapping("/")
   public String index(Principal principal, Model model) {
-    setAuthenticated(principal, model);
+    model.addAllAttributes(SecurityController.authentModel(principal, userService));
     model.addAttribute("title", messageByLocaleService.getMessage("app_name"));
     List<SignView> signsView = SignView.from(signService.all());
     model.addAttribute("signs", signsView);
@@ -83,20 +75,10 @@ public class HomeController {
   @RequestMapping("/users")
   public String users(Model model) {
 
-    setAuthenticated(true, model);
+    model.addAllAttributes(SecurityController.authenticatedModel(true));
     model.addAttribute("title", messageByLocaleService.getMessage("users"));
     model.addAttribute("users", UserView.from(userService.all()));
     return "users";
-  }
-
-  @Secured("ROLE_ADMIN")
-  @RequestMapping("/communities")
-  public String communities(Model model) {
-
-    setAuthenticated(true, model);
-    model.addAttribute("title", messageByLocaleService.getMessage("communities"));
-    model.addAttribute("communities", CommunityView.from(communityService.all()));
-    return "communities";
   }
 
   @Secured("ROLE_USER")
@@ -104,7 +86,7 @@ public class HomeController {
   public String userDetails(@PathVariable long id, Model model) {
     User user = userService.withId(id);
 
-    setAuthenticated(true, model);
+    model.addAllAttributes(SecurityController.authenticatedModel(true));
     model.addAttribute("title", messageByLocaleService.getMessage("user_details"));
 
     UserProfileView userProfileView = new UserProfileView(user, communityService);
@@ -122,7 +104,7 @@ public class HomeController {
   public String videoDetails(@PathVariable long id, Model model) {
     Video video = videoService.withId(id);
 
-    setAuthenticated(true, model);
+    model.addAllAttributes(SecurityController.authenticatedModel(true));
     model.addAttribute("title", messageByLocaleService.getMessage("video_details"));
 
     VideoView videoView = VideoView.from(video);
@@ -142,7 +124,7 @@ public class HomeController {
   public String signDetails(@PathVariable long id, Model model) {
     Sign sign = signService.withIdForAssociate(id);
 
-    setAuthenticated(true, model);
+    model.addAllAttributes(SecurityController.authenticatedModel(true));
     model.addAttribute("title", messageByLocaleService.getMessage("sign_details"));
 
     SignProfileView signProfileView = new SignProfileView(sign, signService);
@@ -156,7 +138,7 @@ public class HomeController {
   public String favoriteDetails(@PathVariable long id, Model model) {
     Favorite favorite = favoriteService.withId(id);
 
-    setAuthenticated(true, model);
+    model.addAllAttributes(SecurityController.authenticatedModel(true));
     model.addAttribute("title", messageByLocaleService.getMessage("favorite_details"));
     FavoriteProfileView favoriteProfileView = new FavoriteProfileView(favorite, signService);
     model.addAttribute("favoriteProfileView", favoriteProfileView);;
@@ -169,7 +151,7 @@ public class HomeController {
   public String requestDetails(@PathVariable long id, Model model) {
     Request request = requestService.withId(id);
 
-    setAuthenticated(true, model);
+    model.addAllAttributes(SecurityController.authenticatedModel(true));
     model.addAttribute("title", messageByLocaleService.getMessage("request_details"));
     RequestProfileView requestProfileView = new RequestProfileView(request, signService);
     model.addAttribute("requestProfileView", requestProfileView);;
@@ -336,62 +318,5 @@ public class HomeController {
     userService.createUserSignVideo(userId, signName, signUrl);
 
     return userDetails(userId, model);
-  }
-
-  @Secured("ROLE_ADMIN")
-  @RequestMapping(value = "/community/{id}")
-  public String community(@PathVariable long id, Model model) {
-
-    Community community = communityService.withId(id);
-    setAuthenticated(true, model);
-    model.addAttribute("title", messageByLocaleService.getMessage("community_details"));
-    model.addAttribute("community", community);
-    return "community";
-  }
-
-  @Secured("ROLE_ADMIN")
-  @RequestMapping("/admin")
-  public String admin(Model model) {
-    setAuthenticated(true, model);
-    model.addAttribute("title", messageByLocaleService.getMessage("admin_page"));
-    // for thymeleaf form management
-    model.addAttribute("user", new UserCreationView());
-    model.addAttribute("community", new CommunityView());
-    return "admin";
-  }
-
-  @Secured("ROLE_ADMIN")
-  @RequestMapping(value = "/admin/user/create", method = RequestMethod.POST)
-  public String user(@ModelAttribute UserCreationView userCreationView, Model model) {
-    User user = userService.create(userCreationView.toUser(), userCreationView.getPassword());
-    return userDetails(user.id, model);
-  }
-
-  @Secured("ROLE_ADMIN")
-  @RequestMapping(value = "/admin/community/create", method = RequestMethod.POST)
-  public String community(@ModelAttribute CommunityView communityView, Model model) {
-    Community community = communityService.create(communityView.toCommunity());
-    return  community(community.id, model);
-
-  }
-
-
-  private void setAuthenticated(Principal principal, Model model) {
-    boolean authenticated = principal != null && principal.getName() != null;
-    setAuthenticated(authenticated, model);
-    model.addAttribute("authenticatedUsername",
-            authenticated ? principal.getName() : "Please sign in");
-    model.addAttribute("isAdmin", authenticated && isAdmin(principal));
-    if ((authenticated) && !(isAdmin(principal))) {
-      model.addAttribute("user", userService.withUserName(principal.getName()));
-    }
-  }
-
-  private void setAuthenticated(boolean isAuthenticated, Model model) {
-    model.addAttribute("isAuthenticated", isAuthenticated);
-  }
-
-  private boolean isAdmin(Principal principal) {
-    return AppSecurityAdmin.isAdmin(principal.getName());
   }
 }

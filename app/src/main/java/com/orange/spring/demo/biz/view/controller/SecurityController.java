@@ -22,8 +22,14 @@ package com.orange.spring.demo.biz.view.controller;
  * #L%
  */
 
+import com.orange.spring.demo.biz.persistence.service.UserService;
+import com.orange.spring.demo.biz.security.AppSecurityAdmin;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.security.Principal;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 public class SecurityController {
@@ -31,5 +37,27 @@ public class SecurityController {
   @RequestMapping("/login")
   public String login() {
     return "login";
+  }
+
+  static Map<String, Object> authentModel(Principal principal, UserService userService) {
+    boolean authenticated = principal != null && principal.getName() != null;
+    Map<String, Object> modelMap = authenticatedModel(authenticated);
+    modelMap.put("authenticatedUsername",
+            authenticated ? principal.getName() : "Please sign in");
+    modelMap.put("isAdmin", authenticated && isAdmin(principal));
+    if (authenticated && !isAdmin(principal)) {
+      modelMap.put("user", userService.withUserName(principal.getName()));
+    }
+    return modelMap;
+  }
+
+  static Map<String, Object> authenticatedModel(boolean isAuthenticated) {
+    Map<String, Object> modelMap = new HashMap<>();
+    modelMap.put("isAuthenticated", isAuthenticated);
+    return modelMap;
+  }
+
+  private static boolean isAdmin(Principal principal) {
+    return AppSecurityAdmin.isAdmin(principal.getName());
   }
 }

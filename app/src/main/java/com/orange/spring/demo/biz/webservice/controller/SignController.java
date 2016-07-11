@@ -47,8 +47,6 @@ public class SignController {
   @Autowired
   UserService userService;
 
-  // FIXME: more logic to have a SignService to create the sign...
-
   @Secured("ROLE_USER")
   @RequestMapping(value = RestApi.WS_SEC_SIGN_CREATE, method = RequestMethod.POST)
   public void createSign(@RequestBody SignCreationView signCreationView, Principal principal) {
