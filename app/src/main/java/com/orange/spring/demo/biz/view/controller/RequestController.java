@@ -49,7 +49,7 @@ public class RequestController {
   MessageByLocaleService messageByLocaleService;
 
   @Secured("ROLE_USER")
-  @RequestMapping(value = "/request/{id}")
+  @RequestMapping(value = "/sec/request/{id}")
   public String requestDetails(@PathVariable long id, Model model) {
     Request request = requestService.withId(id);
 
@@ -62,7 +62,7 @@ public class RequestController {
   }
 
   @Secured("ROLE_USER")
-  @RequestMapping(value = "/request/{requestId}/add/sign", method = RequestMethod.POST)
+  @RequestMapping(value = "/sec/request/{requestId}/add/sign", method = RequestMethod.POST)
   public String changeSignRequest(
           HttpServletRequest req, @PathVariable long requestId, Model model) {
 

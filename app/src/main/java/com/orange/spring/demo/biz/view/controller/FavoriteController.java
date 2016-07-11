@@ -53,7 +53,7 @@ public class FavoriteController {
   MessageByLocaleService messageByLocaleService;
 
   @Secured("ROLE_USER")
-  @RequestMapping(value = "/favorite/{id}")
+  @RequestMapping(value = "/sec/favorite/{id}")
   public String favoriteDetails(@PathVariable long id, Model model) {
     Favorite favorite = favoriteService.withId(id);
 
@@ -66,7 +66,7 @@ public class FavoriteController {
   }
 
   @Secured("ROLE_USER")
-  @RequestMapping(value = "/favorite/{favoriteId}/add/signs", method = RequestMethod.POST)
+  @RequestMapping(value = "/sec/favorite/{favoriteId}/add/signs", method = RequestMethod.POST)
   public String changeFavoriteSigns(
           HttpServletRequest req, @PathVariable long favoriteId, Model model) {
 

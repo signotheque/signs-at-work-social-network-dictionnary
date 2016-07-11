@@ -56,26 +56,7 @@ public class AdminController {
   MessageByLocaleService messageByLocaleService;
 
   @Secured("ROLE_ADMIN")
-  @RequestMapping("/communities")
-  public String communities(Model model) {
-    AuthentModel.addAuthenticatedModel(model, true);
-    model.addAttribute("title", messageByLocaleService.getMessage("communities"));
-    model.addAttribute("communities", CommunityView.from(communityService.all()));
-    return "communities";
-  }
-
-  @Secured("ROLE_ADMIN")
-  @RequestMapping(value = "/community/{id}")
-  public String community(@PathVariable long id, Model model) {
-    Community community = communityService.withId(id);
-    AuthentModel.addAuthenticatedModel(model, true);
-    model.addAttribute("title", messageByLocaleService.getMessage("community_details"));
-    model.addAttribute("community", community);
-    return "community";
-  }
-
-  @Secured("ROLE_ADMIN")
-  @RequestMapping("/admin")
+  @RequestMapping("/sec/admin")
   public String admin(Model model) {
     AuthentModel.addAuthenticatedModel(model, true);
     model.addAttribute("title", messageByLocaleService.getMessage("admin_page"));
@@ -86,14 +67,33 @@ public class AdminController {
   }
 
   @Secured("ROLE_ADMIN")
-  @RequestMapping(value = "/admin/user/create", method = RequestMethod.POST)
+  @RequestMapping("/sec/admin/communities")
+  public String communities(Model model) {
+    AuthentModel.addAuthenticatedModel(model, true);
+    model.addAttribute("title", messageByLocaleService.getMessage("communities"));
+    model.addAttribute("communities", CommunityView.from(communityService.all()));
+    return "communities";
+  }
+
+  @Secured("ROLE_ADMIN")
+  @RequestMapping(value = "/sec/admin/community/{id}")
+  public String community(@PathVariable long id, Model model) {
+    Community community = communityService.withId(id);
+    AuthentModel.addAuthenticatedModel(model, true);
+    model.addAttribute("title", messageByLocaleService.getMessage("community_details"));
+    model.addAttribute("community", community);
+    return "community";
+  }
+
+  @Secured("ROLE_ADMIN")
+  @RequestMapping(value = "/sec/admin/user/create", method = RequestMethod.POST)
   public String user(@ModelAttribute UserCreationView userCreationView, Model model) {
     User user = userService.create(userCreationView.toUser(), userCreationView.getPassword());
     return userController.userDetails(user.id, model);
   }
 
   @Secured("ROLE_ADMIN")
-  @RequestMapping(value = "/admin/community/create", method = RequestMethod.POST)
+  @RequestMapping(value = "/sec/admin/community/create", method = RequestMethod.POST)
   public String community(@ModelAttribute CommunityView communityView, Model model) {
     Community community = communityService.create(communityView.toCommunity());
     return community(community.id, model);

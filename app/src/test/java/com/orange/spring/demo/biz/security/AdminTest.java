@@ -62,7 +62,7 @@ public class AdminTest {
   @Test
   public void adminUnavailableForAll() throws Exception {
     mockMvc
-            .perform(get("/admin"))
+            .perform(get("/sec/admin"))
             .andExpect(status().is3xxRedirection())
             .andExpect(redirectedUrlPattern("**/login"));
   }
@@ -71,7 +71,7 @@ public class AdminTest {
   @WithMockUser
   public void adminUnavailableForUserNonAdmin() throws Exception {
     mockMvc
-            .perform(get("/admin"))
+            .perform(get("/sec/admin"))
             .andExpect(status().isForbidden());
   }
 
@@ -79,7 +79,7 @@ public class AdminTest {
   @WithMockUser(username = AppSecurityAdmin.ADMIN_USERNAME, password = AppSecurityAdmin.ADMIN_PASSWORD, roles = "ADMIN")
   public void adminAvailableForAdmin() throws Exception {
     mockMvc
-            .perform(get("/admin"))
+            .perform(get("/sec/admin"))
             .andExpect(status().isOk());
   }
 
@@ -89,7 +89,7 @@ public class AdminTest {
     mockMvc
             // do
             .perform(
-                    post("/admin/user/create").with(csrf())
+                    post("/sec/admin/user/create").with(csrf())
                             .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                             .param("username", "titi")
                             .param("password", "toto")
@@ -106,7 +106,7 @@ public class AdminTest {
     mockMvc
             // do
             .perform(
-                    post("/admin/user/create").with(csrf())
+                    post("/sec/admin/user/create").with(csrf())
                             .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                             .param("username", "titi")
                             .param("password", "toto")
@@ -122,7 +122,7 @@ public class AdminTest {
     mockMvc
             // do
             .perform(
-                    post("/admin/user/create").with(csrf())
+                    post("/sec/admin/user/create").with(csrf())
                             .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                             .param("username", "titi")
                             .param("password", "toto")

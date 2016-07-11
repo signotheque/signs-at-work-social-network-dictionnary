@@ -55,7 +55,7 @@ public class UserController {
   MessageByLocaleService messageByLocaleService;
 
   @Secured("ROLE_USER")
-  @RequestMapping("/users")
+  @RequestMapping("/sec/users")
   public String users(Model model) {
 
     AuthentModel.addAuthenticatedModel(model, true);
@@ -65,7 +65,7 @@ public class UserController {
   }
 
   @Secured("ROLE_USER")
-  @RequestMapping(value = "/user/{id}")
+  @RequestMapping(value = "/sec/user/{id}")
   public String userDetails(@PathVariable long id, Model model) {
     User user = userService.withId(id);
 
@@ -83,7 +83,7 @@ public class UserController {
   }
 
   @Secured("ROLE_USER")
-  @RequestMapping(value = "/user/{userId}/add/communities", method = RequestMethod.POST)
+  @RequestMapping(value = "/sec/user/{userId}/add/communities", method = RequestMethod.POST)
   /**
    * We retrieve all form parameters directly from the raw request since in this case
    * we can not rely on a json object deserialization.
@@ -118,7 +118,7 @@ public class UserController {
   }
 
   @Secured("ROLE_USER")
-  @RequestMapping(value = "/user/{userId}/add/request", method = RequestMethod.POST)
+  @RequestMapping(value = "/sec/user/{userId}/add/request", method = RequestMethod.POST)
   public String createUserRequest(
           HttpServletRequest req, @PathVariable long userId, Model model) {
 
@@ -132,7 +132,7 @@ public class UserController {
   }
 
   @Secured("ROLE_USER")
-  @RequestMapping(value = "/user/{userId}/add/favorite", method = RequestMethod.POST)
+  @RequestMapping(value = "/sec/user/{userId}/add/favorite", method = RequestMethod.POST)
   public String createUserFavorite(
           HttpServletRequest req, @PathVariable long userId, Model model) {
 

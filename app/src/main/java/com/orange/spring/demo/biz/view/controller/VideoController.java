@@ -57,7 +57,7 @@ public class VideoController {
   MessageByLocaleService messageByLocaleService;
 
   @Secured("ROLE_USER")
-  @RequestMapping(value = "/video/{id}")
+  @RequestMapping(value = "/sec/video/{id}")
   public String videoDetails(@PathVariable long id, Model model) {
     Video video = videoService.withId(id);
 
@@ -76,7 +76,7 @@ public class VideoController {
   }
 
   @Secured("ROLE_USER")
-  @RequestMapping(value = "/video/{videoId}/add/comment", method = RequestMethod.POST)
+  @RequestMapping(value = "/sec/video/{videoId}/add/comment", method = RequestMethod.POST)
   public String createVideoComment(
           HttpServletRequest req, @PathVariable long videoId, Model model, Principal principal) {
 
@@ -89,7 +89,7 @@ public class VideoController {
   }
 
   @Secured("ROLE_USER")
-  @RequestMapping(value = "/video/{videoId}/add/rating", method = RequestMethod.POST)
+  @RequestMapping(value = "/sec/video/{videoId}/add/rating", method = RequestMethod.POST)
   public String createVideoRating(
           HttpServletRequest req, @PathVariable long videoId, Model model, Principal principal) {
 

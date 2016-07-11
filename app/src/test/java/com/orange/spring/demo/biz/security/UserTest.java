@@ -59,7 +59,7 @@ public class UserTest {
   @Test
   public void userUnavailableForAll() throws Exception {
     mockMvc
-            .perform(get("/user/1"))
+            .perform(get("/sec/user/1"))
             .andExpect(status().is3xxRedirection())
             .andExpect(redirectedUrlPattern("**/login"));
   }
@@ -68,7 +68,7 @@ public class UserTest {
   @WithMockUser
   public void userAvailableForAuthenticated() throws Exception {
     mockMvc
-            .perform(get("/user/1"))
+            .perform(get("/sec/user/1"))
             .andExpect(status().isOk());
   }
 }
