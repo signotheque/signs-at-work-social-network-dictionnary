@@ -32,6 +32,7 @@ import com.orange.spring.demo.biz.persistence.service.UserService;
 import com.orange.spring.demo.biz.security.AppSecurityAdmin;
 import com.orange.spring.demo.biz.security.AppSecurityRoles;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
 import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -43,6 +44,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService, ApplicationListener<AuthenticationSuccessEvent> {
@@ -70,7 +72,15 @@ public class UserServiceImpl implements UserService, ApplicationListener<Authent
 
   @Override
   public User withUserName(String userName) {
-    return userFrom(userRepository.findByUsername(userName).get(0));
+    List<UserDB> userDBList = userRepository.findByUsername(userName);
+    if (userDBList.size() == 1) {
+      return userFrom(userRepository.findByUsername(userName).get(0));
+    } else {
+      String err = "Error while retrieving user with username = '" + userName + "' (list size = " + userDBList.size() + ")";
+      RuntimeException e = new IllegalStateException(err);
+      log.error(err, e);
+      throw e;
+    }
   }
 
   @Override

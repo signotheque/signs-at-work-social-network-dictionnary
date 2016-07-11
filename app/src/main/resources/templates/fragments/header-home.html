@@ -92,7 +92,7 @@
                                     <div class="hidden-lg pull-right chevron_right"></div>
                                 </div>
                             </div>
-                            <h4>Communauté (FIXME: pas traduit !)</h4>
+                            <h4 th:text="#{communities}"></h4>
                         </a>
                     </li>
                     <li th:if="${isAuthenticated}" role="presentation">
@@ -104,7 +104,7 @@
                                     <div class="hidden-lg pull-right chevron_right"></div>
                                 </div>
                             </div>
-                            <h4>Favoris (FIXME: pas traduit !)</h4>
+                            <h4 th:text="#{favorites}"></h4>
                         </a>
                     </li>
                     <li th:if="${isAuthenticated}" role="presentation">
@@ -115,7 +115,7 @@
                                     <div class="hidden-lg pull-right chevron_right"></div>
                                 </div>
                             </div>
-                            <h4>Paramètres (FIXME: pas traduit !)</h4>
+                            <h4 th:text="#{settings}"></h4>
                         </a>
                     </li>
                 </ul>

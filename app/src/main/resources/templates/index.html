@@ -20,7 +20,7 @@
                                 <div id="container_badge_new_signe" th:text="${#lists.size(signs)}">2</div>
                             </div>
                         </div>
-                        <h2>Signes (FIXME: pas traduit !)</h2>
+                        <h2 th:text="#{signs}"></h2>
                     </a>
                 </li>
                 <li th:if="${isAuthenticated}" class="aside_bckg_li">
@@ -31,7 +31,7 @@
                                 <div class="pull-right add_whith_chevron"></div>
                             </div>
                         </div>
-                        <h2>Proposer (FIXME: pas traduit !)</h2>
+                        <h2 th:text="#{suggest}"></h2>
                     </a>
                 </li>
                 <li th:if="${isAuthenticated}" class="aside_bckg_li">
@@ -42,7 +42,7 @@
                                 <div class="pull-right add_whith_chevron "></div>
                             </div>
                         </div>
-                        <h2>Demander (FIXME: pas traduit !)</h2>
+                        <h2 th:text="#{request}"></h2>
                     </a>
                 </li>
             </ul>
@@ -51,7 +51,7 @@
 
     <div class="text-center title_middle col-md-8 col-xs-12 middle-col ">
         <a href="listSignes.html" type="text/html">
-            <h2 class="backgroundColor">Liste des Signes (FIXME: pas traduit !)</h2>
+            <h2 class="backgroundColor" th:text="#{signs_list}"></h2>
         </a>
 
         <div th:if="${not #lists.isEmpty(signs)}" class="row">
@@ -66,7 +66,7 @@
             </div>
         </div>
         <div th:if="${#lists.isEmpty(signs)}">
-            <h2>Aucun signe disponible, veuillez en ajouter (FIXME: pas traduit !)</h2>
+            <h2 th:text="#{no_signs_available}"></h2>
         </div>
     </div>
 
@@ -78,17 +78,17 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <div class="pull-left">
                         <div class="require pull-left"></div>
-                        <h4 class="pull-right">Proposer un signe (FIXME: pas traduit !)</h4>
+                        <h4 class="pull-right" th:text="#{suggest_a_sign}"></h4>
                     </div>
                 </div>
                 <div class="modal-body text-center">
                     <input id="signName" type="text" class="text-center border form-control"
-                           placeholder="Saisir le nom (FIXME: pas traduit !)"/><br/>
+                           th:placeholder="#{enter_sign_name}"/><br/>
                     <input id="videoUrl" type="text" class="text-center border form-control"
-                           placeholder="Saisir URL de la video (FIXME: pas traduit !)"/>
+                           th:placeholder="#{enter_video_url}"/>
                 </div>
                 <div class="modal-footer">
-                    <button id="addNewSign" type="button" class="btn btn-default" data-dismiss="">Continuer (FIXME: pas traduit !)</button>
+                    <button th:text="continue" id="addNewSign" type="button" class="btn btn-default" data-dismiss=""></button>
                 </div>
             </div>
         </div>
@@ -102,7 +102,7 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <div class="pull-left">
                         <div class="add_favorite_signe pull-left"></div>
-                        <h4 class="pull-right">Ajouter à (FIXME: pas traduit !)</h4>
+                        <h4 class="pull-right" th:text="#{add_to}"></h4>
                     </div>
                 </div>
                 <div class="modal-body text-center">
@@ -114,7 +114,7 @@
                                         <div class="pull-right add"></div>
                                     </div>
                                 </div>
-                                <h4>Créer nouvelle liste (FIXME: pas traduit !)</h4>
+                                <h4 th:text="#{create_new_list}"></h4>
                             </a>
                         </li>
 
@@ -125,7 +125,7 @@
                                         <div class="pull-right add_favorite_signe"></div>
                                     </div>
                                 </div>
-                                <h4>Favoris (FIXME: pas traduit !)</h4>
+                                <h4 th:text="#{favorites}"></h4>
                             </a>
                         </li>
                         <li class="aside_bckg_li">
@@ -156,5 +156,5 @@
 </div>
 </body>
 
-<script type="text/javascript" src="../public/js/home.js" th:src="@{/js/home.js}"></script>
+<script type="text/javascript" th:src="@{/js/home.js}"></script>
 </html>
