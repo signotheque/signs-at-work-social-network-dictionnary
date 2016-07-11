@@ -37,6 +37,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -55,6 +56,16 @@ public class UserController {
   MessageByLocaleService messageByLocaleService;
 
   @Secured("ROLE_USER")
+  @RequestMapping(value = "/sec/profile")
+  public String userDetails(Principal principal, Model model) {
+    User user = userService.withUserName(principal.getName());
+    model.addAttribute("title", messageByLocaleService.getMessage("profile"));
+    model.addAttribute("user", user);
+    return "profile";
+  }
+
+  // FIXME: TO BE REMOVED?
+  @Secured("ROLE_USER")
   @RequestMapping("/sec/users")
   public String users(Model model) {
 
@@ -64,6 +75,7 @@ public class UserController {
     return "users";
   }
 
+  // FIXME: TO BE REMOVED?
   @Secured("ROLE_USER")
   @RequestMapping(value = "/sec/user/{id}")
   public String userDetails(@PathVariable long id, Model model) {

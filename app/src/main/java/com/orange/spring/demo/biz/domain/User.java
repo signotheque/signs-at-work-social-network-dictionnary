@@ -48,6 +48,10 @@ public class User {
   private final RequestService requestService;
   private final FavoriteService favoriteService;
 
+  public String name() {
+    return firstName + " " + lastName;
+  }
+
   public User loadCommunitiesRequestsFavorites() {
     return communities != null || requests != null || favorites != null ?
             this :

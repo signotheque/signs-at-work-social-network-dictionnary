@@ -22,10 +22,14 @@ package com.orange.spring.demo.biz.view.controller;
  * #L%
  */
 
-import com.orange.spring.demo.biz.domain.*;
-import com.orange.spring.demo.biz.persistence.service.*;
-import com.orange.spring.demo.biz.security.AppSecurityAdmin;
-import com.orange.spring.demo.biz.view.model.*;
+import com.orange.spring.demo.biz.domain.Community;
+import com.orange.spring.demo.biz.domain.User;
+import com.orange.spring.demo.biz.persistence.service.CommunityService;
+import com.orange.spring.demo.biz.persistence.service.MessageByLocaleService;
+import com.orange.spring.demo.biz.persistence.service.UserService;
+import com.orange.spring.demo.biz.view.model.AuthentModel;
+import com.orange.spring.demo.biz.view.model.CommunityView;
+import com.orange.spring.demo.biz.view.model.UserCreationView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
@@ -34,13 +38,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
-import javax.servlet.http.HttpServletRequest;
-import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 public class AdminController {

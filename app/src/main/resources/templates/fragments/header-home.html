@@ -74,14 +74,14 @@
                         </a>
                     </li>
                     <li th:if="${isAuthenticated}" role="presentation" class="active">
-                        <a href="profil.html">
+                        <a th:href="@{/sec/profile}">
                             <div class="  profil_signe pull-left"></div>
                             <div class="pull-right">
                                 <div class="containerRight_signes">
                                     <div class="hidden-lg pull-right chevron_right"></div>
                                 </div>
                             </div>
-                            <h4>Profil (FIXME: pas traduit !)</h4>
+                            <h4 th:text="#{profile}"></h4>
                         </a>
                     </li>
                     <li th:if="${isAuthenticated}" role="presentation">
