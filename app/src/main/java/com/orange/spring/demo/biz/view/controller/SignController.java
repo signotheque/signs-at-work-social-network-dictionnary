@@ -62,6 +62,18 @@ public class SignController {
   @Autowired
   MessageByLocaleService messageByLocaleService;
 
+  @RequestMapping(value = "/signs")
+  public String signs(Model model) {
+    List<SignView> signsView = SignView.from(signService.all());
+    model.addAttribute("signs", signsView);
+    return "signs";
+  }
+
+
+
+
+
+  /************************************************** DEBUG ***********************************************************/
   @Secured("ROLE_USER")
   @RequestMapping(value = "/sec/sign/{id}")
   public String signDetails(@PathVariable long id, Model model) {
@@ -73,7 +85,7 @@ public class SignController {
     SignProfileView signProfileView = new SignProfileView(sign, signService);
     model.addAttribute("signProfileView", signProfileView);
 
-    return "sign";
+    return "debug_sign";
   }
 
   @Secured("ROLE_USER")

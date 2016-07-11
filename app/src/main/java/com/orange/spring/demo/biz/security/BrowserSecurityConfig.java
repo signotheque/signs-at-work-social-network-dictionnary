@@ -54,7 +54,7 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
             // configure restricting access
             .authorizeRequests()
             // open api is... opened
-            .antMatchers("/").permitAll()
+            .antMatchers("/", "/signs").permitAll()
             // admin api restricted to... ADMIN
             .antMatchers("/sec/admin/**").hasRole("ADMIN")
             // and the rest is allowed by any authenticated user

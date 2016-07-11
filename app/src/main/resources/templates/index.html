@@ -13,7 +13,7 @@
         <aside class="sidebar">
             <ul class="nav nav-list primary left-menu">
                 <li class="aside_bckg_li">
-                    <a href="listSignes.html">
+                    <a th:href="@{/signs}">
                         <div class="signe"></div>
                         <div class="pull-right">
                             <div class="containerRight_signes recent_signe">
@@ -50,7 +50,7 @@
     </div>
 
     <div class="text-center title_middle col-md-8 col-xs-12 middle-col ">
-        <a href="listSignes.html" type="text/html">
+        <a th:href="@{/signs}" type="text/html">
             <h2 class="backgroundColor" th:text="#{signs_list}"></h2>
         </a>
 
