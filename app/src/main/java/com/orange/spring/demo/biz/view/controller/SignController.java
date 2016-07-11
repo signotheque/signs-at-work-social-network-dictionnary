@@ -10,12 +10,12 @@ package com.orange.spring.demo.biz.view.controller;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 2 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-2.0.html>.
@@ -23,22 +23,32 @@ package com.orange.spring.demo.biz.view.controller;
  */
 
 import com.orange.spring.demo.biz.domain.Sign;
+import com.orange.spring.demo.biz.domain.User;
 import com.orange.spring.demo.biz.persistence.service.MessageByLocaleService;
 import com.orange.spring.demo.biz.persistence.service.SignService;
+import com.orange.spring.demo.biz.persistence.service.UserService;
 import com.orange.spring.demo.biz.view.model.AuthentModel;
 import com.orange.spring.demo.biz.view.model.SignProfileView;
 import com.orange.spring.demo.biz.view.model.SignView;
+import com.orange.spring.demo.biz.webservice.controller.RestApi;
+import com.orange.spring.demo.biz.webservice.model.SignCreationView;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.List;
 
+@Slf4j
 @Controller
 public class SignController {
+
+  @Autowired
+  private UserService userService;
 
   @Autowired
   private SignService signService;
@@ -52,6 +62,8 @@ public class SignController {
 
     List<SignView> signsView = SignView.from(signService.all());
     model.addAttribute("signs", signsView);
+    model.addAttribute("signCreationView", new SignCreationView());
+
     return "signs";
   }
 
@@ -67,5 +79,16 @@ public class SignController {
     model.addAttribute("signProfileView", signProfileView);
 
     return "sign";
+  }
+
+  @Secured("ROLE_USER")
+  @RequestMapping(value = "/sec/sign/create", method = RequestMethod.POST)
+  public String createSign(HttpServletRequest req, @ModelAttribute SignCreationView signCreationView, Principal principal, Model model) {
+    User user = userService.withUserName(principal.getName());
+    Sign sign = userService.createUserSignVideo(user.id, signCreationView.getSignName(), signCreationView.getVideoUrl());
+
+    log.info("createSign: username = {} / sign name = {} / video url = {}", user.username, signCreationView.getSignName(), signCreationView.getVideoUrl());
+
+    return "redirect:/sign/" + sign.id;
   }
 }

@@ -10,12 +10,12 @@ package com.orange.spring.demo.biz.view.controller;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 2 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-2.0.html>.
@@ -27,6 +27,8 @@ import com.orange.spring.demo.biz.persistence.service.SignService;
 import com.orange.spring.demo.biz.persistence.service.UserService;
 import com.orange.spring.demo.biz.view.model.AuthentModel;
 import com.orange.spring.demo.biz.view.model.SignView;
+import com.orange.spring.demo.biz.view.model.UserCreationView;
+import com.orange.spring.demo.biz.webservice.model.SignCreationView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -52,6 +54,7 @@ public class HomeController {
     model.addAttribute("title", messageByLocaleService.getMessage("app_name"));
     List<SignView> signsView = SignView.from(signService.all());
     model.addAttribute("signs", signsView);
+    model.addAttribute("signCreationView", new SignCreationView());
 
     return "index";
   }
