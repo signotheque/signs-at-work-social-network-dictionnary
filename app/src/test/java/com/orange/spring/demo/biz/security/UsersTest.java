@@ -27,14 +27,17 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrlPattern;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -42,6 +45,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class UsersTest {
+
+  private static final String USERS_URL = "/sec/admin/users";
+
   @Autowired
   private WebApplicationContext context;
 
@@ -59,16 +65,25 @@ public class UsersTest {
   @Test
   public void usersNotAvailableForAll() throws Exception {
     mockMvc
-            .perform(get("/sec/users"))
+            .perform(get(USERS_URL))
             .andExpect(status().is3xxRedirection())
             .andExpect(redirectedUrlPattern("**/login"));
   }
 
   @Test
   @WithMockUser
-  public void usersAvailableForAuthenticated() throws Exception {
+  public void usersNotAvailableForAuthenticated() throws Exception {
     mockMvc
-            .perform(get("/sec/users"))
+            .perform(get(USERS_URL))
+            .andExpect(status().isForbidden());
+  }
+
+  @Test
+  @WithMockUser(username = AppSecurityAdmin.ADMIN_USERNAME, password = AppSecurityAdmin.ADMIN_PASSWORD, roles = "ADMIN")
+  public void usersAvailableForAdmin() throws Exception {
+    // given
+    mockMvc
+            .perform(get(USERS_URL))
             .andExpect(status().isOk());
   }
 }
