@@ -32,31 +32,10 @@
         <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
-                <div class="navbar-toggle-complement">
-                    <ul role="tablist" class="nav navbar-nav">
-                        <li role="presentation">
-                            <a title="Search signe" href="#" data-toggle="modal" data-target="#search_modal">
-                                <div class="search_signe text-center"></div>
-                                <span class="text-hide" th:text="#{sign.search}"></span></a>
-                        </li>
-                        <li role="presentation">
-                            <a title="add signe" href="#" data-toggle="modal" data-target="#add_video">
-                                <div class="add text-center"></div>
-                                <span class="text-hide" th:text="#{sign.add}"></span>
-                            </a>
-                        </li>
-                        <li role="presentation">
-                            <a title="request signe" href="request.html">
-                                <div class="require_video_inverse text-center"></div>
-                                <span class="text-hide" th:text="#{sign.request}"></span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
                 <a href="/" class="col-lg-5" id="backtoHomepage">
                     <div class="chevron_left pull-left"></div>
                 </a>
-                <div class="col-xs-1 dropdown">
+                <div th:if="${isAuthenticated}" class="col-xs-1 dropdown">
                     <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                         Signes FIXME
@@ -95,7 +74,7 @@
                     <li role="presentation" class="hidden-xs">
                         <input type="search" th:placeholder="#{search} + '&hellip;'" class="border form-control"/>
                     </li>
-                    <li role="presentation" class="active">
+                    <li th:if="${isAuthenticated}" role="presentation" class="active">
                         <a href="#" data-toggle="modal" data-target="#add_video">
                             <div class="add pull-left"></div>
                             <div class="pull-right">
@@ -106,7 +85,7 @@
                             <h4 th:text="#{sign.add}"></h4>
                         </a>
                     </li>
-                    <li role=" presentation">
+                    <li th:if="${isAuthenticated}" role=" presentation">
                         <a href="request.html">
                             <div class="  require_video_inverse pull-left"></div>
                             <div class="pull-right">

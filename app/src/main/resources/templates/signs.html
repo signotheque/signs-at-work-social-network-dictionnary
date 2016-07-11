@@ -19,7 +19,7 @@
                 <div th:remove="tag" th:each="video, stats:${sign.videos.list()}" th:if="${stats.first}">
                     <iframe th:src="${video.url}" frameborder="0" width="480" height="270" allowfullscreen=""/>
                 </div>
-                <a th:href="@{/sign}" th:text="${sign.name}" type="text/html"/>
+                <a th:href="@{/sign/} + ${sign.id}" th:text="${sign.name}" type="text/html"/>
             </div>
         </div>
 
@@ -40,46 +40,24 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <div class="pull-left">
                     <div class="search_signe pull-left"></div>
-                    <h4 class="  pull-right  ">Rechercher</h4>
+                    <h4 class="  pull-right  ">Rechercher FIXME</h4>
                 </div>
             </div>
             <div class="modal-body text-center ">
                 <div class="picto_search"></div>
-                <input type="text" class="text-center border form-control" placeholder="Saisir un mot"/>
+                <input type="text" class="text-center border form-control" placeholder="Saisir un mot FIXME"/>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="">Rechercher</button>
+                <button type="button" class="btn btn-default" data-dismiss="">Rechercher FIXME</button>
             </div>
         </div>
 
     </div>
 </div>
 
-<!--ajout du'une video-->
-<div id="add_video" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <div class="pull-left">
-                    <div class="require pull-left"></div>
-                    <h4 class="  pull-right  ">Proposer un signe</h4>
-                </div>
-            </div>
-            <div class="modal-body text-center">
-                <input type="text" class="text-center border form-control" placeholder="Saisir le nom"/><br/>
-                <input type="text" class="text-center border form-control" placeholder="Saisir URL de la video"/>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="">Continuer</button>
-            </div>
-        </div>
-
-    </div>
-</div>
+<div th:replace="fragments/modal-new-sign-video :: div"/>
 
 </body>
 
+<script type="text/javascript" th:src="@{/js/add-sign.js}"></script>
 </html>

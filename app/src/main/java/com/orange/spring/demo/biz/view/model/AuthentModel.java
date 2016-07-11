@@ -10,12 +10,16 @@ import java.util.Map;
 
 public class AuthentModel {
 
+  public static boolean isAuthenticated(Principal principal) {
+    return principal != null && principal.getName() != null;
+  }
+
   public static void addAuthenticatedModel(Model model, boolean isAuthenticated) {
     model.addAllAttributes(authenticatedModel(isAuthenticated));
   }
 
   public static void addAuthentModelWithUserDetails(Model model, Principal principal, UserService userService) {
-    boolean authenticated = principal != null && principal.getName() != null;
+    boolean authenticated = isAuthenticated(principal);
     addAuthenticatedModel(model, authenticated);
     model.addAttribute("authenticatedUsername",
             authenticated ? principal.getName() : "Please sign in");

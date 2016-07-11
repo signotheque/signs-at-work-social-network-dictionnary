@@ -22,13 +22,19 @@ package com.orange.spring.demo.biz.view.controller;
  * #L%
  */
 
+import com.orange.spring.demo.biz.domain.Sign;
+import com.orange.spring.demo.biz.persistence.service.MessageByLocaleService;
 import com.orange.spring.demo.biz.persistence.service.SignService;
+import com.orange.spring.demo.biz.view.model.AuthentModel;
+import com.orange.spring.demo.biz.view.model.SignProfileView;
 import com.orange.spring.demo.biz.view.model.SignView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -37,10 +43,29 @@ public class SignController {
   @Autowired
   private SignService signService;
 
+  @Autowired
+  MessageByLocaleService messageByLocaleService;
+
   @RequestMapping(value = "/signs")
-  public String signs(Model model) {
+  public String signs(Principal principal, Model model) {
+    AuthentModel.addAuthenticatedModel(model, AuthentModel.isAuthenticated(principal));
+
     List<SignView> signsView = SignView.from(signService.all());
     model.addAttribute("signs", signsView);
     return "signs";
+  }
+
+  @RequestMapping(value = "/sign/{id}")
+  public String sign(@PathVariable long id, Principal principal, Model model)  {
+    AuthentModel.addAuthenticatedModel(model, AuthentModel.isAuthenticated(principal));
+
+    Sign sign = signService.withIdForAssociate(id);
+
+    model.addAttribute("title", messageByLocaleService.getMessage("sign.details"));
+
+    SignProfileView signProfileView = new SignProfileView(sign, signService);
+    model.addAttribute("signProfileView", signProfileView);
+
+    return "sign";
   }
 }
