@@ -37,7 +37,7 @@ function addNewSign() {
       contentType: "application/json; charset=utf-8",
     })
     .success(function () {
-      console.log("success");
+      location.reload(true);
     })
     .error(function () {
       console.log("error: " + xhr.responseText);
