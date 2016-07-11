@@ -42,7 +42,7 @@ import java.security.Principal;
 @Slf4j
 @RestController
 /** Rest controller: returns a json body */
-public class SignController {
+public class SignRestController {
 
   @Autowired
   UserService userService;

@@ -42,7 +42,7 @@ import java.util.List;
 @Slf4j
 @RestController
 /** Rest controller: returns a json body */
-public class UserController {
+public class UserRestController {
 
   @Autowired
   private UserService userService;

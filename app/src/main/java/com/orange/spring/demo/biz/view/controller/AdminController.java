@@ -46,7 +46,7 @@ import java.util.stream.Collectors;
 public class AdminController {
 
   @Autowired
-  private HomeController homeController;
+  private UserController userController;
 
   @Autowired
   private UserService userService;
@@ -58,7 +58,7 @@ public class AdminController {
   @Secured("ROLE_ADMIN")
   @RequestMapping("/communities")
   public String communities(Model model) {
-    model.addAllAttributes(SecurityController.authenticatedModel(true));
+    AuthentModel.addAuthenticatedModel(model, true);
     model.addAttribute("title", messageByLocaleService.getMessage("communities"));
     model.addAttribute("communities", CommunityView.from(communityService.all()));
     return "communities";
@@ -68,7 +68,7 @@ public class AdminController {
   @RequestMapping(value = "/community/{id}")
   public String community(@PathVariable long id, Model model) {
     Community community = communityService.withId(id);
-    model.addAllAttributes(SecurityController.authenticatedModel(true));
+    AuthentModel.addAuthenticatedModel(model, true);
     model.addAttribute("title", messageByLocaleService.getMessage("community_details"));
     model.addAttribute("community", community);
     return "community";
@@ -77,7 +77,7 @@ public class AdminController {
   @Secured("ROLE_ADMIN")
   @RequestMapping("/admin")
   public String admin(Model model) {
-    model.addAllAttributes(SecurityController.authenticatedModel(true));
+    AuthentModel.addAuthenticatedModel(model, true);
     model.addAttribute("title", messageByLocaleService.getMessage("admin_page"));
     // for thymeleaf form management
     model.addAttribute("user", new UserCreationView());
@@ -89,7 +89,7 @@ public class AdminController {
   @RequestMapping(value = "/admin/user/create", method = RequestMethod.POST)
   public String user(@ModelAttribute UserCreationView userCreationView, Model model) {
     User user = userService.create(userCreationView.toUser(), userCreationView.getPassword());
-    return homeController.userDetails(user.id, model);
+    return userController.userDetails(user.id, model);
   }
 
   @Secured("ROLE_ADMIN")
