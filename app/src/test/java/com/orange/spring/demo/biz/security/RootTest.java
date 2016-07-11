@@ -65,6 +65,6 @@ public class RootTest {
     mockMvc
             .perform(get("/"))
             .andExpect(status().isOk())
-            .andExpect(content().string(containsString(messageByLocaleService.getMessage("welcome"))));
+            .andExpect(content().string(containsString(messageByLocaleService.getMessage("app_name"))));
   }
 }

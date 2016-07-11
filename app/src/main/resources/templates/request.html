@@ -22,27 +22,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"/>
-
-    <title th:text="${title}"/>
-
-    <script src="http://cdn.jsdelivr.net/webjars/jquery/2.2.2/jquery.min.js"
-            th:src="@{/webjars/jquery/2.2.2/jquery.min.js}"></script>
-
-    <script src="http://cdn.jsdelivr.net/webjars/bootstrap/4.0.0-alpha.2/bootstrap.min.js"
-            th:src="@{/webjars/bootstrap/4.0.0-alpha.2/js/bootstrap.min.js}"></script>
-
-    <link href="http://cdn.jsdelivr.net/webjars/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css"
-          th:href="@{/webjars/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css}" rel="stylesheet" media="screen"/>
-
-    <link href="../public/css/app.css" th:href="@{/css/app.css}" rel="stylesheet" media="screen"/>
-    <link href="../public/css/bstrap.css" th:href="@{/css/bstrap.css}" rel="stylesheet" media="screen"/>
+    <th:block th:include="fragments/header-head :: head"></th:block>
 </head>
 <body>
 
-<div th:replace="fragments/header :: header">&nbsp;</div>
-
+<div th:replace="fragments/header-logo-only :: header">&nbsp;</div>
 
 <section class="jumbotron text-xs-center">
     <div class="container">
