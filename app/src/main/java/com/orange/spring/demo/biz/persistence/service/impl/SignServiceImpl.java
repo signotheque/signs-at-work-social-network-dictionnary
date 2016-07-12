@@ -25,20 +25,29 @@ package com.orange.spring.demo.biz.persistence.service.impl;
 import com.orange.spring.demo.biz.domain.Sign;
 import com.orange.spring.demo.biz.domain.Signs;
 import com.orange.spring.demo.biz.persistence.model.SignDB;
+import com.orange.spring.demo.biz.persistence.model.UserDB;
+import com.orange.spring.demo.biz.persistence.model.VideoDB;
 import com.orange.spring.demo.biz.persistence.repository.FavoriteRepository;
 import com.orange.spring.demo.biz.persistence.repository.SignRepository;
+import com.orange.spring.demo.biz.persistence.repository.UserRepository;
+import com.orange.spring.demo.biz.persistence.repository.VideoRepository;
 import com.orange.spring.demo.biz.persistence.service.SignService;
+import com.orange.spring.demo.biz.persistence.service.VideoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class SignServiceImpl implements SignService {
+  private final UserRepository userRepository;
   private final FavoriteRepository favoriteRepository;
   private final SignRepository signRepository;
+  private final VideoRepository videoRepository;
+  private final VideoService videoService;
 
   @Override
   public Signs all() {
@@ -73,14 +82,12 @@ public class SignServiceImpl implements SignService {
     SignDB signDB = withDBId(signId);
     List<SignDB> signReferenceBy = signDB.getReferenceBy();
 
-
-
-    for (SignDB R : signReferenceBy) {
-      if (!associateSignsIds.contains(R.getId())) {
-        R.getAssociates().remove(signDB);
-        signRepository.save(R);
-      }
-    }
+    signReferenceBy.stream()
+            .filter(R -> !associateSignsIds.contains(R.getId()))
+            .forEach(R -> {
+      R.getAssociates().remove(signDB);
+      signRepository.save(R);
+    });
 
     List<SignDB> newSignAssociates = new ArrayList<>();
     for (Long id : associateSignsIds ) {
@@ -102,33 +109,78 @@ public class SignServiceImpl implements SignService {
     return signFrom(signDB);
   }
 
+  @Override
+  public Sign create(long userId, String signName, String signUrl) {
+    SignDB signDB;
+    UserDB userDB = userRepository.findOne(userId);
+
+    List<SignDB> signsMatches = signRepository.findByName(signName);
+    if (signsMatches.isEmpty()) {
+
+      Date now = new Date();
+      VideoDB videoDB = new VideoDB();
+      videoDB.setUrl(signUrl);
+      videoDB.setUser(userDB);
+      videoDB.setCreateDate(now);
+
+      signDB = new SignDB();
+      signDB.setName(signName);
+      signDB.setUrl(signUrl);
+      signDB.getVideos().add(videoDB);
+      videoDB.setSign(signDB);
+
+      videoRepository.save(videoDB);
+      signDB = signRepository.save(signDB);
+
+      userDB.getVideos().add(videoDB);
+      userRepository.save(userDB);
+
+    } else {
+      Date now = new Date();
+
+      VideoDB videoDB = new VideoDB();
+      videoDB.setUrl(signUrl);
+      videoDB.setCreateDate(now);
+      videoDB.setUser(userDB);
+      signDB = signsMatches.get(0);
+      signDB.setUrl(signUrl);
+      videoDB.setSign(signDB);
+
+      videoRepository.save(videoDB);
+      signDB = signRepository.save(signDB);
+
+      userDB.getVideos().add(videoDB);
+      userRepository.save(userDB);
+    }
+    return signFrom(signDB);
+  }
 
   private SignDB withDBId(long id) {
     return signRepository.findOne(id);
   }
 
-  static Signs signsFrom(Iterable<SignDB> signsDB) {
+  Signs signsFrom(Iterable<SignDB> signsDB) {
     List<Sign> signs = new ArrayList<>();
     signsDB.forEach(signDB -> signs.add(signFrom(signDB)));
     return new Signs(signs);
   }
 
-  static Sign signFrom(SignDB signDB) {
+  Sign signFrom(SignDB signDB) {
     if (signDB == null) {
       return null;
     }
     else {
-      Sign sign = new Sign(signDB.getId(), signDB.getName(), signDB.getUrl(), VideoServiceImpl.videosFrom(signDB.getVideos()), null, null);
+      Sign sign = new Sign(signDB.getId(), signDB.getName(), signDB.getUrl(), VideoServiceImpl.videosFrom(signDB.getVideos()), null, null, videoService);
       return sign;
     }
   }
 
-  static Sign signFromAssociate(SignDB signDB) {
+  Sign signFromAssociate(SignDB signDB) {
     if (signDB == null) {
       return null;
     }
     else {
-      Sign sign = new Sign(signDB.getId(), signDB.getName(), signDB.getUrl(), null, signsFrom(signDB.getAssociates()).ids(), signsFrom(signDB.getReferenceBy()).ids());
+      Sign sign = new Sign(signDB.getId(), signDB.getName(), signDB.getUrl(), null, signsFrom(signDB.getAssociates()).ids(), signsFrom(signDB.getReferenceBy()).ids(), videoService);
       return sign;
     }
   }

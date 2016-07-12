@@ -75,8 +75,8 @@ public class FavoriteServiceIntegrationTest {
     //given
     User user = userService.create(
             new User(id, username, firstName, lastName, email, entity, activity, null, null, null, null, null, null, null), password);
-    userService.createUserSignVideo(user.id, sign1Name, sign1Url);
-    userService.createUserSignVideo(user.id, sign2Name, sign2Url);
+    signService.create(user.id, sign1Name, sign1Url);
+    signService.create(user.id, sign2Name, sign2Url);
     Signs signs = signService.all();
 
     Favorite favorite = favoriteService.create(new Favorite(id, favoriteName, null, signService));
@@ -90,6 +90,5 @@ public class FavoriteServiceIntegrationTest {
     Assertions.assertThat(favoriteWithSign.name).isEqualTo(favoriteName);
     Assertions.assertThat(favoriteWithSign.signs.list().size()).isEqualTo(2);
     Assertions.assertThat(favoriteWithSign.signs.list().containsAll(signs.list()));
-
   }
 }

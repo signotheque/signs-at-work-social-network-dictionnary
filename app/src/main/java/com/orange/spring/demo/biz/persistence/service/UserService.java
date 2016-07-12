@@ -42,6 +42,4 @@ public interface UserService {
   User createUserRequest(long userId, String requestName);
 
   User createUserFavorite(long userId, String favoriteName);
-
-  Sign createUserSignVideo(long userId, String signName, String SignUrl);
 }

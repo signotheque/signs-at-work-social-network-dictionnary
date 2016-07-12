@@ -22,8 +22,6 @@ package com.orange.spring.demo.biz.persistence.service;
  * #L%
  */
 
-import com.orange.spring.demo.biz.domain.Favorite;
-import com.orange.spring.demo.biz.domain.Favorites;
 import com.orange.spring.demo.biz.domain.Sign;
 import com.orange.spring.demo.biz.domain.Signs;
 
@@ -43,4 +41,6 @@ public interface SignService {
   Sign changeSignAssociates(long signId, List<Long> associateSignsIds);
 
   Sign create(Sign sign);
+
+  Sign create(long userId, String signName, String signUrl);
 }

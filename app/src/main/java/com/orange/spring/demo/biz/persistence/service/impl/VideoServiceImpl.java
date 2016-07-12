@@ -28,6 +28,7 @@ import com.orange.spring.demo.biz.persistence.repository.*;
 import com.orange.spring.demo.biz.persistence.service.RequestService;
 import com.orange.spring.demo.biz.persistence.service.VideoService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -41,6 +42,7 @@ public class VideoServiceImpl implements VideoService {
   private final CommentRepository commentRepository;
   private final UserRepository userRepository;
   private final RatingRepository ratingRepository;
+  private final SignRepository signRepository;
 
   @Override
   public Videos all() {
@@ -82,6 +84,11 @@ public class VideoServiceImpl implements VideoService {
     ratingRepository.save(ratingDB);
 
     return videoFrom(videoDB);
+  }
+
+  @Override
+  public Videos forSign(long signId) {
+    return videosFrom(videoRepository.findBySign(signRepository.findOne(signId)));
   }
 
   static Videos videosFrom(Iterable<VideoDB> videosDB) {

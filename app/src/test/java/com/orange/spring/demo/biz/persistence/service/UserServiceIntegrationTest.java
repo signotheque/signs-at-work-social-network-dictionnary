@@ -58,6 +58,8 @@ public class UserServiceIntegrationTest {
   @Autowired
   private CommunityService communityService;
   @Autowired
+  private SignService signService;
+  @Autowired
   private UserRepository userRepository;
 
   @Autowired
@@ -167,13 +169,12 @@ public class UserServiceIntegrationTest {
             new User(id, username, firstName, lastName, email, entity, activity, null, null, null, null, null, null, null), password);
 
     //do
-    userService.createUserSignVideo(user.id, signName, signUrl);
+    signService.create(user.id, signName, signUrl);
     UserDB userDB = userRepository.findOne(user.id);
 
 
     //then
     Assertions.assertThat(userDB.getVideos()).hasSize(1);
     Assertions.assertThat(userDB.getVideos().get(0).getUrl()).isEqualTo(signUrl);
-
   }
 }

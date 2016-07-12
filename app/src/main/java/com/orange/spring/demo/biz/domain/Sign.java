@@ -22,6 +22,7 @@ package com.orange.spring.demo.biz.domain;
  * #L%
  */
 
+import com.orange.spring.demo.biz.persistence.service.VideoService;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -33,5 +34,15 @@ public class Sign {
     public final String url;
     public final Videos videos;
     public final List<Long> associateSignsIds;
-    public final List<Long> refrenceBySignsIds;
+    public final List<Long> referenceBySignsIds;
+
+    private final VideoService videoService;
+
+    public Sign loadVideos() {
+        if (videos != null) {
+            return this;
+        } else {
+            return new Sign(id, name, url, videoService.forSign(id), associateSignsIds, referenceBySignsIds, videoService);
+        }
+    }
 }

@@ -22,7 +22,9 @@ package com.orange.spring.demo.biz.persistence.service;
  * #L%
  */
 
-import com.orange.spring.demo.biz.domain.*;
+import com.orange.spring.demo.biz.domain.Rate;
+import com.orange.spring.demo.biz.domain.Video;
+import com.orange.spring.demo.biz.domain.Videos;
 
 public interface VideoService {
   Videos all();
@@ -32,4 +34,6 @@ public interface VideoService {
   Video createVideoComment(long id, long userId, String commentText);
 
   Video createVideoRating(long id, long userId, Rate rate);
+
+  Videos forSign(long signId);
 }

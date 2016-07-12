@@ -54,6 +54,7 @@ public class UserServiceImpl implements UserService, ApplicationListener<Authent
   private final CommunityService communityService;
   private final RequestService requestService;
   private final FavoriteService favoriteService;
+
   private final PasswordEncoder passwordEncoder;
 
   @Override
@@ -121,53 +122,6 @@ public class UserServiceImpl implements UserService, ApplicationListener<Authent
     userDB.getFavorites().add(favoriteDB);
     userRepository.save(userDB);
     return userFrom(userDB);
-  }
-
-
-  @Override
-  public Sign createUserSignVideo(long userId, String signName, String signUrl) {
-    SignDB signDB;
-    UserDB userDB = withDBId(userId);
-
-    List<SignDB> signsMatches = signRepository.findByName(signName);
-    if (signsMatches.isEmpty()) {
-
-      Date now = new Date();
-      VideoDB videoDB = new VideoDB();
-      videoDB.setUrl(signUrl);
-      videoDB.setUser(userDB);
-      videoDB.setCreateDate(now);
-
-      signDB = new SignDB();
-      signDB.setName(signName);
-      signDB.setUrl(signUrl);
-      signDB.getVideos().add(videoDB);
-      videoDB.setSign(signDB);
-
-      videoRepository.save(videoDB);
-      signDB = signRepository.save(signDB);
-
-      userDB.getVideos().add(videoDB);
-      userRepository.save(userDB);
-
-    } else {
-      Date now = new Date();
-
-      VideoDB videoDB = new VideoDB();
-      videoDB.setUrl(signUrl);
-      videoDB.setCreateDate(now);
-      videoDB.setUser(userDB);
-      signDB = signsMatches.get(0);
-      signDB.setUrl(signUrl);
-      videoDB.setSign(signDB);
-
-      videoRepository.save(videoDB);
-      signDB = signRepository.save(signDB);
-
-      userDB.getVideos().add(videoDB);
-      userRepository.save(userDB);
-    }
-    return SignServiceImpl.signFrom(signDB);
   }
 
   @Override

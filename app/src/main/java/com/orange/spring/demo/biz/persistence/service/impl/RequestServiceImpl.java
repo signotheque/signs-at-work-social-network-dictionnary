@@ -32,6 +32,7 @@ import com.orange.spring.demo.biz.persistence.repository.SignRepository;
 import com.orange.spring.demo.biz.persistence.repository.UserRepository;
 import com.orange.spring.demo.biz.persistence.service.CommunityService;
 import com.orange.spring.demo.biz.persistence.service.RequestService;
+import com.orange.spring.demo.biz.persistence.service.SignService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -44,6 +45,7 @@ public class RequestServiceImpl implements RequestService {
   private final UserRepository userRepository;
   private final RequestRepository requestRepository;
   private final SignRepository signRepository;
+  private final SignServiceImpl signServiceImpl;
 
   @Override
   public Requests all() {
@@ -90,7 +92,7 @@ public class RequestServiceImpl implements RequestService {
   }
 
   private Request requestFrom(RequestDB requestDB) {
-    return new Request(requestDB.getId(), requestDB.getName(), requestDB.getRequestDate(), SignServiceImpl.signFrom(requestDB.getSign()));
+    return new Request(requestDB.getId(), requestDB.getName(), requestDB.getRequestDate(), signServiceImpl.signFrom(requestDB.getSign()));
   }
 
   private RequestDB requestDBFrom(Request request) {

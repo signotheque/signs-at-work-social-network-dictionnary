@@ -96,9 +96,9 @@ public class SignController {
 
   @Secured("ROLE_USER")
   @RequestMapping(value = "/sec/sign/create", method = RequestMethod.POST)
-  public String createSign(HttpServletRequest req, @ModelAttribute SignCreationView signCreationView, Principal principal, Model model) {
+  public String createSign(HttpServletRequest req, @ModelAttribute SignCreationView signCreationView, Principal principal) {
     User user = userService.withUserName(principal.getName());
-    Sign sign = userService.createUserSignVideo(user.id, signCreationView.getSignName(), signCreationView.getVideoUrl());
+    Sign sign = signService.create(user.id, signCreationView.getSignName(), signCreationView.getVideoUrl());
 
     log.info("createSign: username = {} / sign name = {} / video url = {}", user.username, signCreationView.getSignName(), signCreationView.getVideoUrl());
 
