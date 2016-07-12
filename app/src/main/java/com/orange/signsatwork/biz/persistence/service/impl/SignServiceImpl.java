@@ -10,12 +10,12 @@ package com.orange.signsatwork.biz.persistence.service.impl;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 2 of the
  * License, or (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-2.0.html>.
@@ -63,7 +63,7 @@ public class SignServiceImpl implements SignService {
 
   @Override
   public Sign withIdLoadAssociates(long id) {
-    return signFromAssociate(signRepository.findOne(id));
+    return signFromWithAssociates(signRepository.findOne(id));
   }
 
   @Override
@@ -98,7 +98,6 @@ public class SignServiceImpl implements SignService {
     return signFrom(signDB);
   }
 
-
   @Override
   public Sign create(Sign sign) {
     SignDB signDB = signRepository.save(signDBFrom(sign));
@@ -112,7 +111,6 @@ public class SignServiceImpl implements SignService {
 
     List<SignDB> signsMatches = signRepository.findByName(signName);
     if (signsMatches.isEmpty()) {
-
       Date now = new Date();
       VideoDB videoDB = new VideoDB();
       videoDB.setUrl(signUrl);
@@ -164,27 +162,16 @@ public class SignServiceImpl implements SignService {
   }
 
   Sign signFrom(SignDB signDB) {
-    if (signDB == null) {
-      return null;
-    }
-    else {
-      Sign sign = new Sign(signDB.getId(), signDB.getName(), signDB.getUrl(), VideoServiceImpl.videosFrom(signDB.getVideos()), null, null, videoService);
-      return sign;
-    }
+    return signDB == null ? null :
+      new Sign(signDB.getId(), signDB.getName(), signDB.getUrl(), VideoServiceImpl.videosFrom(signDB.getVideos()), null, null, videoService);
   }
 
-  Sign signFromAssociate(SignDB signDB) {
-    if (signDB == null) {
-      return null;
-    }
-    else {
-      Sign sign = new Sign(signDB.getId(), signDB.getName(), signDB.getUrl(), null, signsFrom(signDB.getAssociates()).ids(), signsFrom(signDB.getReferenceBy()).ids(), videoService);
-      return sign;
-    }
+  Sign signFromWithAssociates(SignDB signDB) {
+    return signDB == null ? null :
+      new Sign(signDB.getId(), signDB.getName(), signDB.getUrl(), null, signsFrom(signDB.getAssociates()).ids(), signsFrom(signDB.getReferenceBy()).ids(), videoService);
   }
 
   private SignDB signDBFrom(Sign sign) {
-    SignDB signDB = new SignDB(sign.name, sign.url);
-    return signDB;
+    return new SignDB(sign.name, sign.url);
   }
 }
