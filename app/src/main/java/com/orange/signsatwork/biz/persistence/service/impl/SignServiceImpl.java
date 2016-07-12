@@ -62,14 +62,8 @@ public class SignServiceImpl implements SignService {
   }
 
   @Override
-  public Sign withIdForAssociate(long id) {
+  public Sign withIdLoadAssociates(long id) {
     return signFromAssociate(signRepository.findOne(id));
-  }
-
-
-  @Override
-  public Signs withName(String name) {
-    return signsFrom(signRepository.findByName(name));
   }
 
   @Override
@@ -128,7 +122,9 @@ public class SignServiceImpl implements SignService {
       signDB = new SignDB();
       signDB.setName(signName);
       signDB.setUrl(signUrl);
-      signDB.getVideos().add(videoDB);
+      List<VideoDB> videoDBList = new ArrayList<>();
+      videoDBList.add(videoDB);
+      signDB.setVideos(videoDBList);
       videoDB.setSign(signDB);
 
       videoRepository.save(videoDB);

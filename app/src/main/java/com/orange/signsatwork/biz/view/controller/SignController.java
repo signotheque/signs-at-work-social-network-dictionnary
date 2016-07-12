@@ -73,7 +73,7 @@ public class SignController {
   public String sign(@PathVariable long id, Principal principal, Model model)  {
     AuthentModel.addAuthenticatedModel(model, AuthentModel.isAuthenticated(principal));
 
-    Sign sign = signService.withIdForAssociate(id);
+    Sign sign = signService.withIdLoadAssociates(id);
 
     model.addAttribute("title", messageByLocaleService.getMessage("sign.info"));
 
@@ -88,7 +88,7 @@ public class SignController {
   @Secured("ROLE_USER")
   @RequestMapping(value = "/sign/{id}/detail")
   public String signDetail(@PathVariable long id, Principal principal, Model model)  {
-    Sign sign = signService.withIdForAssociate(id);
+    Sign sign = signService.withIdLoadAssociates(id);
 
     model.addAttribute("title", messageByLocaleService.getMessage("sign.details"));
 

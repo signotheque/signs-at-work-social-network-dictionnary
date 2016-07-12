@@ -47,8 +47,8 @@ public class Sign {
     }
 
     public void changeUserRating(User user, Rating rating) {
-        loadVideos();
-        List<Video> videosList = videos.list();
+        Sign sign = loadVideos();
+        List<Video> videosList = sign.videos.list();
         Video video = videosList.get(videosList.size()-1);
         videoService.createVideoRating(video.id, user.id, rating);
     }

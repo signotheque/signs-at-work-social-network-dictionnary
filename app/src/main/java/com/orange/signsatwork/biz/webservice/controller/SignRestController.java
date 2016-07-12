@@ -53,7 +53,7 @@ public class SignRestController {
 
   @RequestMapping(value = RestApi.WS_OPEN_SIGN + "/{id}")
   public SignView sign(@PathVariable long id) {
-    Sign sign = signService.withIdForAssociate(id);
+    Sign sign = signService.withIdLoadAssociates(id);
     return new SignView(sign);
   }
 

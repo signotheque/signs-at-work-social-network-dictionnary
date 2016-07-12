@@ -63,7 +63,7 @@ public class SignAdminController {
   @Secured("ROLE_ADMIN")
   @RequestMapping(value = "/sec/admin/sign/{id}")
   public String signDetails(@PathVariable long id, Model model) {
-    Sign sign = signService.withIdForAssociate(id);
+    Sign sign = signService.withIdLoadAssociates(id);
 
     AuthentModel.addAuthenticatedModel(model, true);
     model.addAttribute("title", messageByLocaleService.getMessage("sign_details"));
