@@ -119,7 +119,7 @@
     <form id="addratingtovideoform" class="form-inline" action="#" th:action="@{/sec/admin/video/{videoid}/add/rating(videoid=${videoView.id})}" th:object="${ratingView}" method="post">
 
         <div id="vote" class="form-group">
-            <label th:each="rate : ${T(com.orange.spring.demo.biz.domain.Rate).values()}" th:for="${#ids.next('rate')}">
+            <label th:each="rate : ${T(com.orange.signatwork.biz.domain.Rate).values()}" th:for="${#ids.next('rate')}">
                 <input type="radio" name="rate" th:field="*{rate}" th:text="${rate}" th:value="${rate}"/>
             </label>
         </div>
