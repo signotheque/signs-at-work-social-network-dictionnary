@@ -892,8 +892,7 @@ h4.container_signes .pull-right {
 		height: 37rem;
 	}
 	.navbar-collapse .navbar-nav > li{
-		/*width: 20rem;*/
-		width: 30rem;
+		*width: 20rem;
 	}
 	.navbar-collapse .navbar-nav .containerLeft_signes{
 		margin-top: 10px;
@@ -903,3 +902,13 @@ h4.container_signes .pull-right {
 		width: 18rem;
 	}
 }
+/* XXLarge screens min-width 1921px, xxlarge screens */
+@media only screen and (min-width: 120.063em) {
+	.col-lg-12.container-fluid {
+		width: 110%;
+	}
+	.navbar-collapse .navbar-nav > li{
+		width: 30rem;
+	}
+}
+
