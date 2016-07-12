@@ -833,8 +833,7 @@ h4.container_signes .pull-right {
 		/*padding-top: 0;*/
 	}
 }
-
-@media only screen and (min-width: 1300px) {
+@media only screen and (min-width: 1300px) and (max-width: 1920px){
 
 
 	.add {
@@ -898,7 +897,7 @@ h4.container_signes .pull-right {
 		height: 37rem;
 	}
 	.navbar-collapse .navbar-nav > li{
-		*width: 20rem;
+		width: 20rem;
 	}
 	.navbar-collapse .navbar-nav .containerLeft_signes{
 		margin-top: 10px;
