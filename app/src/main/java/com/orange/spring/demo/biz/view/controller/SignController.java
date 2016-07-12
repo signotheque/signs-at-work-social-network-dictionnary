@@ -73,12 +73,25 @@ public class SignController {
 
     Sign sign = signService.withIdForAssociate(id);
 
-    model.addAttribute("title", messageByLocaleService.getMessage("sign.details"));
+    model.addAttribute("title", messageByLocaleService.getMessage("sign.info"));
 
     SignProfileView signProfileView = new SignProfileView(sign, signService);
     model.addAttribute("signProfileView", signProfileView);
 
     return "sign";
+  }
+
+  @Secured("ROLE_USER")
+  @RequestMapping(value = "/sign/{id}/detail")
+  public String signDetail(@PathVariable long id, Model model)  {
+    Sign sign = signService.withIdForAssociate(id);
+
+    model.addAttribute("title", messageByLocaleService.getMessage("sign.details"));
+
+    SignProfileView signProfileView = new SignProfileView(sign, signService);
+    model.addAttribute("signProfileView", signProfileView);
+
+    return "sign-detail";
   }
 
   @Secured("ROLE_USER")
