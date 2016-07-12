@@ -22,8 +22,13 @@ package com.orange.spring.demo.biz.domain;
  * #L%
  */
 
-public enum Rate {
-    Negative,
-    Neutral,
-    Positive,
+import lombok.RequiredArgsConstructor;
+
+import java.util.Date;
+
+@RequiredArgsConstructor
+public class RatingDat {
+    public final RatingId primaryKey;
+    public final Date ratingDate;
+    public final Rating rating;
 }

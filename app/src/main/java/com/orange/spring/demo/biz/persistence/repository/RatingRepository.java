@@ -23,8 +23,13 @@ package com.orange.spring.demo.biz.persistence.repository;
  */
 
 import com.orange.spring.demo.biz.persistence.model.RatingDB;
+import com.orange.spring.demo.biz.persistence.model.UserDB;
+import com.orange.spring.demo.biz.persistence.model.VideoDB;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
+
+import java.util.List;
 
 public interface RatingRepository extends CrudRepository<RatingDB, Long> {
-
 }

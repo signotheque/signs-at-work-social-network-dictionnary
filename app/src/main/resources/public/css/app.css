@@ -434,7 +434,7 @@ text-decoration-line: none;
 
 .containerRight_signes .sentiment_neutre {
 	background-image: url("/img/sprite_picto_400X400.png");
-	background-position: -120px center;
+	background-position: -150px center;
 	background-repeat: no-repeat;
 	background-size: auto 30px;
 	height: 30px;
@@ -443,7 +443,7 @@ text-decoration-line: none;
 
 .containerRight_signes .sentiment_negatif {
 	background-image: url("/img/sprite_picto_400X400.png");
-	background-position: -90px center;
+	background-position: -120px center;
 	background-repeat: no-repeat;
 	background-size: auto 30px;
 	height: 30px;

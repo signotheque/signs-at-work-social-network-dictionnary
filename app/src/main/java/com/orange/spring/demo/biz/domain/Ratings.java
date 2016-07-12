@@ -30,19 +30,19 @@ import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 public class Ratings {
-  private final List<Rating> ratings;
+  private final List<RatingDat> ratingDats;
 
-  public Stream<Rating> stream() {
-    return ratings.stream();
+  public Stream<RatingDat> stream() {
+    return ratingDats.stream();
   }
 
   public List<RatingId> ids() {
-    return ratings.stream()
+    return ratingDats.stream()
             .map(rating -> rating.primaryKey)
             .collect(Collectors.toList());
   }
 
-  public List<Rating> list() {
-    return ratings;
+  public List<RatingDat> list() {
+    return ratingDats;
   }
 }

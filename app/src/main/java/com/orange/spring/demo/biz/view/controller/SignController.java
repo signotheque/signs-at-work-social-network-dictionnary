@@ -30,14 +30,16 @@ import com.orange.spring.demo.biz.persistence.service.UserService;
 import com.orange.spring.demo.biz.view.model.AuthentModel;
 import com.orange.spring.demo.biz.view.model.SignProfileView;
 import com.orange.spring.demo.biz.view.model.SignView;
-import com.orange.spring.demo.biz.webservice.controller.RestApi;
 import com.orange.spring.demo.biz.webservice.model.SignCreationView;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
@@ -75,7 +77,9 @@ public class SignController {
 
     model.addAttribute("title", messageByLocaleService.getMessage("sign.info"));
 
-    SignProfileView signProfileView = new SignProfileView(sign, signService);
+    SignProfileView signProfileView = AuthentModel.isAuthenticated(principal) ?
+            new SignProfileView(sign, signService, userService.withUserName(principal.getName())) :
+            new SignProfileView(sign, signService);
     model.addAttribute("signProfileView", signProfileView);
 
     return "sign";
@@ -83,12 +87,12 @@ public class SignController {
 
   @Secured("ROLE_USER")
   @RequestMapping(value = "/sign/{id}/detail")
-  public String signDetail(@PathVariable long id, Model model)  {
+  public String signDetail(@PathVariable long id, Principal principal, Model model)  {
     Sign sign = signService.withIdForAssociate(id);
 
     model.addAttribute("title", messageByLocaleService.getMessage("sign.details"));
 
-    SignProfileView signProfileView = new SignProfileView(sign, signService);
+    SignProfileView signProfileView = new SignProfileView(sign, signService, userService.withUserName(principal.getName()));
     model.addAttribute("signProfileView", signProfileView);
 
     return "sign-detail";

@@ -49,7 +49,9 @@
                             <div class="pull-right">
                                 <div class="containerRight_signes">
                                     <div class="pull-right chevron_right"/>
-                                    <div class="pull-right sentiment_positif"/>
+                                    <div th:if="${signProfileView.ratePositive}" class="pull-right sentiment_positif"/>
+                                    <div th:if="${signProfileView.rateNeutral}" class="pull-right sentiment_neutre"/>
+                                    <div th:if="${signProfileView.rateNegative}" class="pull-right sentiment_negatif"/>
                                 </div>
                             </div>
                             <h2 th:text="#{sign.reevaluate}"/>

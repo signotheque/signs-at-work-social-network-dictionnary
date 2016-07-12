@@ -22,7 +22,6 @@ package com.orange.spring.demo.biz.persistence.service;
  * #L%
  */
 
-import com.orange.spring.demo.biz.domain.Sign;
 import com.orange.spring.demo.biz.domain.User;
 import com.orange.spring.demo.biz.domain.Users;
 

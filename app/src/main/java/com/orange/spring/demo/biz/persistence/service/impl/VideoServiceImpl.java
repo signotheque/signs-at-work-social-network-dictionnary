@@ -22,18 +22,23 @@ package com.orange.spring.demo.biz.persistence.service.impl;
  * #L%
  */
 
-import com.orange.spring.demo.biz.domain.*;
-import com.orange.spring.demo.biz.persistence.model.*;
+import com.orange.spring.demo.biz.domain.Rating;
+import com.orange.spring.demo.biz.domain.Video;
+import com.orange.spring.demo.biz.domain.Videos;
+import com.orange.spring.demo.biz.persistence.model.CommentDB;
+import com.orange.spring.demo.biz.persistence.model.RatingDB;
+import com.orange.spring.demo.biz.persistence.model.UserDB;
+import com.orange.spring.demo.biz.persistence.model.VideoDB;
 import com.orange.spring.demo.biz.persistence.repository.*;
-import com.orange.spring.demo.biz.persistence.service.RequestService;
 import com.orange.spring.demo.biz.persistence.service.VideoService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -71,7 +76,7 @@ public class VideoServiceImpl implements VideoService {
   }
 
   @Override
-  public Video createVideoRating(long id, long userId, Rate rate) {
+  public Video createVideoRating(long id, long userId, Rating rating) {
     VideoDB videoDB = videoRepository.findOne(id);
     UserDB userDB = userRepository.findOne(userId);
 
@@ -79,7 +84,7 @@ public class VideoServiceImpl implements VideoService {
     ratingDB.setUser(userDB);
     ratingDB.setVideo(videoDB);
     ratingDB.setRatingDate(new Date());
-    ratingDB.setRate(rate);
+    ratingDB.setRating(rating);
 
     ratingRepository.save(ratingDB);
 
@@ -89,6 +94,18 @@ public class VideoServiceImpl implements VideoService {
   @Override
   public Videos forSign(long signId) {
     return videosFrom(videoRepository.findBySign(signRepository.findOne(signId)));
+  }
+
+  @Override
+  @Transactional
+  public Rating ratingFor(Video video, long userId) {
+    VideoDB videoDB = videoRepository.findOne(video.id);
+    List<RatingDB> videos = videoDB.getRatings();
+    Optional<RatingDB> rating = videos.stream()
+            .filter(ratingDB -> ratingDB.getUser().getId() == userId)
+            .findAny();
+
+    return rating.isPresent() ? rating.get().getRating() : Rating.Neutral;
   }
 
   static Videos videosFrom(Iterable<VideoDB> videosDB) {

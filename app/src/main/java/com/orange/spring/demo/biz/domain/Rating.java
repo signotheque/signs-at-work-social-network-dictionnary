@@ -22,14 +22,8 @@ package com.orange.spring.demo.biz.domain;
  * #L%
  */
 
-import com.orange.spring.demo.biz.persistence.model.RatingDB;
-import lombok.RequiredArgsConstructor;
-
-import java.util.Date;
-
-@RequiredArgsConstructor
-public class Rating {
-    public final RatingId primaryKey;
-    public final Date ratingDate;
-    public final Rate rate;
+public enum Rating {
+    Negative,
+    Neutral,
+    Positive,
 }

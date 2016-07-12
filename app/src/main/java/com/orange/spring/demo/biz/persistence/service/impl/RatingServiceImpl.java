@@ -23,12 +23,8 @@ package com.orange.spring.demo.biz.persistence.service.impl;
  */
 
 import com.orange.spring.demo.biz.domain.*;
-import com.orange.spring.demo.biz.persistence.model.CommentDB;
 import com.orange.spring.demo.biz.persistence.model.RatingDB;
 import com.orange.spring.demo.biz.persistence.model.RatingDBId;
-import com.orange.spring.demo.biz.persistence.repository.CommentRepository;
-import com.orange.spring.demo.biz.persistence.repository.VideoRepository;
-import com.orange.spring.demo.biz.persistence.service.CommentService;
 import com.orange.spring.demo.biz.persistence.service.RatingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -42,13 +38,13 @@ public class RatingServiceImpl implements RatingService {
 
 
   static Ratings ratingsFrom(Iterable<RatingDB> ratingsDB) {
-    List<Rating> ratings = new ArrayList<>();
-    ratingsDB.forEach(ratingDB -> ratings.add(ratingFrom(ratingDB)));
-    return new Ratings(ratings);
+    List<RatingDat> ratingDats = new ArrayList<>();
+    ratingsDB.forEach(ratingDB -> ratingDats.add(ratingFrom(ratingDB)));
+    return new Ratings(ratingDats);
   }
 
-  static Rating ratingFrom(RatingDB ratingDB) {
-    return new Rating(ratingIdFrom(ratingDB.getPrimaryKey()), ratingDB.getRatingDate(), ratingDB.getRate());
+  static RatingDat ratingFrom(RatingDB ratingDB) {
+    return new RatingDat(ratingIdFrom(ratingDB.getPrimaryKey()), ratingDB.getRatingDate(), ratingDB.getRating());
   }
 
  static RatingId ratingIdFrom(RatingDBId ratingDBId) {

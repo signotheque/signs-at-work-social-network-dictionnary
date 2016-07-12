@@ -23,7 +23,9 @@ package com.orange.spring.demo.biz.view.model;
  */
 
 
+import com.orange.spring.demo.biz.domain.Rating;
 import com.orange.spring.demo.biz.domain.Sign;
+import com.orange.spring.demo.biz.domain.User;
 import com.orange.spring.demo.biz.persistence.service.SignService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -37,10 +39,17 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class SignProfileView {
   private Sign sign;
+  private boolean ratePositive;
+  private boolean rateNeutral = true;
+  private boolean rateNegative;
   private List<Long> associateSignsIds;
   private List<Sign> allSignsWithoutCurrentSign;
 
   public SignProfileView(Sign sign, SignService signService) {
+    this(sign, signService, null);
+  }
+
+  public SignProfileView(Sign sign, SignService signService, User user) {
     this.sign = sign;
     List<Long> associateIds = sign.associateSignsIds;
     associateIds.addAll(sign.referenceBySignsIds);
@@ -50,5 +59,12 @@ public class SignProfileView {
             .filter(s -> s.id != sign.id)
             .collect(Collectors.toList());
     this.allSignsWithoutCurrentSign = listSignWithOutId;
+
+    if (user != null) {
+      Rating rating = sign.rating(user.id);
+      ratePositive = rating == Rating.Positive;
+      rateNeutral = rating == Rating.Neutral;
+      rateNegative = rating == Rating.Negative;
+    }
   }
 }

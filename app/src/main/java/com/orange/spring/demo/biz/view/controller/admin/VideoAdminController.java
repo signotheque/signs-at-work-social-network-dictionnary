@@ -23,7 +23,7 @@ package com.orange.spring.demo.biz.view.controller.admin;
  */
 
 import com.orange.spring.demo.biz.domain.Comments;
-import com.orange.spring.demo.biz.domain.Rate;
+import com.orange.spring.demo.biz.domain.Rating;
 import com.orange.spring.demo.biz.domain.Video;
 import com.orange.spring.demo.biz.persistence.service.CommentService;
 import com.orange.spring.demo.biz.persistence.service.MessageByLocaleService;
@@ -93,9 +93,9 @@ public class VideoAdminController {
   public String createVideoRating(
           HttpServletRequest req, @PathVariable long videoId, Model model, Principal principal) {
 
-    Rate rate = Rate.valueOf(req.getParameter("rate"));
+    Rating rating = Rating.valueOf(req.getParameter("rate"));
     long userId = userService.withUserName(principal.getName()).id;
-    videoService.createVideoRating(videoId, userId, rate);
+    videoService.createVideoRating(videoId, userId, rating);
 
     return videoDetails(videoId, model);
   }

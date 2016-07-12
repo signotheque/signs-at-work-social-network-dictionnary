@@ -45,4 +45,18 @@ public class Sign {
             return new Sign(id, name, url, videoService.forSign(id), associateSignsIds, referenceBySignsIds, videoService);
         }
     }
+
+    public void changeRate(long userId, Rating rating) {
+        loadVideos();
+        List<Video> videosList = videos.list();
+        Video video = videosList.get(videosList.size()-1);
+        videoService.createVideoRating(video.id, userId, rating);
+    }
+
+    public Rating rating(long userId) {
+        Sign sign = loadVideos();
+        List<Video> videosList = sign.videos.list();
+        Video video = videosList.get(videosList.size()-1);
+        return videoService.ratingFor(video, userId);
+    }
 }

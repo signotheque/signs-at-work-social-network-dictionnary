@@ -1,6 +1,6 @@
 package com.orange.spring.demo.biz.persistence.model;
 
-import com.orange.spring.demo.biz.domain.Rate;
+import com.orange.spring.demo.biz.domain.Rating;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -46,8 +46,6 @@ import java.util.Date;
 @Setter
 @ToString
 public class RatingDB implements Serializable {
-
-
     @EmbeddedId
     private RatingDBId primaryKey = new RatingDBId();
 
@@ -73,7 +71,5 @@ public class RatingDB implements Serializable {
     private Date ratingDate;
 
     @Enumerated(EnumType.STRING)
-    private Rate rate;
-
-
+    private Rating rating;
 }

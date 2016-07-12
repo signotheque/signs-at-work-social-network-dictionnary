@@ -58,29 +58,25 @@ public class RatingController {
   @Secured("ROLE_USER")
   @RequestMapping(value = "/sec/sign/{signId}/rate-positive", method = RequestMethod.POST)
   public String ratePositive(@PathVariable long signId, Principal principal) {
-    return doRate(signId, principal, Rate.Positive);
+    return doRate(signId, principal, Rating.Positive);
   }
 
   @Secured("ROLE_USER")
   @RequestMapping(value = "/sec/sign/{signId}/rate-neutral", method = RequestMethod.POST)
   public String rateNeutral(@PathVariable long signId, Principal principal) {
-    return doRate(signId, principal, Rate.Neutral);
+    return doRate(signId, principal, Rating.Neutral);
   }
 
   @Secured("ROLE_USER")
   @RequestMapping(value = "/sec/sign/{signId}/rate-negative", method = RequestMethod.POST)
   public String rateNegative(@PathVariable long signId, Principal principal) {
-    return doRate(signId, principal, Rate.Negative);
+    return doRate(signId, principal, Rating.Negative);
   }
 
-  private String doRate(long signId, Principal principal, Rate rate) {
+  private String doRate(long signId, Principal principal, Rating rating) {
     User user = userService.withUserName(principal.getName());
     Sign sign = signService.withId(signId);
-    sign = sign.loadVideos();
-    List<Video> videos = sign.videos.list();
-    Video video = videos.get(videos.size()-1);
-
-    videoService.createVideoRating(video.id, user.id, rate);
+    sign.changeRate(user.id, rating);
 
     return "redirect:/sign/" + signId;
   }

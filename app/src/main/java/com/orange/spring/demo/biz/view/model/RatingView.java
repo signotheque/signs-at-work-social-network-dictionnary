@@ -39,15 +39,15 @@ import java.util.stream.Collectors;
 public class RatingView {
   private RatingId primaryKey;
   private Date ratingDate;
-  private Rate rate;
+  private Rating rating;
 
 
-  public Rating toRating() {
-    return new Rating(primaryKey, ratingDate, rate);
+  public RatingDat toRating() {
+    return new RatingDat(primaryKey, ratingDate, rating);
   }
 
-  public static RatingView from(Rating rating) {
-    return new RatingView(rating.primaryKey, rating.ratingDate, rating.rate);
+  public static RatingView from(RatingDat ratingDat) {
+    return new RatingView(ratingDat.primaryKey, ratingDat.ratingDate, ratingDat.rating);
   }
 
   public static List<RatingView> from(Ratings ratings) {
