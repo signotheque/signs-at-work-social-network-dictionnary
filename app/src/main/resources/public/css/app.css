@@ -394,6 +394,8 @@ text-decoration-line: none;
 
 .sentiment_negatif,.modal-body .containerRight_signes .sentiment_negatif{
 	background-image: url("/img/sprite_picto_400X400.png");
+	background-color: Transparent;
+	border: none;
 	background-position: -240px center;
 	background-repeat: no-repeat;
 	background-size: auto 40px;
@@ -402,6 +404,8 @@ text-decoration-line: none;
 
 .sentiment_neutre, .modal-body .containerRight_signes .sentiment_neutre{
 	background-image: url("/img/sprite_picto_400X400.png");
+    background-color: Transparent;
+    border: none;
 	background-position: -200px center;
 	background-repeat: no-repeat;
 	background-size: auto 40px;
@@ -411,6 +415,8 @@ text-decoration-line: none;
 
 .containerRight_signes .sentiment_positif {
 	background-image: url("/img/sprite_picto_400X400.png");
+	background-color: Transparent;
+	border: none;
 	background-position: -150px center;
 	background-repeat: no-repeat;
 	background-size: auto 30px;

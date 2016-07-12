@@ -126,7 +126,6 @@ public class UserAdminController {
     String requestName = req.getParameter("requestName");
     if (requestService.withName(requestName).list().isEmpty()) {
       userService.createUserRequest(userId, requestName);
-
     }
 
     return userDetails(userId, model);
