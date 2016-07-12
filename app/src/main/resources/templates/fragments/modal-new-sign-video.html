@@ -33,7 +33,7 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <div class="pull-left">
                     <div class="require pull-left"></div>
-                    <h4 class="pull-right" th:text="#{suggest_a_sign}"></h4>
+                    <h4 class="pull-right" th:text="#{sign.suggest}"></h4>
                 </div>
             </div>
             <form th:action="@{/sec/sign/create}" th:object="${signCreationView}" method="post">
