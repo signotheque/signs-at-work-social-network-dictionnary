@@ -392,11 +392,11 @@ text-decoration-line: none;
 	width: 20px;}
 
 
-.sentiment_negatif,.modal-body .containerRight_signes .sentiment_negatif{
+.sentiment_negatif, .modal-body .containerRight_signes .sentiment_negatif{
 	background-image: url("/img/sprite_picto_400X400.png");
 	background-color: Transparent;
 	border: none;
-	background-position: -240px center;
+	background-position: -160px center;
 	background-repeat: no-repeat;
 	background-size: auto 40px;
 	height: 40px;
@@ -413,15 +413,15 @@ text-decoration-line: none;
 	width: 40px;
 }
 
-.containerRight_signes .sentiment_positif {
+.sentiment_positif, .modal-body .containerRight_signes .sentiment_positif {
 	background-image: url("/img/sprite_picto_400X400.png");
 	background-color: Transparent;
 	border: none;
-	background-position: -150px center;
+	background-position: -240px center;
 	background-repeat: no-repeat;
-	background-size: auto 30px;
-	height: 30px;
-	width: 30px;
+	background-size: auto 40px;
+	height: 40px;
+	width: 40px;
 }
 .containerRight_signes .sentiment_evaluation {
 	background-image: url("/img/sprite_picto_400X400.png");
@@ -448,14 +448,6 @@ text-decoration-line: none;
 	background-size: auto 30px;
 	height: 30px;
 	width: 30px;
-}
-.sentiment_positif , .modal-body .containerRight_signes .sentiment_positif {
-	background-image: url("/img/sprite_picto_400X400.png");
-	background-position: -160px center;
-	background-repeat: no-repeat;
-	background-size: auto 40px;
-	height: 40px;
-	width: 40px;
 }
 
 .sentiment_In_Modal{
