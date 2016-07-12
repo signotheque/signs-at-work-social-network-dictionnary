@@ -10,12 +10,12 @@ package com.orange.spring.demo.biz.persistence.service.impl;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 2 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-2.0.html>.
@@ -25,13 +25,11 @@ package com.orange.spring.demo.biz.persistence.service.impl;
 import com.orange.spring.demo.biz.domain.*;
 import com.orange.spring.demo.biz.persistence.model.*;
 import com.orange.spring.demo.biz.persistence.repository.*;
-import com.orange.spring.demo.biz.persistence.service.CommunityService;
-import com.orange.spring.demo.biz.persistence.service.FavoriteService;
-import com.orange.spring.demo.biz.persistence.service.RequestService;
-import com.orange.spring.demo.biz.persistence.service.UserService;
+import com.orange.spring.demo.biz.persistence.service.*;
 import com.orange.spring.demo.biz.security.AppSecurityAdmin;
 import com.orange.spring.demo.biz.security.AppSecurityRoles;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
 import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -41,8 +39,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService, ApplicationListener<AuthenticationSuccessEvent> {
@@ -70,7 +68,15 @@ public class UserServiceImpl implements UserService, ApplicationListener<Authent
 
   @Override
   public User withUserName(String userName) {
-    return userFrom(userRepository.findByUsername(userName).get(0));
+    List<UserDB> userDBList = userRepository.findByUsername(userName);
+    if (userDBList.size() == 1) {
+      return userFrom(userRepository.findByUsername(userName).get(0));
+    } else {
+      String err = "Error while retrieving user with username = '" + userName + "' (list size = " + userDBList.size() + ")";
+      RuntimeException e = new IllegalStateException(err);
+      log.error(err, e);
+      throw e;
+    }
   }
 
   @Override
@@ -119,7 +125,8 @@ public class UserServiceImpl implements UserService, ApplicationListener<Authent
 
 
   @Override
-  public User createUserSignVideo(long userId, String signName, String signUrl) {
+  public Sign createUserSignVideo(long userId, String signName, String signUrl) {
+    SignDB signDB;
     UserDB userDB = withDBId(userId);
 
     List<SignDB> signsMatches = signRepository.findByName(signName);
@@ -131,14 +138,14 @@ public class UserServiceImpl implements UserService, ApplicationListener<Authent
       videoDB.setUser(userDB);
       videoDB.setCreateDate(now);
 
-      SignDB signDB = new SignDB();
+      signDB = new SignDB();
       signDB.setName(signName);
       signDB.setUrl(signUrl);
       signDB.getVideos().add(videoDB);
       videoDB.setSign(signDB);
 
       videoRepository.save(videoDB);
-      signRepository.save(signDB);
+      signDB = signRepository.save(signDB);
 
       userDB.getVideos().add(videoDB);
       userRepository.save(userDB);
@@ -150,17 +157,17 @@ public class UserServiceImpl implements UserService, ApplicationListener<Authent
       videoDB.setUrl(signUrl);
       videoDB.setCreateDate(now);
       videoDB.setUser(userDB);
-      SignDB signDB = signsMatches.get(0);
+      signDB = signsMatches.get(0);
       signDB.setUrl(signUrl);
       videoDB.setSign(signDB);
 
       videoRepository.save(videoDB);
-      signRepository.save(signDB);
+      signDB = signRepository.save(signDB);
 
       userDB.getVideos().add(videoDB);
       userRepository.save(userDB);
     }
-    return userFrom(userDB);
+    return SignServiceImpl.signFrom(signDB);
   }
 
   @Override

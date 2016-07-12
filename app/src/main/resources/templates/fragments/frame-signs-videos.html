@@ -22,36 +22,25 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-    <th:block th:include="fragments/header-head :: head"></th:block>
+    <meta charset="utf-8"/>
 </head>
 <body>
 
-<div th:replace="fragments/header-logo-only :: header">&nbsp;</div>
-
-
-<section class="jumbotron text-xs-center">
-    <div class="container">
-        <h1 class="jumbotron-heading" th:text="#{community_details}">
-        </h1>
-        <a href="/" class="btn btn-primary" style="margin-top: 2%">Home</a>
+<div th:fragment="div">
+    <div th:if="${not #lists.isEmpty(signs)}" class="row">
+        <div th:each="sign:${signs}" class="col-lg-3 col-md-4 col-xs-6 col-sm-4">
+            <div class="pull-right tooltip_newSigne"></div>
+            <div th:remove="tag" th:each="video, stats:${sign.videos.list()}" th:if="${stats.first}">
+                <iframe th:src="${video.url}" frameborder="0" allowfullscreen=""/>
+            </div>
+            <a th:href="@{/sign/} + ${sign.id}" th:text="${sign.name}" type="text/html"/>
+        </div>
     </div>
-    <br/>
 
-    <table class="table table-sm table-striped table-bordered" style="margin-top: 1%">
-        <thead>
-        <tr>
-            <th>#id</th>
-            <th th:text="#{name}"></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td th:text="${community.id}"></td>
-            <td th:text="${community.name}"></td>
-        </tr>
-        </tbody>
-    </table>
-</section>
+    <div th:if="${#lists.isEmpty(signs)}">
+        <h2 th:text="#{sign.not_available}"></h2>
+    </div>
+</div>
 
 </body>
 </html>

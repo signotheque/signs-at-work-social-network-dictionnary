@@ -26,7 +26,7 @@
 </head>
 <body>
 
-<div th:replace="fragments/header-logo-only :: header">&nbsp;</div>
+<div th:replace="fragments/header-admin :: header">&nbsp;</div>
 
 <section class="jumbotron text-xs-center">
     <div class="container">
@@ -35,7 +35,7 @@
     </div>
     <br/>
 
-    <form class="form-inline" action="#" th:action="@{/admin/community/create}" th:object="${community}" method="post">
+    <form class="form-inline" action="#" th:action="@{/sec/admin/community/create}" th:object="${community}" method="post">
         <div class="form-group">
             <label for="name" th:text="#{name}"></label>
             <input th:field="*{name}" type="text" class="form-control" placeholder="canari" required="" autofocus=""/>
@@ -53,7 +53,7 @@
     </div>
     <br/>
 
-    <form class="form-inline" action="#" th:action="@{/admin/user/create}" th:object="${user}" method="post">
+    <form class="form-inline" action="#" th:action="@{/sec/admin/user/create}" th:object="${user}" method="post">
         <div class="form-group">
             <label for="username" th:text="#{user_name}"></label>
             <input th:field="*{username}" type="text" class="form-control" placeholder="titi" required="" autofocus=""/>

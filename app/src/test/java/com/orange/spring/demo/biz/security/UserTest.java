@@ -42,6 +42,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class UserTest {
+
+  private static final String USER_URL = "/sec/admin/user/1";
+
   @Autowired
   private WebApplicationContext context;
 
@@ -59,7 +62,7 @@ public class UserTest {
   @Test
   public void userUnavailableForAll() throws Exception {
     mockMvc
-            .perform(get("/user/1"))
+            .perform(get(USER_URL))
             .andExpect(status().is3xxRedirection())
             .andExpect(redirectedUrlPattern("**/login"));
   }
@@ -68,7 +71,16 @@ public class UserTest {
   @WithMockUser
   public void userAvailableForAuthenticated() throws Exception {
     mockMvc
-            .perform(get("/user/1"))
+            .perform(get(USER_URL))
+            .andExpect(status().isForbidden());
+  }
+
+  @Test
+  @WithMockUser(username = AppSecurityAdmin.ADMIN_USERNAME, password = AppSecurityAdmin.ADMIN_PASSWORD, roles = "ADMIN")
+  public void usersAvailableForAdmin() throws Exception {
+    // given
+    mockMvc
+            .perform(get(USER_URL))
             .andExpect(status().isOk());
   }
 }
