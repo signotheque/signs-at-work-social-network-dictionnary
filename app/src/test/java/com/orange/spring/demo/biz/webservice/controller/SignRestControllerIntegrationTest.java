@@ -28,6 +28,7 @@ import com.orange.spring.demo.biz.domain.User;
 import com.orange.spring.demo.biz.persistence.repository.SignRepository;
 import com.orange.spring.demo.biz.persistence.service.UserService;
 import com.orange.spring.demo.biz.webservice.model.SignCreationView;
+import com.orange.spring.demo.biz.webservice.model.SignId;
 import com.orange.spring.demo.biz.webservice.model.SignView;
 import org.fest.assertions.Assertions;
 import org.junit.Before;
@@ -120,10 +121,10 @@ public class SignRestControllerIntegrationTest {
             .andExpect(status().isOk())
             .andReturn();
 
-    String id = result.getResponse().getContentAsString();
+    SignId signId = bodyToSignId(result.getResponse().getContentAsString());
 
     // do
-    result = mockMvc.perform(get(RestApi.WS_OPEN_SIGN + id))
+    result = mockMvc.perform(get(RestApi.WS_OPEN_SIGN + signId.signId))
             // then
             .andExpect(status().isOk())
             .andReturn();
@@ -144,5 +145,10 @@ public class SignRestControllerIntegrationTest {
   private SignView bodyToSignCreationView(String content) throws IOException {
     ObjectMapper mapper = new ObjectMapper();
     return mapper.readValue(content, SignView.class);
+  }
+
+  private SignId bodyToSignId(String content) throws IOException {
+    ObjectMapper mapper = new ObjectMapper();
+    return mapper.readValue(content, SignId.class);
   }
 }

@@ -26,8 +26,8 @@ import com.orange.spring.demo.biz.domain.Sign;
 import com.orange.spring.demo.biz.domain.User;
 import com.orange.spring.demo.biz.persistence.service.SignService;
 import com.orange.spring.demo.biz.persistence.service.UserService;
-import com.orange.spring.demo.biz.view.model.SignProfileView;
 import com.orange.spring.demo.biz.webservice.model.SignCreationView;
+import com.orange.spring.demo.biz.webservice.model.SignId;
 import com.orange.spring.demo.biz.webservice.model.SignView;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,12 +59,12 @@ public class SignRestController {
 
   @Secured("ROLE_USER")
   @RequestMapping(value = RestApi.WS_SEC_SIGN_CREATE, method = RequestMethod.POST)
-  public long createSign(@RequestBody SignCreationView signCreationView, Principal principal) {
+  public SignId createSign(@RequestBody SignCreationView signCreationView, Principal principal) {
     User user = userService.withUserName(principal.getName());
     Sign sign = userService.createUserSignVideo(user.id, signCreationView.getSignName(), signCreationView.getVideoUrl());
 
     log.info("createSign: username = {} / sign name = {} / video url = {}", user.username, signCreationView.getSignName(), signCreationView.getVideoUrl());
 
-    return sign.id;
+    return new SignId(sign.id);
   }
 }
