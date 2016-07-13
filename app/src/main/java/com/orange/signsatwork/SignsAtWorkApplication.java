@@ -42,9 +42,10 @@ import java.util.Locale;
 @Configuration
 @EnableAutoConfiguration
 @ComponentScan
-public class DemoSpringApplication extends WebMvcConfigurerAdapter {
+public class SignsAtWorkApplication extends WebMvcConfigurerAdapter {
+
 	public static void main(String[] args) {
-		SpringApplication.run(DemoSpringApplication.class, args);
+		SpringApplication.run(SignsAtWorkApplication.class, args);
 	}
 
 	@Bean
@@ -65,5 +66,4 @@ public class DemoSpringApplication extends WebMvcConfigurerAdapter {
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(localeChangeInterceptor());
 	}
-
 }

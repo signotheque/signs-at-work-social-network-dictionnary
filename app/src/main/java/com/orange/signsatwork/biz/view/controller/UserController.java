@@ -10,12 +10,12 @@ package com.orange.signsatwork.biz.view.controller;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 2 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-2.0.html>.
@@ -23,10 +23,7 @@ package com.orange.signsatwork.biz.view.controller;
  */
 
 import com.orange.signsatwork.biz.domain.User;
-import com.orange.signsatwork.biz.persistence.service.CommunityService;
-import com.orange.signsatwork.biz.persistence.service.MessageByLocaleService;
-import com.orange.signsatwork.biz.persistence.service.RequestService;
-import com.orange.signsatwork.biz.persistence.service.UserService;
+import com.orange.signsatwork.biz.persistence.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
@@ -39,18 +36,14 @@ import java.security.Principal;
 public class UserController {
 
   @Autowired
-  private UserService userService;
-  @Autowired
-  private CommunityService communityService;
-  @Autowired
-  private RequestService requestService;
+  private Services services;
   @Autowired
   MessageByLocaleService messageByLocaleService;
 
   @Secured("ROLE_USER")
   @RequestMapping(value = "/sec/profile")
   public String userDetails(Principal principal, Model model) {
-    User user = userService.withUserName(principal.getName());
+    User user = services.user().withUserName(principal.getName());
     model.addAttribute("title", messageByLocaleService.getMessage("profile"));
     model.addAttribute("user", user);
     return "profile";

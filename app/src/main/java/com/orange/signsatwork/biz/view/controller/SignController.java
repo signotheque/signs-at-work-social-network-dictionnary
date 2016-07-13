@@ -10,12 +10,12 @@ package com.orange.signsatwork.biz.view.controller;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 2 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-2.0.html>.
@@ -25,6 +25,7 @@ package com.orange.signsatwork.biz.view.controller;
 import com.orange.signsatwork.biz.domain.User;
 import com.orange.signsatwork.biz.persistence.service.MessageByLocaleService;
 import com.orange.signsatwork.biz.domain.Sign;
+import com.orange.signsatwork.biz.persistence.service.Services;
 import com.orange.signsatwork.biz.persistence.service.SignService;
 import com.orange.signsatwork.biz.persistence.service.UserService;
 import com.orange.signsatwork.biz.view.model.AuthentModel;
@@ -50,10 +51,7 @@ import java.util.List;
 public class SignController {
 
   @Autowired
-  private UserService userService;
-
-  @Autowired
-  private SignService signService;
+  private Services services;
 
   @Autowired
   MessageByLocaleService messageByLocaleService;
@@ -62,7 +60,7 @@ public class SignController {
   public String signs(Principal principal, Model model) {
     AuthentModel.addAuthenticatedModel(model, AuthentModel.isAuthenticated(principal));
 
-    List<SignView> signsView = SignView.from(signService.all());
+    List<SignView> signsView = SignView.from(services.sign().all());
     model.addAttribute("signs", signsView);
     model.addAttribute("signCreationView", new SignCreationView());
 
@@ -71,6 +69,8 @@ public class SignController {
 
   @RequestMapping(value = "/sign/{id}")
   public String sign(@PathVariable long id, Principal principal, Model model)  {
+    SignService signService = services.sign();
+
     AuthentModel.addAuthenticatedModel(model, AuthentModel.isAuthenticated(principal));
 
     Sign sign = signService.withIdLoadAssociates(id);
@@ -78,7 +78,7 @@ public class SignController {
     model.addAttribute("title", messageByLocaleService.getMessage("sign.info"));
 
     SignProfileView signProfileView = AuthentModel.isAuthenticated(principal) ?
-            new SignProfileView(sign, signService, userService.withUserName(principal.getName())) :
+            new SignProfileView(sign, signService, services.user().withUserName(principal.getName())) :
             new SignProfileView(sign, signService);
     model.addAttribute("signProfileView", signProfileView);
 
@@ -88,11 +88,11 @@ public class SignController {
   @Secured("ROLE_USER")
   @RequestMapping(value = "/sign/{id}/detail")
   public String signDetail(@PathVariable long id, Principal principal, Model model)  {
-    Sign sign = signService.withIdLoadAssociates(id);
+    Sign sign = services.sign().withIdLoadAssociates(id);
 
     model.addAttribute("title", messageByLocaleService.getMessage("sign.details"));
 
-    SignProfileView signProfileView = new SignProfileView(sign, signService, userService.withUserName(principal.getName()));
+    SignProfileView signProfileView = new SignProfileView(sign, services.sign(), services.user().withUserName(principal.getName()));
     model.addAttribute("signProfileView", signProfileView);
 
     return "sign-detail";
@@ -101,8 +101,8 @@ public class SignController {
   @Secured("ROLE_USER")
   @RequestMapping(value = "/sec/sign/create", method = RequestMethod.POST)
   public String createSign(HttpServletRequest req, @ModelAttribute SignCreationView signCreationView, Principal principal) {
-    User user = userService.withUserName(principal.getName());
-    Sign sign = signService.create(user.id, signCreationView.getSignName(), signCreationView.getVideoUrl());
+    User user = services.user().withUserName(principal.getName());
+    Sign sign = services.sign().create(user.id, signCreationView.getSignName(), signCreationView.getVideoUrl());
 
     log.info("createSign: username = {} / sign name = {} / video url = {}", user.username, signCreationView.getSignName(), signCreationView.getVideoUrl());
 
