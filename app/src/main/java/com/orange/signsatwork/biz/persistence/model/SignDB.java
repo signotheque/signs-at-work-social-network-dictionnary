@@ -10,12 +10,12 @@ package com.orange.signsatwork.biz.persistence.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 2 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-2.0.html>.
@@ -52,20 +52,20 @@ public class SignDB {
   @NotNull
   private String url;
 
-  @OneToMany(mappedBy = "sign", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "sign", fetch = FetchType.LAZY)
   private List<VideoDB> videos;
 
-  @ManyToMany(mappedBy = "signs", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @ManyToMany(mappedBy = "signs", fetch = FetchType.LAZY)
   @JsonBackReference
   private List<FavoriteDB> favorites;
 
-  @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(name="associate_sign",
           joinColumns={@JoinColumn(name="sign_id")},
           inverseJoinColumns={@JoinColumn(name="associate_sign_id")})
   private List<SignDB> associates;
 
-  @ManyToMany(mappedBy="associates", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @ManyToMany(mappedBy="associates", fetch = FetchType.LAZY)
   private List<SignDB> referenceBy;
 
   public SignDB(String name, String url) {

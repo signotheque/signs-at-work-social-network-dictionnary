@@ -10,12 +10,12 @@ package com.orange.signsatwork.biz.persistence.service;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 2 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-2.0.html>.
@@ -46,7 +46,6 @@ public class FavoriteServiceIntegrationTest {
   @Autowired
   private SignService signService;
 
-  private long id = 1234;
   private String favoriteName = "favoris";
 
   private String sign1Name = "cloud";
@@ -65,7 +64,7 @@ public class FavoriteServiceIntegrationTest {
   @Before
   public void setup() {
     clearDB.clear();
-    userId = testUser.get("user1").id;
+    userId = testUser.get().id;
   }
 
   @Test
@@ -75,7 +74,7 @@ public class FavoriteServiceIntegrationTest {
     signService.create(userId, sign2Name, sign2Url);
     Signs signs = signService.all();
 
-    Favorite favorite = favoriteService.create(new Favorite(id, favoriteName, null, signService));
+    Favorite favorite = favoriteService.create(new Favorite(-1, favoriteName, null, signService));
 
     // do
     favoriteService.changeFavoriteSigns(favorite.id, signs.ids());

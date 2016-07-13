@@ -10,12 +10,12 @@ package com.orange.signsatwork.biz.persistence.service.impl;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 2 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-2.0.html>.
@@ -23,12 +23,10 @@ package com.orange.signsatwork.biz.persistence.service.impl;
  */
 
 import com.orange.signsatwork.biz.domain.Favorite;
+import com.orange.signsatwork.biz.domain.Request;
 import com.orange.signsatwork.biz.domain.User;
 import com.orange.signsatwork.biz.domain.Users;
-import com.orange.signsatwork.biz.persistence.model.CommunityDB;
-import com.orange.signsatwork.biz.persistence.model.FavoriteDB;
-import com.orange.signsatwork.biz.persistence.model.RequestDB;
-import com.orange.signsatwork.biz.persistence.model.UserDB;
+import com.orange.signsatwork.biz.persistence.model.*;
 import com.orange.signsatwork.biz.persistence.repository.*;
 import com.orange.signsatwork.biz.persistence.service.*;
 import com.orange.signsatwork.biz.security.AppSecurityAdmin;
@@ -100,7 +98,7 @@ public class UserServiceImpl implements UserService, ApplicationListener<Authent
   }
 
   @Override
-  public User createUserRequest(long userId, String requestName) {
+  public Request createUserRequest(long userId, String requestName) {
     UserDB userDB = withDBId(userId);
 
     RequestDB requestDB = new RequestDB();
@@ -110,7 +108,7 @@ public class UserServiceImpl implements UserService, ApplicationListener<Authent
 
     userDB.getRequests().add(requestDB);
     userRepository.save(userDB);
-    return userFrom(userDB);
+    return RequestServiceImpl.requestFrom(requestDB, services);
   }
 
   @Override
@@ -129,7 +127,25 @@ public class UserServiceImpl implements UserService, ApplicationListener<Authent
 
   @Override
   public void delete(User user) {
-    // FIXME
+    UserDB userDB = userRepository.findOne(user.id);
+
+    List<RequestDB> requestDBs = new ArrayList<>();
+    requestDBs.addAll(userDB.getRequests());
+    List<CommentDB> commentDBs = new ArrayList<>();
+    commentDBs.addAll(userDB.getComments());
+    List<FavoriteDB> favoriteDBs = new ArrayList<>();
+    favoriteDBs.addAll(userDB.getFavorites());
+    List<VideoDB> videoDBs = new ArrayList<>();
+    videoDBs.addAll(userDB.getVideos());
+
+    requestDBs.stream().map(r -> services.requestService().withId(r.getId())).forEach(r -> services.requestService().delete(r));
+    commentDBs.stream().map(c -> services.commentService().withId(c.getId())).forEach(c -> services.commentService().delete(c));
+    favoriteDBs.stream().map(f -> services.favoriteService().withId(f.getId())).forEach(f -> services.favoriteService().delete(f));
+    videoDBs.stream().map(v -> services.videoService().withId(v.getId())).forEach(v -> services.videoService().delete(v));
+
+    userDB.getCommunities().forEach(c -> c.getUsers().remove(userDB));
+
+    userRepository.delete(userDB);
   }
 
   @Override

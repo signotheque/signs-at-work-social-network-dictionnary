@@ -10,12 +10,12 @@ package com.orange.signsatwork.biz.persistence.service.impl;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 2 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-2.0.html>.
@@ -117,13 +117,18 @@ public class VideoServiceImpl implements VideoService {
   @Override
   public void delete(Video video) {
     VideoDB videoDB = videoRepository.findOne(video.id);
+
     List<CommentDB> commentDBs = new ArrayList<>();
     commentDBs.addAll(videoDB.getComments());
-    commentDBs.forEach(commentDB -> services.commentService().delete(CommentServiceImpl.commentFrom(commentDB)));
     List<RatingDB> ratingDBs = new ArrayList<>();
     ratingDBs.addAll(videoDB.getRatings());
+
+    commentDBs.forEach(commentDB -> services.commentService().delete(CommentServiceImpl.commentFrom(commentDB)));
     ratingDBs.forEach(ratingDB -> services.ratingService().delete(ratingDB));
+
     videoDB.getUser().getVideos().remove(videoDB);
+    videoDB.getSign().getVideos().remove(videoDB);
+
     videoRepository.delete(videoDB);
   }
 
@@ -139,10 +144,5 @@ public class VideoServiceImpl implements VideoService {
 
   static Video videoFromRatingView(VideoDB videoDB) {
     return new Video(videoDB.getId(), videoDB.getUrl(), videoDB.getCreateDate(), null, null, null);
-  }
-
-  private VideoDB videoDBFrom(Video video) {
-    VideoDB videoDB = new VideoDB(video.url, video.createDate);
-    return videoDB;
   }
 }

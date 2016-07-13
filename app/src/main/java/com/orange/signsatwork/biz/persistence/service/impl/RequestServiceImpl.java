@@ -10,12 +10,12 @@ package com.orange.signsatwork.biz.persistence.service.impl;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 2 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-2.0.html>.
@@ -30,6 +30,7 @@ import com.orange.signsatwork.biz.persistence.repository.RequestRepository;
 import com.orange.signsatwork.biz.persistence.repository.SignRepository;
 import com.orange.signsatwork.biz.persistence.repository.UserRepository;
 import com.orange.signsatwork.biz.persistence.service.RequestService;
+import com.orange.signsatwork.biz.persistence.service.Services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,6 +46,7 @@ public class RequestServiceImpl implements RequestService {
   private final RequestRepository requestRepository;
   private final SignRepository signRepository;
   private final SignServiceImpl signServiceImpl;
+  private final Services services;
 
   @Override
   public Requests all() {
@@ -53,7 +55,7 @@ public class RequestServiceImpl implements RequestService {
 
   @Override
   public Request withId(long id) {
-    return requestFrom(requestRepository.findOne(id));
+    return requestFrom(requestRepository.findOne(id), services);
   }
 
   @Override
@@ -75,28 +77,31 @@ public class RequestServiceImpl implements RequestService {
     requestDB.setSign(signDB);
 
     requestDB = requestRepository.save(requestDB);
-    return requestFrom(requestDB);
+    return requestFrom(requestDB, services);
   }
 
   @Override
   public Request create(Request request) {
     RequestDB requestDB = requestRepository.save(requestDBFrom(request));
-    return requestFrom(requestDB);
+    return requestFrom(requestDB, services);
   }
 
   @Override
   public void delete(Request request) {
-    // FIXME
+    RequestDB requestDB = requestRepository.findOne(request.id);
+    requestDB.getUser().getRequests().remove(requestDB);
+    requestDB.setUser(null);
+    requestRepository.delete(requestDB);
   }
 
   private Requests requestsFrom(Iterable<RequestDB> requestsDB) {
     List<Request> requests = new ArrayList<>();
-    requestsDB.forEach(requestDB -> requests.add(requestFrom(requestDB)));
+    requestsDB.forEach(requestDB -> requests.add(requestFrom(requestDB, services)));
     return new Requests(requests);
   }
 
-  private Request requestFrom(RequestDB requestDB) {
-    return new Request(requestDB.getId(), requestDB.getName(), requestDB.getRequestDate(), signServiceImpl.signFrom(requestDB.getSign()));
+  static Request requestFrom(RequestDB requestDB, Services services) {
+    return new Request(requestDB.getId(), requestDB.getName(), requestDB.getRequestDate(), SignServiceImpl.signFrom(requestDB.getSign(), services));
   }
 
   private RequestDB requestDBFrom(Request request) {
