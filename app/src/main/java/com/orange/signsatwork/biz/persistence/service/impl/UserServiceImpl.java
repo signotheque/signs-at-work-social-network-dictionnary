@@ -54,9 +54,8 @@ public class UserServiceImpl implements UserService, ApplicationListener<Authent
   private final CommunityRepository communityRepository;
   private final RequestRepository requestRepository;
   private final FavoriteRepository favoriteRepository;
-  private final Services services;
-
   private final PasswordEncoder passwordEncoder;
+  private final Services services;
 
   @Override
   public Users all() {
@@ -138,10 +137,10 @@ public class UserServiceImpl implements UserService, ApplicationListener<Authent
     List<VideoDB> videoDBs = new ArrayList<>();
     videoDBs.addAll(userDB.getVideos());
 
-    requestDBs.stream().map(r -> services.requestService().withId(r.getId())).forEach(r -> services.requestService().delete(r));
-    commentDBs.stream().map(c -> services.commentService().withId(c.getId())).forEach(c -> services.commentService().delete(c));
-    favoriteDBs.stream().map(f -> services.favoriteService().withId(f.getId())).forEach(f -> services.favoriteService().delete(f));
-    videoDBs.stream().map(v -> services.videoService().withId(v.getId())).forEach(v -> services.videoService().delete(v));
+    requestDBs.stream().map(r -> services.request().withId(r.getId())).forEach(r -> services.request().delete(r));
+    commentDBs.stream().map(c -> services.comment().withId(c.getId())).forEach(c -> services.comment().delete(c));
+    favoriteDBs.stream().map(f -> services.favorite().withId(f.getId())).forEach(f -> services.favorite().delete(f));
+    videoDBs.stream().map(v -> services.video().withId(v.getId())).forEach(v -> services.video().delete(v));
 
     userDB.getCommunities().forEach(c -> c.getUsers().remove(userDB));
 
@@ -173,7 +172,7 @@ public class UserServiceImpl implements UserService, ApplicationListener<Authent
             userDB.getId(),
             userDB.getUsername(), userDB.getFirstName(), userDB.getLastName(),
             userDB.getEmail(), userDB.getEntity(), userDB.getActivity(), userDB.getLastConnectionDate(),
-            services.communityService(), services.requestService(), services.favoriteService(), services.videoService());
+            services);
   }
 
   static User userFromSignView(UserDB userDB) {

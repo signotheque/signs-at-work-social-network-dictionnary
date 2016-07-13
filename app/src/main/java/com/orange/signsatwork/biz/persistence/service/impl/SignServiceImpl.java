@@ -33,7 +33,6 @@ import com.orange.signsatwork.biz.persistence.repository.UserRepository;
 import com.orange.signsatwork.biz.persistence.repository.VideoRepository;
 import com.orange.signsatwork.biz.persistence.service.Services;
 import com.orange.signsatwork.biz.persistence.service.SignService;
-import com.orange.signsatwork.biz.persistence.service.VideoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -163,8 +162,8 @@ public class SignServiceImpl implements SignService {
     List<VideoDB> videoDBs = new ArrayList<>();
     videoDBs.addAll(signDB.getVideos());
     videoDBs.stream()
-            .map(videoDB -> services.videoService().withId(videoDB.getId()))
-            .forEach(video -> services.videoService().delete(video));
+            .map(videoDB -> services.video().withId(videoDB.getId()))
+            .forEach(video -> services.video().delete(video));
     signDB.getFavorites().forEach(favoriteDB -> favoriteDB.getSigns().remove(signDB));
     signDB.getReferenceBy().forEach(s -> s.getAssociates().remove(signDB));
     signRepository.delete(signDB);
@@ -182,12 +181,12 @@ public class SignServiceImpl implements SignService {
 
   static Sign signFrom(SignDB signDB, Services services) {
     return signDB == null ? null :
-      new Sign(signDB.getId(), signDB.getName(), signDB.getUrl(), VideoServiceImpl.videosFrom(signDB.getVideos()), null, null, services.videoService());
+      new Sign(signDB.getId(), signDB.getName(), signDB.getUrl(), VideoServiceImpl.videosFrom(signDB.getVideos()), null, null, services.video());
   }
 
   Sign signFromWithAssociates(SignDB signDB) {
     return signDB == null ? null :
-      new Sign(signDB.getId(), signDB.getName(), signDB.getUrl(), null, signsFrom(signDB.getAssociates()).ids(), signsFrom(signDB.getReferenceBy()).ids(), services.videoService());
+      new Sign(signDB.getId(), signDB.getName(), signDB.getUrl(), null, signsFrom(signDB.getAssociates()).ids(), signsFrom(signDB.getReferenceBy()).ids(), services.video());
   }
 
   private SignDB signDBFrom(Sign sign) {

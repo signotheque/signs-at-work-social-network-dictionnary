@@ -24,8 +24,8 @@ package com.orange.signsatwork.biz.security;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.orange.signsatwork.biz.ClearDB;
 import com.orange.signsatwork.biz.TestUser;
+import com.orange.signsatwork.biz.persistence.service.Services;
 import com.orange.signsatwork.biz.view.model.UserCreationView;
 import com.orange.signsatwork.biz.webservice.controller.RestApi;
 import org.junit.Before;
@@ -55,7 +55,7 @@ public class RestApiSecurityTest {
   WebApplicationContext context;
 
   @Autowired
-  ClearDB clearDB;
+  Services services;
 
   @Autowired
   TestUser testUser;
@@ -73,7 +73,7 @@ public class RestApiSecurityTest {
             .alwaysDo(print())
             .build();
 
-    clearDB.clear();
+    services.clearPersistence();
     testUser.get(username);
   }
 

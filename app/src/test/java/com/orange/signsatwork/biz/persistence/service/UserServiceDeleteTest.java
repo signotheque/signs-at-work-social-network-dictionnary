@@ -31,8 +31,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Arrays;
-
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class UserServiceDeleteTest {
@@ -47,30 +45,30 @@ public class UserServiceDeleteTest {
   public void canRemoveUser() {
     // given
     User user = testUser.get("user-canRemoveUser");
-    Sign sign = services.signService().create(user.id, "sign-canRemoveUser", "//video-canRemoveUser");
+    Sign sign = services.sign().create(user.id, "sign-canRemoveUser", "//video-canRemoveUser");
     Video video = sign.loadVideos().videos.list().get(0);
-    Favorite favorite = services.userService().createUserFavorite(user.id, "favorite-canRemoveUser");
-    Request request = services.userService().createUserRequest(user.id, "request-canRemoveUser");
-    services.videoService().createVideoRating(video.id, user.id, Rating.Positive);
-    Comment comment = services.videoService().createVideoComment(video.id, user.id, "comment-canRemoveUser");
+    Favorite favorite = services.user().createUserFavorite(user.id, "favorite-canRemoveUser");
+    Request request = services.user().createUserRequest(user.id, "request-canRemoveUser");
+    services.video().createVideoRating(video.id, user.id, Rating.Positive);
+    Comment comment = services.video().createVideoComment(video.id, user.id, "comment-canRemoveUser");
 
     // then, check we have a correct testing context
-    Assertions.assertThat(services.userService().withId(user.id)).isNotNull();
-    Assertions.assertThat(services.favoriteService().withId(favorite.id)).isNotNull();
-    Assertions.assertThat(services.requestService().withId(request.id)).isNotNull();
-    Assertions.assertThat(services.commentService().withId(comment.id)).isNotNull();
-    Assertions.assertThat(services.videoService().withId(video.id)).isNotNull();
-    Assertions.assertThat(services.ratingService().all().stream().filter(r -> r.primaryKey.user.id == user.id).count()).isEqualTo(1);
+    Assertions.assertThat(services.user().withId(user.id)).isNotNull();
+    Assertions.assertThat(services.favorite().withId(favorite.id)).isNotNull();
+    Assertions.assertThat(services.request().withId(request.id)).isNotNull();
+    Assertions.assertThat(services.comment().withId(comment.id)).isNotNull();
+    Assertions.assertThat(services.video().withId(video.id)).isNotNull();
+    Assertions.assertThat(services.rating().all().stream().filter(r -> r.primaryKey.user.id == user.id).count()).isEqualTo(1);
 
     // do
-    services.userService().delete(user);
+    services.user().delete(user);
 
     // then
-    Assertions.assertThat(services.userService().all().stream().filter(u -> u.id == user.id).count()).isEqualTo(0);
-    Assertions.assertThat(services.favoriteService().all().stream().filter(f -> f.id == favorite.id).count()).isEqualTo(0);
-    Assertions.assertThat(services.requestService().all().stream().filter(r -> r.id == request.id).count()).isEqualTo(0);
-    Assertions.assertThat(services.commentService().all().stream().filter(c -> c.id == comment.id).count()).isEqualTo(0);
-    Assertions.assertThat(services.videoService().all().stream().filter(v -> v.id == video.id).count()).isEqualTo(0);
-    Assertions.assertThat(services.ratingService().all().stream().filter(r -> r.primaryKey.user.id == user.id).count()).isEqualTo(0);
+    Assertions.assertThat(services.user().all().stream().filter(u -> u.id == user.id).count()).isEqualTo(0);
+    Assertions.assertThat(services.favorite().all().stream().filter(f -> f.id == favorite.id).count()).isEqualTo(0);
+    Assertions.assertThat(services.request().all().stream().filter(r -> r.id == request.id).count()).isEqualTo(0);
+    Assertions.assertThat(services.comment().all().stream().filter(c -> c.id == comment.id).count()).isEqualTo(0);
+    Assertions.assertThat(services.video().all().stream().filter(v -> v.id == video.id).count()).isEqualTo(0);
+    Assertions.assertThat(services.rating().all().stream().filter(r -> r.primaryKey.user.id == user.id).count()).isEqualTo(0);
   }
 }

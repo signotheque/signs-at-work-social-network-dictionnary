@@ -47,16 +47,16 @@ public class CommunityServiceDeleteTest {
   public void canRemoveCommunity() {
     // given
     User user = testUser.get("user-CanRemoveCommunity");
-    Community community = services.communityService().create(Community.create("community-canRemoveCommunity"));
+    Community community = services.community().create(Community.create("community-canRemoveCommunity"));
 
     // do/then
-    services.userService().changeUserCommunities(user.id, Arrays.asList(new Long[]{community.id}));
-    Assertions.assertThat(services.communityService().all().stream().filter(c -> c.id == community.id).count()).isEqualTo(1);
-    Assertions.assertThat(services.userService().withId(user.id).loadCommunitiesRequestsFavorites().communitiesIds()).contains(community.id);
+    services.user().changeUserCommunities(user.id, Arrays.asList(new Long[]{community.id}));
+    Assertions.assertThat(services.community().all().stream().filter(c -> c.id == community.id).count()).isEqualTo(1);
+    Assertions.assertThat(services.user().withId(user.id).loadCommunitiesRequestsFavorites().communitiesIds()).contains(community.id);
 
     // do/then
-    services.communityService().delete(community);
-    Assertions.assertThat(services.userService().withId(user.id).loadCommunitiesRequestsFavorites().communitiesIds()).doesNotContain(community.id);
-    Assertions.assertThat(services.communityService().all().stream().filter(c -> c.id == community.id).count()).isEqualTo(0);
+    services.community().delete(community);
+    Assertions.assertThat(services.user().withId(user.id).loadCommunitiesRequestsFavorites().communitiesIds()).doesNotContain(community.id);
+    Assertions.assertThat(services.community().all().stream().filter(c -> c.id == community.id).count()).isEqualTo(0);
   }
 }

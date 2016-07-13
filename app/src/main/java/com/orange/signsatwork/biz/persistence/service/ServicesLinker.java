@@ -22,41 +22,42 @@ package com.orange.signsatwork.biz.persistence.service;
  * #L%
  */
 
-
-import com.orange.signsatwork.biz.domain.Community;
-import org.assertj.core.api.Assertions;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.stereotype.Service;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class CommunityServiceIntegrationTest {
+import javax.annotation.PostConstruct;
 
+@Service
+class ServicesLinker {
   @Autowired
-  Services services;
-
+  private CommentService commentService;
   @Autowired
   private CommunityService communityService;
+  @Autowired
+  private FavoriteService favoriteService;
+  @Autowired
+  private RatingService ratingService;
+  @Autowired
+  private RequestService requestService;
+  @Autowired
+  private SignService signService;
+  @Autowired
+  private UserService userService;
+  @Autowired
+  private VideoService videoService;
 
-  private String name = "aristochat";
+  @Autowired
+  private Services services;
 
-  @Before
-  public void setup() {
-    services.clearPersistence();
-  }
-
-  @Test
-  public void createCommunity() {
-    // given
-    // do
-    Community community = communityService.create(new Community(0, name));
-    community = communityService.withId(community.id);
-
-    // then
-    Assertions.assertThat(community.name).isEqualTo(name);
+  @PostConstruct
+  private void init() {
+    services.community(communityService);
+    services.comment(commentService);
+    services.favorite(favoriteService);
+    services.rating(ratingService);
+    services.request(requestService);
+    services.sign(signService);
+    services.user(userService);
+    services.video(videoService);
   }
 }

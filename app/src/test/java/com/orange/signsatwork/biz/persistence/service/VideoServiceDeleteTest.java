@@ -24,7 +24,6 @@ package com.orange.signsatwork.biz.persistence.service;
 
 import com.orange.signsatwork.biz.TestUser;
 import com.orange.signsatwork.biz.domain.*;
-import org.assertj.core.api.Assert;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,24 +45,24 @@ public class VideoServiceDeleteTest {
   public void canRemoveVideo() {
     // given
     User user = testUser.get("user-canRemoveVideo");
-    Sign sign = services.signService().create(user.id, "sign-canRemoveVideo", "//video-canRemoveVideo");
+    Sign sign = services.sign().create(user.id, "sign-canRemoveVideo", "//video-canRemoveVideo");
     Video video = sign.loadVideos().videos.list().get(0);
-    services.videoService().createVideoRating(video.id, user.id, Rating.Negative);
-    Comment comment = services.videoService().createVideoComment(video.id, user.id, "comment-canRemoveVideo");
+    services.video().createVideoRating(video.id, user.id, Rating.Negative);
+    Comment comment = services.video().createVideoComment(video.id, user.id, "comment-canRemoveVideo");
 
     // do/then
-    Assertions.assertThat(services.videoService().all().stream().filter(v -> v.id == video.id).count()).isEqualTo(1);
-    Assertions.assertThat(services.userService().withId(user.id).loadVideos().videos.ids()).contains(video.id);
-    Assertions.assertThat(services.signService().withId(sign.id).loadVideos().videos.ids()).contains(video.id);
-    Assertions.assertThat(services.ratingService().all().stream().filter(r -> r.primaryKey.user.id == user.id && r.primaryKey.video.id == video.id).count()).isEqualTo(1);
-    Assertions.assertThat(services.commentService().all().stream().filter(c -> c.id == comment.id).count()).isEqualTo(1);
+    Assertions.assertThat(services.video().all().stream().filter(v -> v.id == video.id).count()).isEqualTo(1);
+    Assertions.assertThat(services.user().withId(user.id).loadVideos().videos.ids()).contains(video.id);
+    Assertions.assertThat(services.sign().withId(sign.id).loadVideos().videos.ids()).contains(video.id);
+    Assertions.assertThat(services.rating().all().stream().filter(r -> r.primaryKey.user.id == user.id && r.primaryKey.video.id == video.id).count()).isEqualTo(1);
+    Assertions.assertThat(services.comment().all().stream().filter(c -> c.id == comment.id).count()).isEqualTo(1);
 
     // do/then
-    services.videoService().delete(video);
-    Assertions.assertThat(services.videoService().all().stream().filter(v -> v.id == video.id).count()).isEqualTo(0);
-    Assertions.assertThat(services.userService().withId(user.id).loadVideos().videos.ids()).doesNotContain(video.id);
-    Assertions.assertThat(services.signService().withId(sign.id).loadVideos().videos.ids()).doesNotContain(video.id);
-    Assertions.assertThat(services.ratingService().all().stream().filter(r -> r.primaryKey.user.id == user.id && r.primaryKey.video.id == video.id).count()).isEqualTo(0);
-    Assertions.assertThat(services.commentService().all().stream().filter(c -> c.id == comment.id).count()).isEqualTo(0);
+    services.video().delete(video);
+    Assertions.assertThat(services.video().all().stream().filter(v -> v.id == video.id).count()).isEqualTo(0);
+    Assertions.assertThat(services.user().withId(user.id).loadVideos().videos.ids()).doesNotContain(video.id);
+    Assertions.assertThat(services.sign().withId(sign.id).loadVideos().videos.ids()).doesNotContain(video.id);
+    Assertions.assertThat(services.rating().all().stream().filter(r -> r.primaryKey.user.id == user.id && r.primaryKey.video.id == video.id).count()).isEqualTo(0);
+    Assertions.assertThat(services.comment().all().stream().filter(c -> c.id == comment.id).count()).isEqualTo(0);
   }
 }

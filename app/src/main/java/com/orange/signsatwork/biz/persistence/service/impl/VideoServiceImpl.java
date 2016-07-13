@@ -123,8 +123,8 @@ public class VideoServiceImpl implements VideoService {
     List<RatingDB> ratingDBs = new ArrayList<>();
     ratingDBs.addAll(videoDB.getRatings());
 
-    commentDBs.forEach(commentDB -> services.commentService().delete(CommentServiceImpl.commentFrom(commentDB)));
-    ratingDBs.forEach(ratingDB -> services.ratingService().delete(ratingDB));
+    commentDBs.forEach(commentDB -> services.comment().delete(CommentServiceImpl.commentFrom(commentDB)));
+    ratingDBs.forEach(ratingDB -> services.rating().delete(ratingDB));
 
     videoDB.getUser().getVideos().remove(videoDB);
     videoDB.getSign().getVideos().remove(videoDB);

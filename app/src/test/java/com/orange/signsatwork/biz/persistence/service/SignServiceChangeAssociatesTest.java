@@ -22,7 +22,6 @@ package com.orange.signsatwork.biz.persistence.service;
  * #L%
  */
 
-import com.orange.signsatwork.biz.ClearDB;
 import com.orange.signsatwork.biz.TestUser;
 import com.orange.signsatwork.biz.domain.Sign;
 import org.assertj.core.api.Assertions;
@@ -40,20 +39,17 @@ import java.util.Arrays;
 public class SignServiceChangeAssociatesTest {
 
   @Autowired
-  SignService signService;
-
-  @Autowired
   TestUser testUser;
 
   @Autowired
-  ClearDB clearDB;
+  Services services;
 
   long userId1;
   long userId2;
 
   @Before
   public void setup() {
-    clearDB.clear();
+    services.clearPersistence();
     userId1 = testUser.get("user1").id;
     userId2 = testUser.get("user2").id;
   }
@@ -61,6 +57,8 @@ public class SignServiceChangeAssociatesTest {
   @Test
   public void associateSigns() {
     // given
+    SignService signService = services.sign();
+
     Sign sign1 = signService.create(userId1, "s1", "//video1");
     Sign sign2 = signService.create(userId2, "s2", "//video2");
     Sign sign3 = signService.create(userId2, "s3", "//video3");

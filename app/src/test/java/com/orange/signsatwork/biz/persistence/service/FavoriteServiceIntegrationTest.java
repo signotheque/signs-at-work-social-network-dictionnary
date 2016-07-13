@@ -23,7 +23,6 @@ package com.orange.signsatwork.biz.persistence.service;
  */
 
 
-import com.orange.signsatwork.biz.ClearDB;
 import com.orange.signsatwork.biz.TestUser;
 import com.orange.signsatwork.biz.domain.Favorite;
 import com.orange.signsatwork.biz.domain.Signs;
@@ -42,9 +41,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class FavoriteServiceIntegrationTest {
 
   @Autowired
-  private FavoriteService favoriteService;
-  @Autowired
-  private SignService signService;
+  private Services services;
 
   private String favoriteName = "favoris";
 
@@ -56,20 +53,20 @@ public class FavoriteServiceIntegrationTest {
   @Autowired
   TestUser testUser;
 
-  @Autowired
-  ClearDB clearDB;
-
   long userId;
 
   @Before
   public void setup() {
-    clearDB.clear();
+    services.clearPersistence();
     userId = testUser.get().id;
   }
 
   @Test
   public void changeFavoriteSigns() {
     //given
+    SignService signService = services.sign();
+    FavoriteService favoriteService = services.favorite();
+
     signService.create(userId, sign1Name, sign1Url);
     signService.create(userId, sign2Name, sign2Url);
     Signs signs = signService.all();

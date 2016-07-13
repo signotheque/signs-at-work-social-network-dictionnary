@@ -50,27 +50,27 @@ public class SignServiceDeleteTest {
   public void canRemoveSign() {
     // given
     User user = testUser.get("user-canRemoveSign");
-    Sign sign1 = services.signService().create(user.id, "sign-canRemoveSign", "//video-canRemoveSign");
-    Sign sign2 = services.signService().create(user.id, "sign-canRemoveSign2", "//video-canRemoveSign2");
+    Sign sign1 = services.sign().create(user.id, "sign-canRemoveSign", "//video-canRemoveSign");
+    Sign sign2 = services.sign().create(user.id, "sign-canRemoveSign2", "//video-canRemoveSign2");
     Video video = sign1.loadVideos().videos.list().get(0);
-    Favorite favorite = services.userService().createUserFavorite(user.id, "favorite-canRemoveSign");
+    Favorite favorite = services.user().createUserFavorite(user.id, "favorite-canRemoveSign");
 
-    services.signService().changeSignAssociates(sign2.id, Arrays.asList(new Long[]{sign1.id}));
-    services.favoriteService().changeFavoriteSigns(favorite.id, Arrays.asList(new Long[]{sign1.id}));
+    services.sign().changeSignAssociates(sign2.id, Arrays.asList(new Long[]{sign1.id}));
+    services.favorite().changeFavoriteSigns(favorite.id, Arrays.asList(new Long[]{sign1.id}));
 
     // then, check we have a correct testing context
-    Assertions.assertThat(services.signService().withId(sign1.id)).isNotNull();
-    Assertions.assertThat(services.videoService().withId(video.id)).isNotNull();
-    Assertions.assertThat(services.signService().withIdLoadAssociates(sign2.id).associateSignsIds).contains(sign1.id);
-    Assertions.assertThat(services.favoriteService().withId(favorite.id).loadSigns().signsIds()).contains(sign1.id);
+    Assertions.assertThat(services.sign().withId(sign1.id)).isNotNull();
+    Assertions.assertThat(services.video().withId(video.id)).isNotNull();
+    Assertions.assertThat(services.sign().withIdLoadAssociates(sign2.id).associateSignsIds).contains(sign1.id);
+    Assertions.assertThat(services.favorite().withId(favorite.id).loadSigns().signsIds()).contains(sign1.id);
 
     // do
-    services.signService().delete(sign1);
+    services.sign().delete(sign1);
 
     // then
-    Assertions.assertThat(services.signService().withId(sign1.id)).isNull();
-    Assertions.assertThat(services.videoService().all().stream().filter(v -> v.id == video.id).count()).isEqualTo(0);
-    Assertions.assertThat(services.signService().withIdLoadAssociates(sign2.id).associateSignsIds).doesNotContain(sign1.id);
-    Assertions.assertThat(services.favoriteService().withId(favorite.id).loadSigns().signsIds()).doesNotContain(sign1.id);
+    Assertions.assertThat(services.sign().withId(sign1.id)).isNull();
+    Assertions.assertThat(services.video().all().stream().filter(v -> v.id == video.id).count()).isEqualTo(0);
+    Assertions.assertThat(services.sign().withIdLoadAssociates(sign2.id).associateSignsIds).doesNotContain(sign1.id);
+    Assertions.assertThat(services.favorite().withId(favorite.id).loadSigns().signsIds()).doesNotContain(sign1.id);
   }
 }

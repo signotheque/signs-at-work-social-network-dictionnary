@@ -22,10 +22,8 @@ package com.orange.signsatwork.biz.domain;
  * #L%
  */
 
-import com.orange.signsatwork.biz.ClearDB;
 import com.orange.signsatwork.biz.TestUser;
-import com.orange.signsatwork.biz.persistence.service.SignService;
-import com.orange.signsatwork.biz.persistence.service.UserService;
+import com.orange.signsatwork.biz.persistence.service.Services;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
@@ -39,31 +37,26 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class SignRatingTest {
 
   @Autowired
-  ClearDB clearDB;
+  Services services;
   @Autowired
   TestUser testUser;
-
-  @Autowired
-  UserService userService;
-  @Autowired
-  SignService signService;
 
   long userId;
   long signId;
 
   @Before
   public void setup() {
-    clearDB.clear();
+    services.clearPersistence();
 
     userId = testUser.get("user").id;
-    signId = signService.create(userId, "mySign", "//video").id;
+    signId = services.sign().create(userId, "mySign", "//video").id;
   }
 
   @Test
   public void defaultRatingIsNeutral() {
     // given
-    User user = userService.withId(userId);
-    Sign sign = signService.withId(signId);
+    User user = services.user().withId(userId);
+    Sign sign = services.sign().withId(signId);
     // do
     Rating rating = sign.rating(user);
     // then
@@ -79,11 +72,11 @@ public class SignRatingTest {
 
   private void testChangeAndReadRating(Rating rating) {
     // given
-    User user = userService.withId(userId);
-    Sign sign = signService.withId(signId);
+    User user = services.user().withId(userId);
+    Sign sign = services.sign().withId(signId);
     sign.changeUserRating(user, rating);
     // do
-    Sign reloadedSign = signService.withId(sign.id);
+    Sign reloadedSign = services.sign().withId(sign.id);
     Rating newRating = reloadedSign.rating(user);
     // then
     Assertions.assertThat(newRating).isEqualTo(rating);

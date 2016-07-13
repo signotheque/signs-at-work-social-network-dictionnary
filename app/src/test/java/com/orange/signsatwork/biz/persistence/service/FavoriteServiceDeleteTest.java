@@ -23,7 +23,6 @@ package com.orange.signsatwork.biz.persistence.service;
  */
 
 import com.orange.signsatwork.biz.TestUser;
-import com.orange.signsatwork.biz.domain.Community;
 import com.orange.signsatwork.biz.domain.Favorite;
 import com.orange.signsatwork.biz.domain.Sign;
 import com.orange.signsatwork.biz.domain.User;
@@ -50,17 +49,17 @@ public class FavoriteServiceDeleteTest {
   public void canRemoveFavorite() {
     // given
     User user = testUser.get("user-canRemoveFavorite");
-    Sign sign = services.signService().create(user.id, "sign-canRemoveFavorite", "//video-canRemoveFavorite");
+    Sign sign = services.sign().create(user.id, "sign-canRemoveFavorite", "//video-canRemoveFavorite");
 
     // do/then
-    Favorite favorite = services.userService().createUserFavorite(user.id, "favorite-canRemoveFavorite");
-    services.favoriteService().changeFavoriteSigns(favorite.id, Arrays.asList(new Long[]{sign.id}));
-    Assertions.assertThat(services.favoriteService().all().stream().filter(f -> f.id == favorite.id).count()).isEqualTo(1);
-    Assertions.assertThat(services.userService().withId(user.id).loadCommunitiesRequestsFavorites().favorites.ids()).contains(favorite.id);
+    Favorite favorite = services.user().createUserFavorite(user.id, "favorite-canRemoveFavorite");
+    services.favorite().changeFavoriteSigns(favorite.id, Arrays.asList(new Long[]{sign.id}));
+    Assertions.assertThat(services.favorite().all().stream().filter(f -> f.id == favorite.id).count()).isEqualTo(1);
+    Assertions.assertThat(services.user().withId(user.id).loadCommunitiesRequestsFavorites().favorites.ids()).contains(favorite.id);
 
     // do/then
-    services.favoriteService().delete(favorite);
-    Assertions.assertThat(services.favoriteService().all().stream().filter(f -> f.id == favorite.id).count()).isEqualTo(0);
-    Assertions.assertThat(services.userService().withId(user.id).loadCommunitiesRequestsFavorites().favorites.ids()).doesNotContain(favorite.id);
+    services.favorite().delete(favorite);
+    Assertions.assertThat(services.favorite().all().stream().filter(f -> f.id == favorite.id).count()).isEqualTo(0);
+    Assertions.assertThat(services.user().withId(user.id).loadCommunitiesRequestsFavorites().favorites.ids()).doesNotContain(favorite.id);
   }
 }

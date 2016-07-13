@@ -24,9 +24,9 @@ package com.orange.signsatwork.biz.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.orange.signsatwork.biz.ClearDB;
 import com.orange.signsatwork.biz.TestUser;
 import com.orange.signsatwork.biz.persistence.repository.SignRepository;
+import com.orange.signsatwork.biz.persistence.service.Services;
 import com.orange.signsatwork.biz.persistence.service.UserService;
 import com.orange.signsatwork.biz.webservice.controller.RestApi;
 import com.orange.signsatwork.biz.webservice.model.SignCreationView;
@@ -62,15 +62,10 @@ public class SignRestControllerIntegrationTest {
   private WebApplicationContext context;
 
   @Autowired
-  ClearDB clearDB;
+  Services services;
 
   @Autowired
   TestUser testUser;
-
-  @Autowired
-  private SignRepository signRepository;
-  @Autowired
-  private UserService userService;
 
   private MockMvc mockMvc;
 
@@ -87,7 +82,7 @@ public class SignRestControllerIntegrationTest {
             .alwaysDo(print())
             .build();
 
-    clearDB.clear();
+    services.clearPersistence();
     testUser.get(username);
   }
 

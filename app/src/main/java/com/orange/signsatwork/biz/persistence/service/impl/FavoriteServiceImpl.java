@@ -31,7 +31,6 @@ import com.orange.signsatwork.biz.persistence.repository.SignRepository;
 import com.orange.signsatwork.biz.persistence.repository.UserRepository;
 import com.orange.signsatwork.biz.persistence.service.FavoriteService;
 import com.orange.signsatwork.biz.persistence.service.Services;
-import com.orange.signsatwork.biz.persistence.service.SignService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -105,7 +104,7 @@ public class FavoriteServiceImpl implements FavoriteService {
   }
 
   static Favorite favoriteFrom(FavoriteDB favoriteDB, Services services) {
-    return new Favorite(favoriteDB.getId(), favoriteDB.getName(), null, services.signService());
+    return new Favorite(favoriteDB.getId(), favoriteDB.getName(), null, services.sign());
   }
 
   private FavoriteDB favoriteDBFrom(Favorite favorite) {

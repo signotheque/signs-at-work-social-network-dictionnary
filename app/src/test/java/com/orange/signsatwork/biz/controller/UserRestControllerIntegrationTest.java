@@ -22,8 +22,8 @@ package com.orange.signsatwork.biz.controller;
  * #L%
  */
 
-import com.orange.signsatwork.biz.ClearDB;
 import com.orange.signsatwork.biz.TestUser;
+import com.orange.signsatwork.biz.persistence.service.Services;
 import com.orange.signsatwork.biz.webservice.controller.RestApi;
 import org.junit.Before;
 import org.junit.Test;
@@ -48,7 +48,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class UserRestControllerIntegrationTest {
 
   @Autowired
-  ClearDB clearDB;
+  Services services;
 
   @Autowired
   TestUser testUser;
@@ -70,7 +70,7 @@ public class UserRestControllerIntegrationTest {
             .alwaysDo(print())
             .build();
 
-    clearDB.clear();
+    services.clearPersistence();
 
     testUser.get(username1);
     testUser.get(username2);

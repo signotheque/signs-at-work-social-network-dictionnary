@@ -23,40 +23,34 @@ package com.orange.signsatwork.biz.persistence.service;
  */
 
 import com.orange.signsatwork.biz.security.AppSecurityAdmin;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.experimental.Accessors;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 @Getter
+@Setter(AccessLevel.PACKAGE)
 @Accessors(fluent = true)
 public class Services {
-  @Autowired
-  private CommentService commentService;
-  @Autowired
-  private CommunityService communityService;
-  @Autowired
-  private FavoriteService favoriteService;
-  @Autowired
-  private RatingService ratingService;
-  @Autowired
-  private RequestService requestService;
-  @Autowired
-  private SignService signService;
-  @Autowired
-  private UserService userService;
-  @Autowired
-  private VideoService videoService;
+  private CommentService comment;
+  private CommunityService community;
+  private FavoriteService favorite;
+  private RatingService rating;
+  private RequestService request;
+  private SignService sign;
+  private UserService user;
+  private VideoService video;
 
   public void clearPersistence() {
-    commentService.all().stream().forEach(comment -> commentService.delete(comment));
-    communityService.all().stream().forEach(community -> communityService.delete(community));
-    favoriteService.all().stream().forEach(favorite -> favoriteService.delete(favorite));
-    ratingService.deleteAll();
-    videoService.all().stream().forEach(video -> videoService.delete(video));
-    requestService.all().stream().forEach(request -> requestService.delete(request));
-    signService.all().stream().forEach(sign -> signService.delete(sign));
-    userService.all().stream().filter(user -> user.username != AppSecurityAdmin.ADMIN_USERNAME).forEach(user -> userService.delete(user));
+    comment.all().stream().forEach(c -> comment.delete(c));
+    community.all().stream().forEach(c -> community.delete(c));
+    favorite.all().stream().forEach(f -> favorite.delete(f));
+    rating.deleteAll();
+    video.all().stream().forEach(v -> video.delete(v));
+    request.all().stream().forEach(r -> request.delete(r));
+    sign.all().stream().forEach(s -> sign.delete(s));
+    user.all().stream().filter(u -> u.username != AppSecurityAdmin.ADMIN_USERNAME).forEach(u -> user.delete(u));
   }
 }

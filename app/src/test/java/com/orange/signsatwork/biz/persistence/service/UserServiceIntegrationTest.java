@@ -22,7 +22,6 @@ package com.orange.signsatwork.biz.persistence.service;
  * #L%
  */
 
-import com.orange.signsatwork.biz.ClearDB;
 import com.orange.signsatwork.biz.TestUser;
 import com.orange.signsatwork.biz.domain.Community;
 import com.orange.signsatwork.biz.domain.User;
@@ -48,17 +47,11 @@ import java.util.Set;
 public class UserServiceIntegrationTest {
 
   @Autowired
-  ClearDB clearDB;
+  Services services;
 
   @Autowired
   TestUser testUser;
 
-  @Autowired
-  UserService userService;
-  @Autowired
-  CommunityService communityService;
-  @Autowired
-  SignService signService;
   @Autowired
   UserRepository userRepository;
 
@@ -80,7 +73,7 @@ public class UserServiceIntegrationTest {
 
   @Before
   public void setup() {
-    clearDB.clear();
+    services.clearPersistence();
     userId = testUser.get(username).id;
   }
 
@@ -103,13 +96,13 @@ public class UserServiceIntegrationTest {
   @Test
   public void changeUserCommunities() {
     //given
-    Community community = communityService.create(Community.create(communityName));
+    Community community = services.community().create(Community.create(communityName));
     List<Long> commmunitiesIds = new ArrayList<>();
     commmunitiesIds.add(community.id);
-    User user = userService.withId(userId);
+    User user = services.user().withId(userId);
 
     //do
-    userService.changeUserCommunities(userId, commmunitiesIds);
+    services.user().changeUserCommunities(userId, commmunitiesIds);
 
     User userWithCommunitiesRequestsFavorites = user.loadCommunitiesRequestsFavorites();
 
@@ -121,9 +114,9 @@ public class UserServiceIntegrationTest {
   @Test
   public void createUserRequest() {
     //given
-    User user = userService.withId(userId);
+    User user = services.user().withId(userId);
     //do
-    userService.createUserRequest(userId, requestName);
+    services.user().createUserRequest(userId, requestName);
 
     User userWithCommunitiesRequestsFavorites = user.loadCommunitiesRequestsFavorites();
 
@@ -135,9 +128,9 @@ public class UserServiceIntegrationTest {
   @Test
   public void createUserFavorite() {
     //given
-    User user = userService.withId(userId);
+    User user = services.user().withId(userId);
     //do
-    userService.createUserFavorite(userId, favoriteName);
+    services.user().createUserFavorite(userId, favoriteName);
 
     User userWithCommunitiesRequestsFavorites = user.loadCommunitiesRequestsFavorites();
 
@@ -150,8 +143,8 @@ public class UserServiceIntegrationTest {
   public void createUserSignVideo() {
     //given
     //do
-    signService.create(userId, signName, signUrl);
-    User user = userService.withId(userId);
+    services.sign().create(userId, signName, signUrl);
+    User user = services.user().withId(userId);
     user = user.loadVideos();
 
     //then
