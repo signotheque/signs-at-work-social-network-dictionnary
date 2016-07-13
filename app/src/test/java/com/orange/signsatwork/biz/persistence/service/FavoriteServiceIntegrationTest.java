@@ -23,14 +23,13 @@ package com.orange.signsatwork.biz.persistence.service;
  */
 
 
+import com.orange.signsatwork.biz.ClearDB;
+import com.orange.signsatwork.biz.TestUser;
 import com.orange.signsatwork.biz.domain.Favorite;
 import com.orange.signsatwork.biz.domain.Signs;
-import com.orange.signsatwork.biz.domain.User;
-import com.orange.signsatwork.biz.persistence.service.FavoriteService;
-import com.orange.signsatwork.biz.persistence.service.SignService;
-import com.orange.signsatwork.biz.persistence.service.UserService;
 import com.orange.signsatwork.biz.persistence.repository.UserRepository;
 import org.assertj.core.api.Assertions;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,33 +54,33 @@ public class FavoriteServiceIntegrationTest {
   private long id = 1234;
   private String favoriteName = "favoris";
 
-  private String username = "Duchess";
-  private String password = "aristocats";
-  private String firstName = "Duchess";
-  private String lastName = "Aristocats";
-  private String email = "duchess@cats.com";
-  private String entity = "CATS";
-  private String activity = "mother";
-
-
   private String sign1Name = "cloud";
   private String sign1Url = "//www.dailymotion.com/embed/video/x2mnl8q";
   private String sign2Name = "chat";
   private String sign2Url = "//www.dailymotion.com/embed/video/k4h7GSlUDZQUvkaMF5s";
 
+  @Autowired
+  TestUser testUser;
+
+  @Autowired
+  ClearDB clearDB;
+
+  long userId;
+
+  @Before
+  public void setup() {
+    clearDB.deleteAll();
+    userId = testUser.get("user1").id;
+  }
 
   @Test
   public void changeFavoriteSigns() {
-
     //given
-    User user = userService.create(
-            new User(id, username, firstName, lastName, email, entity, activity, null, null, null, null, null, null, null), password);
-    signService.create(user.id, sign1Name, sign1Url);
-    signService.create(user.id, sign2Name, sign2Url);
+    signService.create(userId, sign1Name, sign1Url);
+    signService.create(userId, sign2Name, sign2Url);
     Signs signs = signService.all();
 
     Favorite favorite = favoriteService.create(new Favorite(id, favoriteName, null, signService));
-
 
     // do
     favoriteService.changeFavoriteSigns(favorite.id, signs.ids());
