@@ -21,43 +21,36 @@
                 <ul class="nav nav-list primary left-menu">
                     <li th:if="${isAuthenticated}" id="label_sign" class="aside_bckg_li">
                         <a th:href="@{/sign/} + ${signProfileView.sign.id} + '/detail'">
-                            <div class="pull-right">
-                                <div class="containerRight_signes">
+                            <h2  class="container_H2" th:text="${signProfileView.sign.name}"/>
+                                <div >
                                     <div class="pull-right menu_detail_with_chevron"/>
                                 </div>
-                            </div>
-                            <h2 th:text="${signProfileView.sign.name}"/>
                         </a>
                     </li>
                     <li class="aside_bckg_li">
                         <a href="#" data-toggle="modal" data-target="#evaluation_modal">
-                            <div class="pull-right">
-                                <div class="containerRight_signes">
-                                    <div class="pull-right chevron_right"/>
+                            <h2 class="container_H2" th:text="#{sign.evaluate}"></h2>
+                                <div>
+                                    <div class="pull-right  chevron_right"/>
                                     <div class="pull-right sentiment_evaluation"/>
                                 </div>
-                            </div>
-                            <h2 th:text="#{sign.evaluate}"></h2>
                         </a>
                     </li>
                     <li class="aside_bckg_li"><a href="#" data-toggle="modal" data-target="#evaluation_modal">
-                        <div class="pull-right">
-                            <div class="containerRight_signes">
+                        <h2 class="container_H2"  th:text="#{sign.associated}"></h2>
+                            <div>
                                 <div class="pull-right chevron_right"/>
                             </div>
-                        </div>
-                        <h2 th:text="#{sign.associated}"></h2>
                     </a>
                     </li>
 
                     <li class="aside_bckg_li">
                         <a href="#">
-                            <div class="pull-right">
-                                <div class="containerRight_signes">
+                            <h2 class="container_H2" th:text="#{sign.comments}"/>
+                                <div >
                                     <div class="pull-right add_whith_chevron"/>
                                 </div>
-                            </div>
-                            <h2 th:text="#{sign.comments}"/>
+
                         </a>
                     </li>
                 </ul>

@@ -9,6 +9,9 @@ body{
 	font-family: "Accessible-DfA";
 }
 
+.clear{
+clear: both;}
+
 h2, h4 {
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -316,8 +319,7 @@ text-decoration-line: none;
 #container_badge_new_signe {
 	font-size: 2rem;
 	line-height: 40px;
-	text-align: center;
-	width: 40px;
+	margin-left: 0.7em;
 }
 /*#badge_new_signe {*/
 	/*font-size: 15px;*/
@@ -444,7 +446,7 @@ text-decoration-line: none;
 	height: 40px;
 	width: 40px;
 }
-.containerRight_signes .sentiment_evaluation {
+.sentiment_evaluation {
 	background-image: url("/img/sprite_picto_400X400.png");
 	background-position: -280px center;
 	background-repeat: no-repeat;
