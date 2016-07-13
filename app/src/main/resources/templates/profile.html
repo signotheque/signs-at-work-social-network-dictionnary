@@ -13,31 +13,21 @@
             <ul class="nav nav-list primary left-menu">
                 <li class="aside_bckg_li">
                     <a href="#">
-                        <div class="pull-right">
-                            <div class="containerRight_signes">
-                                <div class="pull-right chevron_right"></div>
-                            </div>
-                        </div>
-                        <h2 th:text="${user.name()}"></h2>
+                        <h2 class="container_H2" th:text="${user.name()}"></h2>
+                        <div><div class="pull-right chevron_right"></div></div>
                     </a>
                 </li>
-                <li class="aside_bckg_li"><a href="#">
-                    <div class="pull-right">
-                        <div class="containerRight_signes">
-                            <div class="pull-right chevron_right"></div>
-                        </div>
-                    </div>
-                    <h2 th:text="${user.activity}"></h2></a></li>
+                <li class="aside_bckg_li">
+                    <a href="#">
+                        <h2 class="container_H2" th:text="${user.activity}"></h2>
+                        <div><div class="pull-right chevron_right"></div></div>
+                  </a>
+                </li>
                 <li class="aside_bckg_li">
                     <a href="#" data-toggle="modal" data-target="#add_favorite">
                         <div class="pull-left personal_favorite_signe"></div>
-                        <div class="pull-right">
-                            <div class="containerRight_signes">
-                                <div class="pull-right chevron_right"></div>
-
-                            </div>
-                        </div>
-                        <h2 th:text="#{favorites}"></h2>
+                        <h2 class="container_H2" th:text="#{favorites}"></h2>
+                        <div ><div class="pull-right chevron_right"></div></div>
                     </a>
                 </li>
             </ul>

@@ -140,6 +140,11 @@ a.form-control{
 	border-bottom: none;
 }
 
+.aside_bckg_li > a > div {
+	height: 3em;
+	padding: 0em;
+}
+
 .aside_bckg_li {
 	border-bottom: medium solid;
 	text-align: left;
@@ -262,6 +267,22 @@ padding-right: 1rem;
 padding-top: 1rem;
 position: relative;
 }
+
+.nav > li {
+	position: relative;
+}
+
+.nav > li > a {
+	display: inline;
+	padding: 0px;
+
+}
+
+
+.container_H2{
+	float: left;
+}
+
 .navbar-nav > li > a {
 font-size: 1.8rem;
 }
