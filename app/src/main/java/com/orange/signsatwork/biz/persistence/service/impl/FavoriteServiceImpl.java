@@ -108,7 +108,6 @@ public class FavoriteServiceImpl implements FavoriteService {
   }
 
   private FavoriteDB favoriteDBFrom(Favorite favorite) {
-    FavoriteDB favoriteDB = new FavoriteDB(favorite.name);
-    return favoriteDB;
+    return new FavoriteDB(favorite.name);
   }
 }

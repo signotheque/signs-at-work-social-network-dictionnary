@@ -113,7 +113,7 @@ public class UserAdminController {
       return new ArrayList<>();
     }
     return Arrays.asList(userCommunitiesIds).stream()
-            .map(communityIdString -> Long.parseLong(communityIdString))
+            .map(Long::parseLong)
             .collect(Collectors.toList());
   }
 

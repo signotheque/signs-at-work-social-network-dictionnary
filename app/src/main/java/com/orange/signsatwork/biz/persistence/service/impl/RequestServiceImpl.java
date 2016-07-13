@@ -105,7 +105,6 @@ public class RequestServiceImpl implements RequestService {
   }
 
   private RequestDB requestDBFrom(Request request) {
-    RequestDB requestDB = new RequestDB(request.name, request.requestDate);
-    return requestDB;
+    return new RequestDB(request.name, request.requestDate);
   }
 }

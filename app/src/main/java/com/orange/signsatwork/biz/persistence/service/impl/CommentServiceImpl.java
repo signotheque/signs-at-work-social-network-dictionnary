@@ -88,7 +88,6 @@ public class CommentServiceImpl implements CommentService {
   }
 
   private CommentDB commentDBFrom(Comment comment) {
-    CommentDB commentDB = new CommentDB(comment.commentDate, comment.text);
-    return commentDB;
+    return new CommentDB(comment.commentDate, comment.text);
   }
 }

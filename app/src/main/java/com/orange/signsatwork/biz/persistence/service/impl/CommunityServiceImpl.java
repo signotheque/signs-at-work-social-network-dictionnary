@@ -83,7 +83,6 @@ public class CommunityServiceImpl implements CommunityService {
   }
 
   private CommunityDB communityDBFrom(Community community) {
-    CommunityDB communityDB = new CommunityDB(community.name);
-    return communityDB;
+    return new CommunityDB(community.name);
   }
 }

@@ -70,6 +70,6 @@ public class RatingServiceImpl implements RatingService {
 
   @Override
   public void deleteAll() {
-    ratingRepository.findAll().forEach(ratingDB -> delete(ratingDB));
+    ratingRepository.findAll().forEach(this::delete);
   }
 }

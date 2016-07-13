@@ -61,9 +61,7 @@ public class AppSecurityRoles {
 
   private Set<UserRoleDB> allRoles() {
     Set<UserRoleDB> set = new HashSet<>();
-    Collections.addAll(set, new UserRoleDB[] {
-            new UserRoleDB(ROLE_USER), new UserRoleDB(ROLE_ADMIN)
-    });
+    Collections.addAll(set, new UserRoleDB(ROLE_USER), new UserRoleDB(ROLE_ADMIN));
     return set;
   }
 }

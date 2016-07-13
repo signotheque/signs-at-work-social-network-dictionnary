@@ -55,10 +55,9 @@ public class SignProfileView {
     associateIds.addAll(sign.referenceBySignsIds);
     this.associateSignsIds = associateIds;
 
-    List<Sign> listSignWithOutId = signService.all().list().stream()
+    this.allSignsWithoutCurrentSign = signService.all().list().stream()
             .filter(s -> s.id != sign.id)
             .collect(Collectors.toList());
-    this.allSignsWithoutCurrentSign = listSignWithOutId;
 
     if (user != null) {
       Rating rating = sign.rating(user);

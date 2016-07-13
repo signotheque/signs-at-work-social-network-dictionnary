@@ -51,6 +51,6 @@ public class Services {
     video.all().stream().forEach(v -> video.delete(v));
     request.all().stream().forEach(r -> request.delete(r));
     sign.all().stream().forEach(s -> sign.delete(s));
-    user.all().stream().filter(u -> u.username != AppSecurityAdmin.ADMIN_USERNAME).forEach(u -> user.delete(u));
+    user.all().stream().filter(u -> !u.username.equals(AppSecurityAdmin.ADMIN_USERNAME)).forEach(u -> user.delete(u));
   }
 }

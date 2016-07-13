@@ -104,7 +104,7 @@ public class SignAdminController {
       return new ArrayList<>();
     }
     return Arrays.asList(associateSignsIds).stream()
-            .map(signIdString -> Long.parseLong(signIdString))
+            .map(Long::parseLong)
             .collect(Collectors.toList());
   }
 }
