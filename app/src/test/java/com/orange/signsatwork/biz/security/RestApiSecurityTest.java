@@ -24,9 +24,8 @@ package com.orange.signsatwork.biz.security;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.orange.signsatwork.biz.domain.User;
-import com.orange.signsatwork.biz.persistence.service.UserService;
-import com.orange.signsatwork.biz.security.AppSecurityAdmin;
+import com.orange.signsatwork.biz.ClearDB;
+import com.orange.signsatwork.biz.TestUser;
 import com.orange.signsatwork.biz.view.model.UserCreationView;
 import com.orange.signsatwork.biz.webservice.controller.RestApi;
 import org.junit.Before;
@@ -53,20 +52,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class RestApiSecurityTest {
 
   @Autowired
-  private WebApplicationContext context;
+  WebApplicationContext context;
 
   @Autowired
-  private UserService userService;
+  ClearDB clearDB;
 
-  private MockMvc mockMvc;
+  @Autowired
+  TestUser testUser;
 
-  private String username = "Duchess";
-  private String password = "aristocats";
-  private String firstName = "Duchess";
-  private String lastName = "Aristocats";
-  private String email = "duchess@cats.com";
-  private String entity = "CATS";
-  private String activity = "mother";
+  MockMvc mockMvc;
+
+  String username = "Duchess";
+  String password = "aristocats";
 
   @Before
   public void setup() {
@@ -76,19 +73,12 @@ public class RestApiSecurityTest {
             .alwaysDo(print())
             .build();
 
-    if (shouldCreateUser()) {
-      userService.create(new User(0, username, firstName, lastName, email, entity, activity, null, null, null, null, null, null, null), password);
-    }
-  }
-
-  private boolean shouldCreateUser() {
-    return userService.all().stream()
-            .filter(u -> u.username.equals(username))
-            .count() == 0;
+    clearDB.clear();
+    testUser.get(username);
   }
 
   @Test
-  public void retrieveUsersAsAnAuthenticatedUser() throws Exception {
+  public void retrieveUsersAsAnAuthenticatedUserIsNotAuthorized() throws Exception {
     // given
     mockMvc
             // do
@@ -96,7 +86,7 @@ public class RestApiSecurityTest {
                             .with(httpBasic(username, password))
                             .accept(MediaType.APPLICATION_JSON))
             // then
-            .andExpect(status().isOk());
+            .andExpect(status().isUnauthorized());
   }
 
   @Test
@@ -128,7 +118,7 @@ public class RestApiSecurityTest {
             .contentType(MediaType.APPLICATION_JSON)
             .content(bodyForUserCreation()))
             // then
-            .andExpect(status().isForbidden());
+            .andExpect(status().isUnauthorized());
   }
 
   @Test

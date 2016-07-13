@@ -33,4 +33,6 @@ public interface CommunityService {
   Community withId(long id);
 
   Community create(Community community);
+
+  void delete(Community community);
 }

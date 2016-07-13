@@ -28,4 +28,8 @@ import lombok.RequiredArgsConstructor;
 public class Community {
     public final long id;
     public final String name;
+
+    public static Community create(String name) {
+        return new Community(-1, name);
+    }
 }

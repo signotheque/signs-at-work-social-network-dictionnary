@@ -22,6 +22,7 @@ package com.orange.signsatwork.biz.persistence.service.impl;
  * #L%
  */
 
+import com.orange.signsatwork.biz.domain.Favorite;
 import com.orange.signsatwork.biz.domain.User;
 import com.orange.signsatwork.biz.domain.Users;
 import com.orange.signsatwork.biz.persistence.model.CommunityDB;
@@ -29,10 +30,7 @@ import com.orange.signsatwork.biz.persistence.model.FavoriteDB;
 import com.orange.signsatwork.biz.persistence.model.RequestDB;
 import com.orange.signsatwork.biz.persistence.model.UserDB;
 import com.orange.signsatwork.biz.persistence.repository.*;
-import com.orange.signsatwork.biz.persistence.service.CommunityService;
-import com.orange.signsatwork.biz.persistence.service.FavoriteService;
-import com.orange.signsatwork.biz.persistence.service.RequestService;
-import com.orange.signsatwork.biz.persistence.service.UserService;
+import com.orange.signsatwork.biz.persistence.service.*;
 import com.orange.signsatwork.biz.security.AppSecurityAdmin;
 import com.orange.signsatwork.biz.security.AppSecurityRoles;
 import lombok.RequiredArgsConstructor;
@@ -58,9 +56,7 @@ public class UserServiceImpl implements UserService, ApplicationListener<Authent
   private final CommunityRepository communityRepository;
   private final RequestRepository requestRepository;
   private final FavoriteRepository favoriteRepository;
-  private final CommunityService communityService;
-  private final RequestService requestService;
-  private final FavoriteService favoriteService;
+  private final Services services;
 
   private final PasswordEncoder passwordEncoder;
 
@@ -118,7 +114,7 @@ public class UserServiceImpl implements UserService, ApplicationListener<Authent
   }
 
   @Override
-  public User createUserFavorite(long userId, String favoriteName) {
+  public Favorite createUserFavorite(long userId, String favoriteName) {
     UserDB userDB = withDBId(userId);
 
     FavoriteDB favoriteDB = new FavoriteDB();
@@ -128,7 +124,12 @@ public class UserServiceImpl implements UserService, ApplicationListener<Authent
 
     userDB.getFavorites().add(favoriteDB);
     userRepository.save(userDB);
-    return userFrom(userDB);
+    return FavoriteServiceImpl.favoriteFrom(favoriteDB, services);
+  }
+
+  @Override
+  public void delete(User user) {
+    // FIXME
   }
 
   @Override
@@ -152,21 +153,18 @@ public class UserServiceImpl implements UserService, ApplicationListener<Authent
   }
 
   private User userFrom(UserDB userDB) {
-    return new User(
+    return User.create(
             userDB.getId(),
             userDB.getUsername(), userDB.getFirstName(), userDB.getLastName(),
             userDB.getEmail(), userDB.getEntity(), userDB.getActivity(), userDB.getLastConnectionDate(),
-            null /* communities lazy loading, use User to load it */,
-            null, null,
-            communityService, requestService, favoriteService);
+            services.communityService(), services.requestService(), services.favoriteService(), services.videoService());
   }
 
   static User userFromSignView(UserDB userDB) {
-    return new User(
+    return User.create(
             userDB.getId(),
             userDB.getUsername(), userDB.getFirstName(), userDB.getLastName(),
-            userDB.getEmail(), userDB.getEntity(), userDB.getActivity(), userDB.getLastConnectionDate(),
-            null, null, null, null, null, null);
+            userDB.getEmail(), userDB.getEntity(), userDB.getActivity(), userDB.getLastConnectionDate());
   }
   /**
    * Create a transient UserDB with a hashed password and a ROLE_USER as default

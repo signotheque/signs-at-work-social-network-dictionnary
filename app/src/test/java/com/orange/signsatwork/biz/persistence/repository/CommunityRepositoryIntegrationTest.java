@@ -66,9 +66,7 @@ public class CommunityRepositoryIntegrationTest {
     assertThat(communities).contains(community2);
 
     assertThat(community1.getName()).isEqualTo(community1Name);
-
     assertThat(community2.getName()).isEqualTo(community2Name);
-
   }
 
   @Test
@@ -79,6 +77,5 @@ public class CommunityRepositoryIntegrationTest {
     CommunityDB community1 = communityRepository.findByName(community1Name).get(0);
     // then
     assertThat(community1.getName()).isEqualTo(community1Name);
-
   }
 }

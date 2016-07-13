@@ -30,10 +30,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class TestUser {
 
+  public static final String PASSWORD = "pass";
+
   @Autowired
   UserService userService;
 
   public User get(String username) {
-    return userService.create(new User(0, username, "titi", "toto", "titi@toto.org", "", "", null, null, null, null, null, null, null), "pass");
+    return userService.create(User.create(username, "titi", "toto", "titi@toto.org", "entity", "activity"), PASSWORD);
   }
 }

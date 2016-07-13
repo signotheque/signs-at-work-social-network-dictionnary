@@ -23,9 +23,10 @@ package com.orange.signsatwork.biz.persistence.service;
  */
 
 
+import com.orange.signsatwork.biz.ClearDB;
 import com.orange.signsatwork.biz.domain.Community;
-import com.orange.signsatwork.biz.persistence.service.CommunityService;
 import org.assertj.core.api.Assertions;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,21 +38,26 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class CommunityServiceIntegrationTest {
 
   @Autowired
+  ClearDB clearDB;
+
+  @Autowired
   private CommunityService communityService;
 
-  private long id = 1234;
   private String name = "aristochat";
 
-
+  @Before
+  public void setup() {
+    clearDB.clear();
+  }
 
   @Test
   public void createCommunity() {
     // given
     // do
-    Community community = communityService.create(new Community(id, name));
+    Community community = communityService.create(new Community(0, name));
+    community = communityService.withId(community.id);
 
     // then
     Assertions.assertThat(community.name).isEqualTo(name);
-
   }
 }

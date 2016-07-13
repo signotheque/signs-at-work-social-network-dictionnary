@@ -22,20 +22,22 @@ package com.orange.signsatwork.biz.persistence.service;
  * #L%
  */
 
-import com.orange.signsatwork.biz.domain.Rating;
-import com.orange.signsatwork.biz.domain.Video;
-import com.orange.signsatwork.biz.domain.Videos;
+import com.orange.signsatwork.biz.domain.*;
 
 public interface VideoService {
   Videos all();
 
-  Video withId(long id);
+  Video withId(long videoId);
 
-  Video createVideoComment(long id, long userId, String commentText);
+  Comment createVideoComment(long videoId, long userId, String commentText);
 
-  Video createVideoRating(long id, long userId, Rating rating);
+  RatingDat createVideoRating(long videoId, long userId, Rating rating);
 
   Videos forSign(long signId);
 
   Rating ratingFor(Video video, long userId);
+
+  Videos forUser(long userId);
+
+  void delete(Video video);
 }

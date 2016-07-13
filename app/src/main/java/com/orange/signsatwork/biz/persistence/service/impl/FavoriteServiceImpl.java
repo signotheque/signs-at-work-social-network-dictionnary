@@ -30,6 +30,7 @@ import com.orange.signsatwork.biz.persistence.repository.FavoriteRepository;
 import com.orange.signsatwork.biz.persistence.repository.SignRepository;
 import com.orange.signsatwork.biz.persistence.repository.UserRepository;
 import com.orange.signsatwork.biz.persistence.service.FavoriteService;
+import com.orange.signsatwork.biz.persistence.service.Services;
 import com.orange.signsatwork.biz.persistence.service.SignService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -45,7 +46,7 @@ public class FavoriteServiceImpl implements FavoriteService {
   private final UserRepository userRepository;
   private final FavoriteRepository favoriteRepository;
   private final SignRepository signRepository;
-  private final SignService signService;
+  private final Services services;
 
   @Override
   public Favorites all() {
@@ -54,7 +55,7 @@ public class FavoriteServiceImpl implements FavoriteService {
 
   @Override
   public Favorite withId(long id) {
-    return favoriteFrom(favoriteRepository.findOne(id));
+    return favoriteFrom(favoriteRepository.findOne(id), services);
   }
 
   @Override
@@ -76,7 +77,7 @@ public class FavoriteServiceImpl implements FavoriteService {
     favoriteSigns.clear();
     signRepository.findAll(signsIds).forEach(favoriteSigns::add);
     favoriteDB = favoriteRepository.save(favoriteDB);
-    return favoriteFrom(favoriteDB);
+    return favoriteFrom(favoriteDB, services);
   }
 
   private FavoriteDB withDBId(long id) {
@@ -86,17 +87,25 @@ public class FavoriteServiceImpl implements FavoriteService {
   @Override
   public Favorite create(Favorite favorite) {
     FavoriteDB favoriteDB = favoriteRepository.save(favoriteDBFrom(favorite));
-    return favoriteFrom(favoriteDB);
+    return favoriteFrom(favoriteDB, services);
+  }
+
+  @Override
+  public void delete(Favorite favorite) {
+    FavoriteDB favoriteDB = favoriteRepository.findOne(favorite.id);
+    favoriteDB.getUser().getFavorites().remove(favoriteDB);
+    favoriteDB.getSigns().stream().forEach(signDB -> signDB.getFavorites().remove(favoriteDB));
+    favoriteRepository.delete(favoriteDB);
   }
 
   private Favorites favoritesFrom(Iterable<FavoriteDB> favoritesDB) {
     List<Favorite> favorites = new ArrayList<>();
-    favoritesDB.forEach(favoriteDB -> favorites.add(favoriteFrom(favoriteDB)));
+    favoritesDB.forEach(favoriteDB -> favorites.add(favoriteFrom(favoriteDB, services)));
     return new Favorites(favorites);
   }
 
-  private Favorite favoriteFrom(FavoriteDB favoriteDB) {
-    return new Favorite(favoriteDB.getId(), favoriteDB.getName(), null, signService);
+  static Favorite favoriteFrom(FavoriteDB favoriteDB, Services services) {
+    return new Favorite(favoriteDB.getId(), favoriteDB.getName(), null, services.signService());
   }
 
   private FavoriteDB favoriteDBFrom(Favorite favorite) {

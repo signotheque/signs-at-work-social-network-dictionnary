@@ -33,4 +33,6 @@ public interface CommentService {
   Comment withId(long id);
 
   Comment create(Comment comment);
+
+  void delete(Comment comment);
 }

@@ -24,7 +24,8 @@ package com.orange.signsatwork.biz.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.orange.signsatwork.biz.domain.User;
+import com.orange.signsatwork.biz.ClearDB;
+import com.orange.signsatwork.biz.TestUser;
 import com.orange.signsatwork.biz.persistence.repository.SignRepository;
 import com.orange.signsatwork.biz.persistence.service.UserService;
 import com.orange.signsatwork.biz.webservice.controller.RestApi;
@@ -61,6 +62,12 @@ public class SignRestControllerIntegrationTest {
   private WebApplicationContext context;
 
   @Autowired
+  ClearDB clearDB;
+
+  @Autowired
+  TestUser testUser;
+
+  @Autowired
   private SignRepository signRepository;
   @Autowired
   private UserService userService;
@@ -68,7 +75,6 @@ public class SignRestControllerIntegrationTest {
   private MockMvc mockMvc;
 
   private String username = "user";
-  private String password = "password";
 
   private String signName = "sign";
   private String videoUrl = "//video";
@@ -81,8 +87,8 @@ public class SignRestControllerIntegrationTest {
             .alwaysDo(print())
             .build();
 
-    signRepository.deleteAll();
-    userService.create(new User(0, username, "", "", "", "", "", null, null, null, null, null, null, null), password);
+    clearDB.clear();
+    testUser.get(username);
   }
 
   @Test
@@ -103,7 +109,7 @@ public class SignRestControllerIntegrationTest {
     mockMvc
             // do
             .perform(
-                    post(RestApi.WS_SEC_SIGN_CREATE).with(httpBasic(username, password))
+                    post(RestApi.WS_SEC_SIGN_CREATE).with(httpBasic(username, TestUser.PASSWORD))
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(bodyForSignCreation())
             )
@@ -115,7 +121,7 @@ public class SignRestControllerIntegrationTest {
   public void getSignAfterPost() throws Exception {
     // given
     MvcResult result = mockMvc.perform(
-            post(RestApi.WS_SEC_SIGN_CREATE).with(httpBasic(username, password))
+            post(RestApi.WS_SEC_SIGN_CREATE).with(httpBasic(username, TestUser.PASSWORD))
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(bodyForSignCreation())
     )

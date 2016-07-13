@@ -26,7 +26,6 @@ import com.orange.signsatwork.biz.ClearDB;
 import com.orange.signsatwork.biz.TestUser;
 import com.orange.signsatwork.biz.persistence.service.SignService;
 import com.orange.signsatwork.biz.persistence.service.UserService;
-import com.orange.signsatwork.biz.persistence.service.VideoService;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
@@ -47,8 +46,6 @@ public class SignRatingTest {
   @Autowired
   UserService userService;
   @Autowired
-  VideoService videoService;
-  @Autowired
   SignService signService;
 
   long userId;
@@ -56,7 +53,7 @@ public class SignRatingTest {
 
   @Before
   public void setup() {
-    clearDB.deleteAll();
+    clearDB.clear();
 
     userId = testUser.get("user").id;
     signId = signService.create(userId, "mySign", "//video").id;

@@ -104,6 +104,7 @@ public class SignServiceImpl implements SignService {
     return signFrom(signDB);
   }
 
+  // FIXME: we append videos, but which one do we use? first, last?
   @Override
   public Sign create(long userId, String signName, String signUrl) {
     SignDB signDB;
@@ -141,14 +142,24 @@ public class SignServiceImpl implements SignService {
       signDB = signsMatches.get(0);
       signDB.setUrl(signUrl);
       videoDB.setSign(signDB);
+      signDB.getVideos().add(videoDB);
 
       videoRepository.save(videoDB);
       signDB = signRepository.save(signDB);
 
       userDB.getVideos().add(videoDB);
       userRepository.save(userDB);
+
+      userRepository.findAll().forEach(userDB1 -> System.out.println("user id: " + userDB1.getId()));
+      signDB.getVideos().stream().forEach(videoDB1 -> System.out.println("video user: " + videoDB1.getUser()));
+
     }
     return signFrom(signDB);
+  }
+
+  @Override
+  public void delete(Sign sign) {
+    // FIXME
   }
 
   private SignDB withDBId(long id) {

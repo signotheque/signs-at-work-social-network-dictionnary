@@ -22,6 +22,7 @@ package com.orange.signsatwork.biz.persistence.service;
  * #L%
  */
 
+import com.orange.signsatwork.biz.domain.Favorite;
 import com.orange.signsatwork.biz.domain.User;
 import com.orange.signsatwork.biz.domain.Users;
 
@@ -40,5 +41,7 @@ public interface UserService {
 
   User createUserRequest(long userId, String requestName);
 
-  User createUserFavorite(long userId, String favoriteName);
+  Favorite createUserFavorite(long userId, String favoriteName);
+
+  void delete(User user);
 }

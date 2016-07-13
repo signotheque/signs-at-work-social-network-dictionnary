@@ -41,4 +41,6 @@ public interface SignService {
   Sign create(Sign sign);
 
   Sign create(long userId, String signName, String signUrl);
+
+  void delete(Sign sign);
 }

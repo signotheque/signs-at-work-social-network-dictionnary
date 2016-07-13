@@ -50,7 +50,6 @@ public class SignRepositoryIntegrationTest {
   private String sign2Name = "chat";
   private String sign2Url ="//www.dailymotion.com/embed/video/k4h7GSlUDZQUvkaMF5s";
 
-
   @Test
   public void returnAllPersisted() throws IOException {
     // given
@@ -71,7 +70,6 @@ public class SignRepositoryIntegrationTest {
     assertThat(sign1.getUrl()).isEqualTo(sign1Url);
     assertThat(sign2.getName()).isEqualTo(sign2Name);
     assertThat(sign2.getUrl()).isEqualTo(sign2Url);
-
   }
 
   @Test
@@ -83,6 +81,5 @@ public class SignRepositoryIntegrationTest {
     // then
     assertThat(sign1.getName()).isEqualTo(sign1Name);
     assertThat(sign1.getUrl()).isEqualTo(sign1Url);
-
   }
 }

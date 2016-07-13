@@ -48,7 +48,6 @@ public class FavoriteRepositoryIntegrationTest {
   private String favorite1Name = "Favoris";
   private String favorite2Name = "Interfaces";
 
-
   @Test
   public void returnAllPersisted() throws IOException {
     // given
@@ -66,9 +65,7 @@ public class FavoriteRepositoryIntegrationTest {
     assertThat(favorites).contains(favorite2);
 
     assertThat(favorite1.getName()).isEqualTo(favorite1Name);
-
     assertThat(favorite2.getName()).isEqualTo(favorite2Name);
-
   }
 
   @Test
@@ -79,6 +76,5 @@ public class FavoriteRepositoryIntegrationTest {
     FavoriteDB favorite1 = favoriteRepository.findByName(favorite1Name).get(0);
     // then
     assertThat(favorite1.getName()).isEqualTo(favorite1Name);
-
   }
 }

@@ -22,5 +22,13 @@ package com.orange.signsatwork.biz.persistence.service;
  * #L%
  */
 
+import com.orange.signsatwork.biz.domain.Ratings;
+import com.orange.signsatwork.biz.persistence.model.RatingDB;
+
 public interface RatingService {
+  void delete(RatingDB ratingDB);
+
+  Ratings all();
+
+  void deleteAll();
 }

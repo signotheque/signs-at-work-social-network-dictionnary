@@ -51,10 +51,8 @@ public class RequestRepositoryIntegrationTest {
   Date requestDate = new Date();
 
 
-
   @Test
   public void returnAllPersisted() throws IOException {
-
     // given
     entityManager.persist(new RequestDB(request1Name, requestDate));
     entityManager.persist(new RequestDB(request2Name, requestDate));
@@ -73,7 +71,6 @@ public class RequestRepositoryIntegrationTest {
     assertThat(request1.getRequestDate()).isEqualTo(requestDate);
     assertThat(request2.getName()).isEqualTo(request2Name);
     assertThat(request2.getRequestDate()).isEqualTo(requestDate);
-
   }
 
   @Test

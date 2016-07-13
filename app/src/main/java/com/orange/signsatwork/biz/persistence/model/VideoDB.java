@@ -51,18 +51,18 @@ public class VideoDB {
   @NotNull
   private Date createDate;
 
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne
   @JoinColumn(name="sign_id")
   private SignDB sign;
 
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne
   @JoinColumn(name="user_id")
   private UserDB user;
 
-  @OneToMany(mappedBy = "video", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "video")
   private List<CommentDB> comments = new ArrayList<>();
 
-  @OneToMany(mappedBy = "primaryKey.video", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "primaryKey.video")
   private List<RatingDB> ratings = new ArrayList<>();
 
   public VideoDB(String url, Date createDate) {

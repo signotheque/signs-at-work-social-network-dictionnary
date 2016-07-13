@@ -25,6 +25,7 @@ package com.orange.signsatwork.biz.domain;
 import com.orange.signsatwork.biz.persistence.service.CommunityService;
 import com.orange.signsatwork.biz.persistence.service.FavoriteService;
 import com.orange.signsatwork.biz.persistence.service.RequestService;
+import com.orange.signsatwork.biz.persistence.service.VideoService;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Date;
@@ -43,10 +44,12 @@ public class User {
   public final Communities communities;
   public final Requests requests;
   public final Favorites favorites;
+  public final Videos videos;
 
   private final CommunityService communityService;
   private final RequestService requestService;
   private final FavoriteService favoriteService;
+  private final VideoService videoService;
 
   public String name() {
     return firstName + " " + lastName;
@@ -57,12 +60,41 @@ public class User {
             this :
             new User(
                     id, username, firstName, lastName, email, entity, activity, lastConnectionDate,
-                    communityService.forUser(id),  requestService.requestsforUser(id), favoriteService.favoritesforUser(id),
-                    communityService, requestService, favoriteService);
+                    communityService.forUser(id),  requestService.requestsforUser(id), favoriteService.favoritesforUser(id), videos,
+                    communityService, requestService, favoriteService, videoService);
+  }
+
+  public User loadVideos() {
+    return videos != null ? this :
+            new User(
+                    id, username, firstName, lastName, email, entity, activity, lastConnectionDate,
+                    communities, requests, favorites, videoService.forUser(id),
+                    communityService, requestService, favoriteService, videoService);
   }
 
   public List<Long> communitiesIds() {
     return communities.ids();
   }
 
+
+  public static User create(String username, String firstName, String lastName, String email, String entity, String activity) {
+    return create(username, firstName, lastName, email, entity, activity, null);
+  }
+
+  public static User create(String username, String firstName, String lastName, String email, String entity, String activity, Date lastConnectionDate) {
+    return create(-1, username, firstName, lastName, email, entity, activity, lastConnectionDate);
+  }
+
+  public static User create(long id, String username, String firstName, String lastName, String email, String entity, String activity, Date lastConnectionDate) {
+    return create(
+            id, username, firstName, lastName, email, entity, activity, lastConnectionDate,
+            null, null, null, null);
+  }
+
+  public static User create(long id, String username, String firstName, String lastName, String email, String entity, String activity, Date lastConnectionDate,
+                            CommunityService communityService, RequestService requestService, FavoriteService favoriteService, VideoService videoService) {
+    return new User(
+            id, username, firstName, lastName, email, entity, activity, lastConnectionDate,
+            null, null, null, null, communityService, requestService, favoriteService, videoService);
+  }
 }

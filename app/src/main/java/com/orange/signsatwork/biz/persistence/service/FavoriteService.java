@@ -39,4 +39,6 @@ public interface FavoriteService {
   Favorite create(Favorite favorite);
 
   Favorite changeFavoriteSigns(long favoriteId, List<Long> signsIds);
+
+  void delete(Favorite favorite);
 }

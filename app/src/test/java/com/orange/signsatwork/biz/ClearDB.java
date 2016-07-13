@@ -22,51 +22,16 @@ package com.orange.signsatwork.biz;
  * #L%
  */
 
-import com.orange.signsatwork.biz.persistence.model.UserDB;
-import com.orange.signsatwork.biz.persistence.repository.*;
-import com.orange.signsatwork.biz.security.AppSecurityAdmin;
+import com.orange.signsatwork.biz.persistence.service.Services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class ClearDB {
   @Autowired
-  UserRepository userRepository;
-  @Autowired
-  SignRepository signRepository;
-  @Autowired
-  VideoRepository videoRepository;
-  @Autowired
-  RatingRepository ratingRepository;
-  @Autowired
-  CommentRepository commentRepository;
-  @Autowired
-  RequestRepository requestRepository;
-  @Autowired
-  FavoriteRepository favoriteRepository;
-  @Autowired
-  CommunityRepository communityRepository;
+  Services services;
 
-  public void deleteAll() {
-    favoriteRepository.deleteAll();
-    ratingRepository.deleteAll();
-    videoRepository.deleteAll();
-    signRepository.deleteAll();
-    requestRepository.deleteAll();
-    commentRepository.deleteAll();
-    deleteUsers();
-  }
-
-  private void deleteUsers() {
-    List<UserDB> toRemove = new ArrayList<>();
-    userRepository.findAll().forEach( userDB -> {
-      if (userDB.getUsername() != AppSecurityAdmin.ADMIN_USERNAME) {
-        toRemove.add(userDB);
-      }
-    });
-    userRepository.delete(toRemove);
+  public void clear() {
+    services.clearPersistence();
   }
 }

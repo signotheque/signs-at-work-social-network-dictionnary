@@ -25,6 +25,8 @@ package com.orange.signsatwork.biz.persistence.service.impl;
 import com.orange.signsatwork.biz.domain.Comment;
 import com.orange.signsatwork.biz.domain.Comments;
 import com.orange.signsatwork.biz.persistence.model.CommentDB;
+import com.orange.signsatwork.biz.persistence.model.UserDB;
+import com.orange.signsatwork.biz.persistence.model.VideoDB;
 import com.orange.signsatwork.biz.persistence.repository.CommentRepository;
 import com.orange.signsatwork.biz.persistence.repository.VideoRepository;
 import com.orange.signsatwork.biz.persistence.service.CommentService;
@@ -65,13 +67,23 @@ public class CommentServiceImpl implements CommentService {
     return commentFrom(commentDB);
   }
 
-  private Comments commentsFrom(Iterable<CommentDB> commentsDB) {
+  @Override
+  public void delete(Comment comment) {
+    CommentDB commentDB = commentRepository.findOne(comment.id);
+    VideoDB videoDB = commentDB.getVideo();
+    UserDB userDB = commentDB.getUser();
+    videoDB.getComments().remove(commentDB);
+    userDB.getComments().remove(commentDB);
+    commentRepository.delete(commentDB);
+  }
+
+  Comments commentsFrom(Iterable<CommentDB> commentsDB) {
     List<Comment> comments = new ArrayList<>();
     commentsDB.forEach(commentDB -> comments.add(commentFrom(commentDB)));
     return new Comments(comments);
   }
 
-  private Comment commentFrom(CommentDB commentDB) {
+  static Comment commentFrom(CommentDB commentDB) {
     return new Comment(commentDB.getId(), commentDB.getCommentDate(), commentDB.getText(), UserServiceImpl.userFromSignView(commentDB.getUser()));
   }
 

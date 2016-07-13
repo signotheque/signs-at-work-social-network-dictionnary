@@ -44,8 +44,6 @@ public class UserCreationView {
   private String activity;
 
   public User toUser() {
-    return new User(
-            0, username, firstName, lastName, email, entity, activity,
-            null, null, null, null, null, null, null);
+    return User.create(username, firstName, lastName, email, entity, activity);
   }
 }

@@ -24,7 +24,7 @@ package com.orange.signsatwork.biz.view.model;
 
 import com.orange.signsatwork.biz.domain.User;
 import com.orange.signsatwork.biz.domain.Users;
-import lombok.*;
+import lombok.RequiredArgsConstructor;
 
 import java.util.Date;
 import java.util.List;
@@ -42,9 +42,7 @@ public class UserView {
   public final Date lastConnectionDate;
 
   public User toUser() {
-    return new User(
-            id, username, firstName, lastName, email, entity, activity, lastConnectionDate,
-            null, null, null, null, null, null);
+    return User.create(username, firstName, lastName, email, entity, activity, lastConnectionDate);
   }
 
   public static UserView from(User user) {

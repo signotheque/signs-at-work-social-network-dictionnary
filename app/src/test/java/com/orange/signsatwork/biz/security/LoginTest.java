@@ -22,7 +22,6 @@ package com.orange.signsatwork.biz.security;
  * #L%
  */
 
-import com.orange.signsatwork.biz.security.AppSecurityAdmin;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

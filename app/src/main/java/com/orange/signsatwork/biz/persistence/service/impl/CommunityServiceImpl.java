@@ -65,6 +65,13 @@ public class CommunityServiceImpl implements CommunityService {
     return communityFrom(communityDB);
   }
 
+  @Override
+  public void delete(Community community) {
+    CommunityDB communityDB = communityRepository.findOne(community.id);
+    communityDB.getUsers().forEach(userDB -> userDB.getCommunities().remove(communityDB));
+    communityRepository.delete(communityDB);
+  }
+
   private Communities communitiesFrom(Iterable<CommunityDB> communitiesDB) {
     List<Community> communities = new ArrayList<>();
     communitiesDB.forEach(communityDB -> communities.add(communityFrom(communityDB)));

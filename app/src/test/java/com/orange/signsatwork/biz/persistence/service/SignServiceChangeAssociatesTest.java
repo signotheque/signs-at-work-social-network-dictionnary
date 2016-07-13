@@ -53,7 +53,7 @@ public class SignServiceChangeAssociatesTest {
 
   @Before
   public void setup() {
-    clearDB.deleteAll();
+    clearDB.clear();
     userId1 = testUser.get("user1").id;
     userId2 = testUser.get("user2").id;
   }

@@ -27,7 +27,6 @@ import com.orange.signsatwork.biz.ClearDB;
 import com.orange.signsatwork.biz.TestUser;
 import com.orange.signsatwork.biz.domain.Favorite;
 import com.orange.signsatwork.biz.domain.Signs;
-import com.orange.signsatwork.biz.persistence.repository.UserRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
@@ -46,10 +45,6 @@ public class FavoriteServiceIntegrationTest {
   private FavoriteService favoriteService;
   @Autowired
   private SignService signService;
-  @Autowired
-  private UserService userService;
-  @Autowired
-  private UserRepository userRepository;
 
   private long id = 1234;
   private String favoriteName = "favoris";
@@ -69,7 +64,7 @@ public class FavoriteServiceIntegrationTest {
 
   @Before
   public void setup() {
-    clearDB.deleteAll();
+    clearDB.clear();
     userId = testUser.get("user1").id;
   }
 

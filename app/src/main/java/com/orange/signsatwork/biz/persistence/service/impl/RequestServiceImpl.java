@@ -84,6 +84,11 @@ public class RequestServiceImpl implements RequestService {
     return requestFrom(requestDB);
   }
 
+  @Override
+  public void delete(Request request) {
+    // FIXME
+  }
+
   private Requests requestsFrom(Iterable<RequestDB> requestsDB) {
     List<Request> requests = new ArrayList<>();
     requestsDB.forEach(requestDB -> requests.add(requestFrom(requestDB)));

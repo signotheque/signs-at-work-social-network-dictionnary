@@ -22,23 +22,22 @@ package com.orange.signsatwork.biz.persistence.service;
  * #L%
  */
 
+import com.orange.signsatwork.biz.ClearDB;
+import com.orange.signsatwork.biz.TestUser;
 import com.orange.signsatwork.biz.domain.Community;
 import com.orange.signsatwork.biz.domain.User;
 import com.orange.signsatwork.biz.persistence.model.UserDB;
 import com.orange.signsatwork.biz.persistence.model.UserRoleDB;
 import com.orange.signsatwork.biz.persistence.repository.UserRepository;
-import com.orange.signsatwork.biz.persistence.service.CommunityService;
-import com.orange.signsatwork.biz.persistence.service.SignService;
-import com.orange.signsatwork.biz.persistence.service.UserService;
 import com.orange.signsatwork.biz.security.AppSecurityRoles;
 import org.assertj.core.api.Assertions;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,54 +45,56 @@ import java.util.Set;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Transactional
 public class UserServiceIntegrationTest {
 
   @Autowired
-  private UserService userService;
-  @Autowired
-  private CommunityService communityService;
-  @Autowired
-  private SignService signService;
-  @Autowired
-  private UserRepository userRepository;
+  ClearDB clearDB;
 
   @Autowired
-  private PasswordEncoder passwordEncoder;
+  TestUser testUser;
 
-  private long id = 1234;
-  private String username = "Duchess";
-  private String password = "aristocats";
-  private String firstName = "Duchess";
-  private String lastName = "Aristocats";
-  private String email = "duchess@cats.com";
-  private String entity = "CATS";
-  private String activity = "mother";
+  @Autowired
+  UserService userService;
+  @Autowired
+  CommunityService communityService;
+  @Autowired
+  SignService signService;
+  @Autowired
+  UserRepository userRepository;
 
-  private String communityName = "gangstercat";
+  @Autowired
+  PasswordEncoder passwordEncoder;
 
-  private String requestName = "chat";
+  String username = "Duchess";
 
-  private String favoriteName = "favoris";
+  String communityName = "gangstercat";
 
-  private String signName = "chat";
-  private String signUrl ="//www.dailymotion.com/embed/video/k4h7GSlUDZQUvkaMF5s";
+  String requestName = "chat";
 
+  String favoriteName = "favoris";
+
+  String signName = "chat";
+  String signUrl ="//www.dailymotion.com/embed/video/k4h7GSlUDZQUvkaMF5s";
+
+  long userId;
+
+  @Before
+  public void setup() {
+    clearDB.clear();
+    userId = testUser.get(username).id;
+  }
 
   @Test
   public void createUser() {
     // given
     // do
-    User user = userService.create(
-            new User(id, username, firstName, lastName, email, entity, activity, null, null, null, null, null, null, null), password);
-
-    UserDB userDB = userRepository.findOne(user.id);
+    UserDB userDB = userRepository.findOne(userId);
     String passwordHash = userDB.getPasswordHash();
     Set<UserRoleDB> roles = userDB.getUserRoles();
 
     // then
-    Assertions.assertThat(user.username).isEqualTo(username);
-    Assertions.assertThat(passwordEncoder.matches(password, passwordHash)).isTrue();
+    Assertions.assertThat(userDB.getUsername()).isEqualTo(username);
+    Assertions.assertThat(passwordEncoder.matches(TestUser.PASSWORD, passwordHash)).isTrue();
     Assertions.assertThat(passwordEncoder.matches("", passwordHash)).isFalse();
     Assertions.assertThat(roles).hasSize(1);
     Assertions.assertThat(roles.stream().findFirst().get().getRole()).isEqualTo(AppSecurityRoles.Role.ROLE_USER.toString());
@@ -102,75 +103,59 @@ public class UserServiceIntegrationTest {
   @Test
   public void changeUserCommunities() {
     //given
-    User user = userService.create(
-            new User(id, username, firstName, lastName, email, entity, activity, null, null, null, null, null, null, null), password);
-
-
-    Community community = communityService.create(new Community(id, communityName));
+    Community community = communityService.create(Community.create(communityName));
     List<Long> commmunitiesIds = new ArrayList<>();
     commmunitiesIds.add(community.id);
+    User user = userService.withId(userId);
 
     //do
-    userService.changeUserCommunities(user.id, commmunitiesIds);
+    userService.changeUserCommunities(userId, commmunitiesIds);
 
     User userWithCommunitiesRequestsFavorites = user.loadCommunitiesRequestsFavorites();
 
     //then
     Assertions.assertThat(userWithCommunitiesRequestsFavorites.communities.list().size()).isEqualTo(1);
     Assertions.assertThat(userWithCommunitiesRequestsFavorites.communities.list().get(0).name).isEqualTo(communityName);
-
-
   }
 
   @Test
   public void createUserRequest() {
     //given
-    User user = userService.create(
-            new User(id, username, firstName, lastName, email, entity, activity, null, null, null, null, null, null, null), password);
-
+    User user = userService.withId(userId);
     //do
-    userService.createUserRequest(user.id, requestName);
+    userService.createUserRequest(userId, requestName);
 
     User userWithCommunitiesRequestsFavorites = user.loadCommunitiesRequestsFavorites();
 
     //then
     Assertions.assertThat(userWithCommunitiesRequestsFavorites.requests.list().size()).isEqualTo(1);
     Assertions.assertThat(userWithCommunitiesRequestsFavorites.requests.list().get(0).name).isEqualTo(requestName);
-
-
   }
 
   @Test
   public void createUserFavorite() {
     //given
-    User user = userService.create(
-            new User(id, username, firstName, lastName, email, entity, activity, null, null, null, null, null, null, null), password);
-
+    User user = userService.withId(userId);
     //do
-    userService.createUserFavorite(user.id, favoriteName);
+    userService.createUserFavorite(userId, favoriteName);
 
     User userWithCommunitiesRequestsFavorites = user.loadCommunitiesRequestsFavorites();
-
 
     //then
     Assertions.assertThat(userWithCommunitiesRequestsFavorites.favorites.list().size()).isEqualTo(1);
     Assertions.assertThat(userWithCommunitiesRequestsFavorites.favorites.list().get(0).name).isEqualTo(favoriteName);
-
   }
 
   @Test
   public void createUserSignVideo() {
     //given
-    User user = userService.create(
-            new User(id, username, firstName, lastName, email, entity, activity, null, null, null, null, null, null, null), password);
-
     //do
-    signService.create(user.id, signName, signUrl);
-    UserDB userDB = userRepository.findOne(user.id);
-
+    signService.create(userId, signName, signUrl);
+    User user = userService.withId(userId);
+    user = user.loadVideos();
 
     //then
-    Assertions.assertThat(userDB.getVideos()).hasSize(1);
-    Assertions.assertThat(userDB.getVideos().get(0).getUrl()).isEqualTo(signUrl);
+    Assertions.assertThat(user.videos.list()).hasSize(1);
+    Assertions.assertThat(user.videos.list().get(0).url).isEqualTo(signUrl);
   }
 }

@@ -27,6 +27,7 @@ import com.orange.signsatwork.biz.domain.RatingId;
 import com.orange.signsatwork.biz.domain.Ratings;
 import com.orange.signsatwork.biz.persistence.model.RatingDB;
 import com.orange.signsatwork.biz.persistence.model.RatingDBId;
+import com.orange.signsatwork.biz.persistence.repository.RatingRepository;
 import com.orange.signsatwork.biz.persistence.service.RatingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -40,6 +41,7 @@ import java.util.List;
 @Transactional
 public class RatingServiceImpl implements RatingService {
 
+  private final RatingRepository ratingRepository;
 
   static Ratings ratingsFrom(Iterable<RatingDB> ratingsDB) {
     List<RatingDat> ratingDats = new ArrayList<>();
@@ -55,4 +57,19 @@ public class RatingServiceImpl implements RatingService {
    return new RatingId(VideoServiceImpl.videoFromRatingView(ratingDBId.getVideo()),UserServiceImpl.userFromSignView(ratingDBId.getUser()));
  }
 
+  @Override
+  public void delete(RatingDB ratingDB) {
+    ratingDB.getVideo().getRatings().remove(ratingDB);
+    ratingRepository.delete(ratingDB);
+  }
+
+  @Override
+  public Ratings all() {
+    return ratingsFrom(ratingRepository.findAll());
+  }
+
+  @Override
+  public void deleteAll() {
+    ratingRepository.findAll().forEach(ratingDB -> delete(ratingDB));
+  }
 }

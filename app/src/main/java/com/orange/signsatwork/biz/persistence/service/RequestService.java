@@ -37,4 +37,6 @@ public interface RequestService {
   Requests withName(String name);
 
   Request create(Request request);
+
+  void delete(Request request);
 }

@@ -22,14 +22,13 @@ package com.orange.signsatwork.biz.persistence.service.impl;
  * #L%
  */
 
-import com.orange.signsatwork.biz.domain.Rating;
-import com.orange.signsatwork.biz.domain.Video;
-import com.orange.signsatwork.biz.domain.Videos;
+import com.orange.signsatwork.biz.domain.*;
 import com.orange.signsatwork.biz.persistence.model.CommentDB;
 import com.orange.signsatwork.biz.persistence.model.RatingDB;
 import com.orange.signsatwork.biz.persistence.model.UserDB;
 import com.orange.signsatwork.biz.persistence.model.VideoDB;
 import com.orange.signsatwork.biz.persistence.repository.*;
+import com.orange.signsatwork.biz.persistence.service.Services;
 import com.orange.signsatwork.biz.persistence.service.VideoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -49,6 +48,7 @@ public class VideoServiceImpl implements VideoService {
   private final UserRepository userRepository;
   private final RatingRepository ratingRepository;
   private final SignRepository signRepository;
+  private final Services services;
 
   @Override
   public Videos all() {
@@ -56,13 +56,13 @@ public class VideoServiceImpl implements VideoService {
   }
 
   @Override
-  public Video withId(long id) {
-    return videoFrom(videoRepository.findOne(id));
+  public Video withId(long videoId) {
+    return videoFrom(videoRepository.findOne(videoId));
   }
 
   @Override
-  public Video createVideoComment(long id, long userId, String commentText) {
-    VideoDB videoDB = videoRepository.findOne(id);
+  public Comment createVideoComment(long videoId, long userId, String commentText) {
+    VideoDB videoDB = videoRepository.findOne(videoId);
     UserDB userDB = userRepository.findOne(userId);
 
     CommentDB commentDB = new CommentDB();
@@ -73,12 +73,12 @@ public class VideoServiceImpl implements VideoService {
 
     commentRepository.save(commentDB);
 
-    return videoFrom(videoDB);
+    return CommentServiceImpl.commentFrom(commentDB);
   }
 
   @Override
-  public Video createVideoRating(long id, long userId, Rating rating) {
-    VideoDB videoDB = videoRepository.findOne(id);
+  public RatingDat createVideoRating(long videoId, long userId, Rating rating) {
+    VideoDB videoDB = videoRepository.findOne(videoId);
     UserDB userDB = userRepository.findOne(userId);
 
     RatingDB ratingDB = new RatingDB();
@@ -89,7 +89,7 @@ public class VideoServiceImpl implements VideoService {
 
     ratingRepository.save(ratingDB);
 
-    return videoFrom(videoDB);
+    return RatingServiceImpl.ratingFrom(ratingDB);
   }
 
   @Override
@@ -107,6 +107,24 @@ public class VideoServiceImpl implements VideoService {
             .findAny();
 
     return rating.isPresent() ? rating.get().getRating() : Rating.Neutral;
+  }
+
+  @Override
+  public Videos forUser(long userId) {
+    return videosFrom(videoRepository.findByUser(userRepository.findOne(userId)));
+  }
+
+  @Override
+  public void delete(Video video) {
+    VideoDB videoDB = videoRepository.findOne(video.id);
+    List<CommentDB> commentDBs = new ArrayList<>();
+    commentDBs.addAll(videoDB.getComments());
+    commentDBs.forEach(commentDB -> services.commentService().delete(CommentServiceImpl.commentFrom(commentDB)));
+    List<RatingDB> ratingDBs = new ArrayList<>();
+    ratingDBs.addAll(videoDB.getRatings());
+    ratingDBs.forEach(ratingDB -> services.ratingService().delete(ratingDB));
+    videoDB.getUser().getVideos().remove(videoDB);
+    videoRepository.delete(videoDB);
   }
 
   static Videos videosFrom(Iterable<VideoDB> videosDB) {

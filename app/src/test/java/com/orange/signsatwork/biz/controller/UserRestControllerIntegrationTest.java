@@ -22,18 +22,14 @@ package com.orange.signsatwork.biz.controller;
  * #L%
  */
 
-import com.orange.signsatwork.biz.domain.*;
-import com.orange.signsatwork.biz.persistence.service.CommunityService;
-import com.orange.signsatwork.biz.persistence.service.FavoriteService;
-import com.orange.signsatwork.biz.persistence.service.RequestService;
-import com.orange.signsatwork.biz.persistence.service.UserService;
+import com.orange.signsatwork.biz.ClearDB;
+import com.orange.signsatwork.biz.TestUser;
 import com.orange.signsatwork.biz.webservice.controller.RestApi;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -41,12 +37,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -57,40 +48,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class UserRestControllerIntegrationTest {
 
   @Autowired
+  ClearDB clearDB;
+
+  @Autowired
+  TestUser testUser;
+
+  @Autowired
   private WebApplicationContext context;
 
   private MockMvc mockMvc;
 
-  @MockBean
-  private UserService userService;
-
-  @MockBean
-  private CommunityService communityService;
-
-  @MockBean
-  private RequestService requestService;
-
-  @MockBean
-  private FavoriteService favoriteService;
-
-  private long id1 = 11;
   private String username1 = "Duchess";
-  private String firstName1 = "Duchess";
-  private String lastName1 = "Aristocats";
-  private String email1 = "duchess@cats.com";
-  private String entity1 = "CATS";
-  private String activity1 = "mother";
-  private Date lastConnectionDate1;
-
-
-  private long id2 = 22;
   private String username2 = "Thomas";
-  private String firstName2 = "Thomas";
-  private String lastName2 = "O'Malley";
-  private String email2 = "gangster@cats.com";
-  private String entity2 = "MOUSE";
-  private String activity2 = "gangster";
-  private Date lastConnectionDate2;
 
 
   @Before
@@ -101,17 +70,10 @@ public class UserRestControllerIntegrationTest {
             .alwaysDo(print())
             .build();
 
-    Users users = new Users(
-            Arrays.asList(
-                    new User(
-                            id1, username1, firstName1, lastName1,
-                            email1, entity1, activity1, lastConnectionDate1,
-                            new Communities(new ArrayList<>()), new Requests(new ArrayList<>()), new Favorites(new ArrayList<>()), communityService, requestService, favoriteService),
-                    new User(id2, username2, firstName2, lastName2,
-                            email2, entity2, activity2, lastConnectionDate2,
-                            new Communities(new ArrayList<>()), new Requests(new ArrayList<>()), new Favorites(new ArrayList<>()), communityService, requestService, favoriteService)));
+    clearDB.clear();
 
-    given(userService.all()).willReturn(users);
+    testUser.get(username1);
+    testUser.get(username2);
   }
 
   @Test
