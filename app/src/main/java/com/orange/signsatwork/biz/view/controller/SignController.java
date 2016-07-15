@@ -54,23 +54,28 @@ public class SignController {
   private static final boolean SHOW_ADD_FAVORITE = true;
   private static final boolean HIDE_ADD_FAVORITE = false;
 
+  private static final String HOME_URL = "/";
+  private static final String SIGNS_URL = "/signs";
+
   @Autowired
   private Services services;
 
   @Autowired
   MessageByLocaleService messageByLocaleService;
 
-  @RequestMapping(value = "/signs")
+  @RequestMapping(value = SIGNS_URL)
   public String signs(Principal principal, Model model) {
-    fillModelWithContext(model, "sign.list", principal, SHOW_ADD_FAVORITE);
+    fillModelWithContext(model, "sign.list", principal, SHOW_ADD_FAVORITE, HOME_URL);
     fillModelWithSigns(model);
     model.addAttribute("showTooltip", true);
     return "signs";
   }
 
   @RequestMapping(value = "/sign/{signId}")
-  public String sign(@PathVariable long signId, Principal principal, Model model)  {
-    fillModelWithContext(model, "sign.info", principal, SHOW_ADD_FAVORITE);
+  public String sign(HttpServletRequest req, @PathVariable long signId, Principal principal, Model model) {
+    String referer = req.getHeader("Referer");
+    String backUrl = referer.contains(SIGNS_URL) ? SIGNS_URL : HOME_URL;
+    fillModelWithContext(model, "sign.info", principal, SHOW_ADD_FAVORITE, backUrl);
     fillModelWithSign(model, signId, principal);
     return "sign";
   }
@@ -78,7 +83,8 @@ public class SignController {
   @Secured("ROLE_USER")
   @RequestMapping(value = "/sec/sign/{signId}/detail")
   public String signDetail(@PathVariable long signId, Principal principal, Model model)  {
-    fillModelWithContext(model, "sign.detail", principal, SHOW_ADD_FAVORITE);
+    String backUrl = "/sec/sign/" + signId;
+    fillModelWithContext(model, "sign.detail", principal, SHOW_ADD_FAVORITE, backUrl);
     fillModelWithSign(model, signId, principal);
     return "sign-detail";
   }
@@ -86,7 +92,8 @@ public class SignController {
   @Secured("ROLE_USER")
   @RequestMapping(value = "/sec/sign/{signId}/associate")
   public String signAssociate(@PathVariable long signId, Principal principal, Model model)  {
-    fillModelWithContext(model, "sign.associate-with", principal, HIDE_ADD_FAVORITE);
+    String backUrl = "/sec/sign/" + signId;
+    fillModelWithContext(model, "sign.associate-with", principal, HIDE_ADD_FAVORITE, backUrl);
     fillModelWithSign(model, signId, principal);
     model.addAttribute("isForAssociation", true);
     return "sign-associate";
@@ -120,8 +127,9 @@ public class SignController {
     return "redirect:/sign/" + signId;
   }
 
-  private void fillModelWithContext(Model model, String messageEntry, Principal principal, boolean showAddFavorite) {
+  private void fillModelWithContext(Model model, String messageEntry, Principal principal, boolean showAddFavorite, String backUrl) {
     model.addAttribute("title", messageByLocaleService.getMessage(messageEntry));
+    model.addAttribute("backUrl", backUrl);
     AuthentModel.addAuthenticatedModel(model, AuthentModel.isAuthenticated(principal));
     model.addAttribute("showAddFavorite", showAddFavorite && AuthentModel.isAuthenticated(principal));
   }

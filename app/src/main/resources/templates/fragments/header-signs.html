@@ -33,7 +33,8 @@
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
                 <a href="/" class="col-lg-5" id="backtoHomepage">
-                    <div class="chevron_left pull-left"></div>
+                    <div class="chevron_left pull-left"/>
+                    <h1 class="navbar_title pull-left" th:text="#{home}"/>
                 </a>
                 <div th:if="${isAuthenticated}" class="col-xs-1 dropdown">
                     <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1"
