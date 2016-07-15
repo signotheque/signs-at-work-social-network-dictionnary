@@ -32,12 +32,9 @@
             <div class="col-lg-12 navbar-header">
                 <a th:href="@{/}">
                     <div class="chevron_left pull-left"></div>
-                    <div class="pull-left">
-                        <div class="logo_signe pull-right"></div>
-                        <h1 class="navbar_title pull-left" th:text="#{sign.sign}"></h1>
-                    </div>
+                    <h1 class="navbar_title pull-left" th:text="${title}"></h1>
                 </a>
-                <div th:if="${isAuthenticated}" class="col-lg-12 navbar-right collapse navbar-collapse"
+                <div th:if="${showAddFavorite}" class="col-lg-12 navbar-right collapse navbar-collapse"
                      id="orange-navbar-collapse">
                     <ul class=" nav navbar-nav" role="tablist">
                         <li role="presentation" class="active">

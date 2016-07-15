@@ -10,24 +10,23 @@ package com.orange.signsatwork.biz.view.controller;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 2 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-2.0.html>.
  * #L%
  */
 
+import com.orange.signsatwork.biz.domain.Sign;
 import com.orange.signsatwork.biz.domain.User;
 import com.orange.signsatwork.biz.persistence.service.MessageByLocaleService;
-import com.orange.signsatwork.biz.domain.Sign;
 import com.orange.signsatwork.biz.persistence.service.Services;
 import com.orange.signsatwork.biz.persistence.service.SignService;
-import com.orange.signsatwork.biz.persistence.service.UserService;
 import com.orange.signsatwork.biz.view.model.AuthentModel;
 import com.orange.signsatwork.biz.view.model.SignProfileView;
 import com.orange.signsatwork.biz.view.model.SignView;
@@ -44,11 +43,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
 public class SignController {
+  private static final boolean SHOW_ADD_FAVORITE = true;
+  private static final boolean HIDE_ADD_FAVORITE = false;
 
   @Autowired
   private Services services;
@@ -58,54 +62,90 @@ public class SignController {
 
   @RequestMapping(value = "/signs")
   public String signs(Principal principal, Model model) {
-    AuthentModel.addAuthenticatedModel(model, AuthentModel.isAuthenticated(principal));
-
-    List<SignView> signsView = SignView.from(services.sign().all());
-    model.addAttribute("signs", signsView);
-    model.addAttribute("signCreationView", new SignCreationView());
-
+    fillModelWithContext(model, "sign.list", principal, SHOW_ADD_FAVORITE);
+    fillModelWithSigns(model);
+    model.addAttribute("showTooltip", true);
     return "signs";
   }
 
-  @RequestMapping(value = "/sign/{id}")
-  public String sign(@PathVariable long id, Principal principal, Model model)  {
-    SignService signService = services.sign();
-
-    AuthentModel.addAuthenticatedModel(model, AuthentModel.isAuthenticated(principal));
-
-    Sign sign = signService.withIdLoadAssociates(id);
-
-    model.addAttribute("title", messageByLocaleService.getMessage("sign.info"));
-
-    SignProfileView signProfileView = AuthentModel.isAuthenticated(principal) ?
-            new SignProfileView(sign, signService, services.user().withUserName(principal.getName())) :
-            new SignProfileView(sign, signService);
-    model.addAttribute("signProfileView", signProfileView);
-
+  @RequestMapping(value = "/sign/{signId}")
+  public String sign(@PathVariable long signId, Principal principal, Model model)  {
+    fillModelWithContext(model, "sign.info", principal, SHOW_ADD_FAVORITE);
+    fillModelWithSign(model, signId, principal);
     return "sign";
   }
 
   @Secured("ROLE_USER")
-  @RequestMapping(value = "/sign/{id}/detail")
-  public String signDetail(@PathVariable long id, Principal principal, Model model)  {
-    Sign sign = services.sign().withIdLoadAssociates(id);
-
-    model.addAttribute("title", messageByLocaleService.getMessage("sign.details"));
-
-    SignProfileView signProfileView = new SignProfileView(sign, services.sign(), services.user().withUserName(principal.getName()));
-    model.addAttribute("signProfileView", signProfileView);
-
+  @RequestMapping(value = "/sec/sign/{signId}/detail")
+  public String signDetail(@PathVariable long signId, Principal principal, Model model)  {
+    fillModelWithContext(model, "sign.detail", principal, SHOW_ADD_FAVORITE);
+    fillModelWithSign(model, signId, principal);
     return "sign-detail";
   }
 
   @Secured("ROLE_USER")
+  @RequestMapping(value = "/sec/sign/{signId}/associate")
+  public String signAssociate(@PathVariable long signId, Principal principal, Model model)  {
+    fillModelWithContext(model, "sign.associate-with", principal, HIDE_ADD_FAVORITE);
+    fillModelWithSign(model, signId, principal);
+    model.addAttribute("isForAssociation", true);
+    return "sign-associate";
+  }
+
+  @Secured("ROLE_USER")
+  @RequestMapping(value = "/sec/sign/{signId}/associate", method = RequestMethod.POST)
+  public String changeAssociate(HttpServletRequest req, @PathVariable long signId, Principal principal)  {
+    List<Long> associateSignsIds =
+            transformAssociateSignsIdsToLong(req.getParameterMap().get("associateSignsIds"));
+
+    services.sign().changeSignAssociates(signId, associateSignsIds);
+
+    log.info("Change sign (id={}) associates, ids={}", signId, associateSignsIds);
+
+    return showSign(signId);
+  }
+
+  @Secured("ROLE_USER")
   @RequestMapping(value = "/sec/sign/create", method = RequestMethod.POST)
-  public String createSign(HttpServletRequest req, @ModelAttribute SignCreationView signCreationView, Principal principal) {
+  public String createSign(@ModelAttribute SignCreationView signCreationView, Principal principal) {
     User user = services.user().withUserName(principal.getName());
     Sign sign = services.sign().create(user.id, signCreationView.getSignName(), signCreationView.getVideoUrl());
 
     log.info("createSign: username = {} / sign name = {} / video url = {}", user.username, signCreationView.getSignName(), signCreationView.getVideoUrl());
 
-    return "redirect:/sign/" + sign.id;
+    return showSign(sign.id);
+  }
+
+  private String showSign(long signId) {
+    return "redirect:/sign/" + signId;
+  }
+
+  private void fillModelWithContext(Model model, String messageEntry, Principal principal, boolean showAddFavorite) {
+    model.addAttribute("title", messageByLocaleService.getMessage(messageEntry));
+    AuthentModel.addAuthenticatedModel(model, AuthentModel.isAuthenticated(principal));
+    model.addAttribute("showAddFavorite", showAddFavorite && AuthentModel.isAuthenticated(principal));
+  }
+
+  private void fillModelWithSigns(Model model) {
+    List<SignView> signsView = SignView.from(services.sign().all());
+    model.addAttribute("signs", signsView);
+    model.addAttribute("signCreationView", new SignCreationView());
+  }
+
+  private void fillModelWithSign(Model model, long signId, Principal principal) {
+    SignService signService = services.sign();
+    Sign sign = signService.withIdLoadAssociates(signId);
+
+    SignProfileView signProfileView = AuthentModel.isAuthenticated(principal) ?
+            new SignProfileView(sign, signService, services.user().withUserName(principal.getName())) :
+            new SignProfileView(sign, signService);
+    model.addAttribute("signProfileView", signProfileView);
+  }
+
+  private List<Long> transformAssociateSignsIdsToLong(String[] associateSignsIds) {
+    return associateSignsIds == null ? new ArrayList<>() :
+      Arrays.asList(associateSignsIds).stream()
+            .map(Long::parseLong)
+            .collect(Collectors.toList());
   }
 }
