@@ -83,25 +83,30 @@ public class SignController {
   @Secured("ROLE_USER")
   @RequestMapping(value = "/sec/sign/{signId}/detail")
   public String signDetail(@PathVariable long signId, Principal principal, Model model)  {
-    String backUrl = "/sec/sign/" + signId;
-    fillModelWithContext(model, "sign.detail", principal, SHOW_ADD_FAVORITE, backUrl);
+    fillModelWithContext(model, "sign.detail", principal, SHOW_ADD_FAVORITE, signUrl(signId));
     fillModelWithSign(model, signId, principal);
     return "sign-detail";
   }
 
   @Secured("ROLE_USER")
-  @RequestMapping(value = "/sec/sign/{signId}/associate")
-  public String signAssociate(@PathVariable long signId, Principal principal, Model model)  {
-    String backUrl = "/sec/sign/" + signId;
-    fillModelWithContext(model, "sign.associate-with", principal, HIDE_ADD_FAVORITE, backUrl);
+  @RequestMapping(value = "/sign/{signId}/associates")
+  public String associates(@PathVariable long signId, Principal principal, Model model)  {
+    fillModelWithContext(model, "sign.associated", principal, HIDE_ADD_FAVORITE, signUrl(signId));
     fillModelWithSign(model, signId, principal);
-    model.addAttribute("isForAssociation", true);
-    return "sign-associate";
+    return "sign-associates";
+  }
+
+  @Secured("ROLE_USER")
+  @RequestMapping(value = "/sec/sign/{signId}/associate-form")
+  public String associate(@PathVariable long signId, Principal principal, Model model)  {
+    fillModelWithContext(model, "sign.associate-with", principal, HIDE_ADD_FAVORITE, signUrl(signId));
+    fillModelWithSign(model, signId, principal);
+    return "sign-associate-form";
   }
 
   @Secured("ROLE_USER")
   @RequestMapping(value = "/sec/sign/{signId}/associate", method = RequestMethod.POST)
-  public String changeAssociate(HttpServletRequest req, @PathVariable long signId, Principal principal)  {
+  public String changeAssociates(HttpServletRequest req, @PathVariable long signId, Principal principal)  {
     List<Long> associateSignsIds =
             transformAssociateSignsIdsToLong(req.getParameterMap().get("associateSignsIds"));
 
@@ -121,6 +126,10 @@ public class SignController {
     log.info("createSign: username = {} / sign name = {} / video url = {}", user.username, signCreationView.getSignName(), signCreationView.getVideoUrl());
 
     return showSign(sign.id);
+  }
+
+  private String signUrl(long signId) {
+    return "/sign/" + signId;
   }
 
   private String showSign(long signId) {

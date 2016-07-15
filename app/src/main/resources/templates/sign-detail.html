@@ -21,42 +21,42 @@
                 <ul class="nav nav-list primary left-menu">
                     <li class="aside_bckg_li">
                         <a href="#">
-                            <h2  class="text-center" th:text="${signProfileView.sign.name}"/>
+                            <h2 class="text-center" th:text="${signProfileView.sign.name}"/>
                         </a>
                     </li>
                     <li class="clear aside_bckg_li">
-                        <a th:href="@{/sec/sign/} + ${signProfileView.sign.id} + '/associate'">
-                            <h2  class="container_H2" th:text="#{sign.associate-with}"/>
-                                <div >
-                                    <div class="pull-right chevron_right"/>
-                                </div>
+                        <a th:href="@{/sec/sign/} + ${signProfileView.sign.id} + '/associate-form'">
+                            <h2 class="container_H2" th:text="#{sign.associate-with}"/>
+                            <div>
+                                <div class="pull-right chevron_right"/>
+                            </div>
                         </a>
                     </li>
                     <li class="aside_bckg_li">
                         <a href="#">
                             <h2 class="container_H2" th:text="#{sign.replace}"/>
-                                <div>
-                                    <div class="pull-right chevron_right"/>
-                                </div>
+                            <div>
+                                <div class="pull-right chevron_right"/>
+                            </div>
                         </a>
                     </li>
                     <li class="aside_bckg_li">
                         <a href="#" data-toggle="modal" data-target="#evaluation_modal">
                             <h2 class="container_H2" th:text="#{sign.reevaluate}"/>
-                                <div >
-                                    <div class="pull-right chevron_right"/>
-                                    <div th:if="${signProfileView.ratePositive}" class="pull-right sentiment_positif"/>
-                                    <div th:if="${signProfileView.rateNeutral}" class="pull-right sentiment_neutre"/>
-                                    <div th:if="${signProfileView.rateNegative}" class="pull-right sentiment_negatif"/>
-                                </div>
+                            <div>
+                                <div class="pull-right chevron_right"/>
+                                <div th:if="${signProfileView.ratePositive}" class="pull-right sentiment_positif"/>
+                                <div th:if="${signProfileView.rateNeutral}" class="pull-right sentiment_neutre"/>
+                                <div th:if="${signProfileView.rateNegative}" class="pull-right sentiment_negatif"/>
+                            </div>
                         </a>
                     </li>
                     <li class="aside_bckg_li">
                         <a href="#">
                             <h2 class="container_H2" th:text="#{history}"/>
-                                <div>
-                                    <div class="pull-right chevron_right"/>
-                                </div>
+                            <div>
+                                <div class="pull-right chevron_right"/>
+                            </div>
                         </a>
                     </li>
                 </ul>

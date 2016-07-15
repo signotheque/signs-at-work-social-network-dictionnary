@@ -28,14 +28,26 @@
 
 <div th:fragment="div">
 
-    <div th:if="${not #lists.isEmpty(signProfileView.allSignsWithoutCurrentSign)}">
-        <div th:each="sign:${signProfileView.allSignsWithoutCurrentSign}" class="col-lg-3 col-md-4 col-xs-6 col-sm-4">
-            <div th:remove="tag" th:each="video, stats:${sign.videos.list()}" th:if="${stats.first}">
-                <iframe th:src="${video.url}" frameborder="0" allowfullscreen=""/>
-            </div>
-            <a th:href="@{/sign/} + ${sign.id}" th:text="${sign.name}" type="text/html"/>
+    <form th:if="${not #lists.isEmpty(signProfileView.allSignsWithoutCurrentSign)}"
+          class="row"
+          th:action="@{/sec/sign/{signid}/associate(signid=${signProfileView.sign.id})}"
+          th:object="${signProfileView}"
+          method="post">
+
+        <div class="form-group">
+            <label th:each="sign : ${signProfileView.allSignsWithoutCurrentSign}"
+                   th:for="${#ids.next('associateSignsIds')}">
+
+                <div th:remove="tag" th:each="video, stats:${sign.videos.list()}" th:if="${stats.first}">
+                    <iframe th:src="${video.url}" frameborder="0" allowfullscreen=""/>
+                </div>
+
+                <input type="checkbox" th:field="*{associateSignsIds}" th:text="${sign.name}" th:value="${sign.id}"/>
+            </label>
         </div>
-    </div>
+        <br/>
+        <button type="submit" class="btn btn-default" th:text="#{sign.associate}"></button>
+    </form>
 
     <div th:if="${#lists.isEmpty(signProfileView.allSignsWithoutCurrentSign)}">
         <h2 th:text="#{sign.not_available}"></h2>
