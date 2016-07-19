@@ -23,10 +23,8 @@ package com.orange.signsatwork.biz.view.controller.admin;
  */
 
 import com.orange.signsatwork.biz.domain.User;
-import com.orange.signsatwork.biz.persistence.service.CommunityService;
 import com.orange.signsatwork.biz.persistence.service.MessageByLocaleService;
-import com.orange.signsatwork.biz.persistence.service.RequestService;
-import com.orange.signsatwork.biz.persistence.service.UserService;
+import com.orange.signsatwork.biz.persistence.service.Services;
 import com.orange.signsatwork.biz.view.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -46,11 +44,7 @@ import java.util.stream.Collectors;
 public class UserAdminController {
 
   @Autowired
-  private UserService userService;
-  @Autowired
-  private CommunityService communityService;
-  @Autowired
-  private RequestService requestService;
+  private Services services;
   @Autowired
   MessageByLocaleService messageByLocaleService;
 
@@ -60,19 +54,19 @@ public class UserAdminController {
 
     AuthentModel.addAuthenticatedModel(model, true);
     model.addAttribute("title", messageByLocaleService.getMessage("users"));
-    model.addAttribute("users", UserView.from(userService.all()));
+    model.addAttribute("users", UserView.from(services.user().all()));
     return "admin/users";
   }
 
   @Secured("ROLE_ADMIN")
   @RequestMapping(value = "/sec/admin/user/{id}")
   public String userDetails(@PathVariable long id, Model model) {
-    User user = userService.withId(id);
+    User user = services.user().withId(id);
 
     AuthentModel.addAuthenticatedModel(model, true);
     model.addAttribute("title", messageByLocaleService.getMessage("user_details"));
 
-    UserProfileView userProfileView = new UserProfileView(user, communityService);
+    UserProfileView userProfileView = new UserProfileView(user, services.community());
     model.addAttribute("userProfileView", userProfileView);
 
     model.addAttribute("requestView", new RequestView());
@@ -101,7 +95,7 @@ public class UserAdminController {
     List<Long> communitiesIds =
             transformCommunitiesIdsToLong(req.getParameterMap().get("userCommunitiesIds"));
 
-    userService.changeUserCommunities(userId, communitiesIds);
+    services.user().changeUserCommunities(userId, communitiesIds);
 
     return userDetails(userId, model);
   }
@@ -118,13 +112,26 @@ public class UserAdminController {
   }
 
   @Secured("ROLE_ADMIN")
+  @RequestMapping(value = "/sec/admin/user/{userId}/add/sign", method = RequestMethod.POST)
+  public String newSign(
+          HttpServletRequest req, @PathVariable long userId, Model model) {
+
+    String signName = req.getParameter("name");
+    String signUrl = req.getParameter("url");
+
+    services.sign().create(userId, signName, signUrl);
+
+    return userDetails(userId, model);
+  }
+
+  @Secured("ROLE_ADMIN")
   @RequestMapping(value = "/sec/admin/user/{userId}/add/request", method = RequestMethod.POST)
   public String createUserRequest(
           HttpServletRequest req, @PathVariable long userId, Model model) {
 
     String requestName = req.getParameter("requestName");
-    if (requestService.withName(requestName).list().isEmpty()) {
-      userService.createUserRequest(userId, requestName);
+    if (services.request().withName(requestName).list().isEmpty()) {
+      services.user().createUserRequest(userId, requestName);
     }
 
     return userDetails(userId, model);
@@ -136,8 +143,7 @@ public class UserAdminController {
           HttpServletRequest req, @PathVariable long userId, Model model) {
 
     String favoriteName = req.getParameter("favoriteName");
-    userService.createUserFavorite(userId, favoriteName);
-
+    services.user().createUserFavorite(userId, favoriteName);
 
     return userDetails(userId, model);
   }
