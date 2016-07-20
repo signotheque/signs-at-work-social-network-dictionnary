@@ -23,7 +23,10 @@ package com.orange.signsatwork.biz.view.controller.admin;
  */
 
 import com.orange.signsatwork.biz.domain.User;
-import com.orange.signsatwork.biz.persistence.service.*;
+import com.orange.signsatwork.biz.persistence.service.CommunityService;
+import com.orange.signsatwork.biz.persistence.service.MessageByLocaleService;
+import com.orange.signsatwork.biz.persistence.service.RequestService;
+import com.orange.signsatwork.biz.persistence.service.UserService;
 import com.orange.signsatwork.biz.view.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
