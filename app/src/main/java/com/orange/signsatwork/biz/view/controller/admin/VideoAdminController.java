@@ -93,7 +93,7 @@ public class VideoAdminController {
   public String createVideoRating(
           HttpServletRequest req, @PathVariable long videoId, Model model, Principal principal) {
 
-    Rating rating = Rating.valueOf(req.getParameter("rate"));
+    Rating rating = Rating.valueOf(req.getParameter("rating"));
     long userId = userService.withUserName(principal.getName()).id;
     videoService.createVideoRating(videoId, userId, rating);
 
