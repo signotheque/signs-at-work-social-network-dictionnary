@@ -23,10 +23,7 @@ package com.orange.signsatwork.biz.view.controller.admin;
  */
 
 import com.orange.signsatwork.biz.domain.User;
-import com.orange.signsatwork.biz.persistence.service.CommunityService;
-import com.orange.signsatwork.biz.persistence.service.MessageByLocaleService;
-import com.orange.signsatwork.biz.persistence.service.RequestService;
-import com.orange.signsatwork.biz.persistence.service.UserService;
+import com.orange.signsatwork.biz.persistence.service.*;
 import com.orange.signsatwork.biz.view.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -51,6 +48,8 @@ public class UserAdminController {
   private CommunityService communityService;
   @Autowired
   private RequestService requestService;
+  @Autowired
+  private SignService signService;
   @Autowired
   MessageByLocaleService messageByLocaleService;
 
@@ -138,6 +137,18 @@ public class UserAdminController {
     String favoriteName = req.getParameter("favoriteName");
     userService.createUserFavorite(userId, favoriteName);
 
+
+    return userDetails(userId, model);
+  }
+
+  @Secured("ROLE_USER")
+  @RequestMapping(value = "sec/admin/user/{userId}/add/sign", method = RequestMethod.POST)
+  public String createUserSignVideo(
+          HttpServletRequest req, @PathVariable long userId, Model model) {
+
+    String signName = req.getParameter("name");
+    String signUrl = req.getParameter("url");
+    signService.create(userId, signName, signUrl);
 
     return userDetails(userId, model);
   }
