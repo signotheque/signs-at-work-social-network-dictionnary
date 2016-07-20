@@ -1,4 +1,4 @@
-package com.orange.signsatwork.biz.view.controller.admin;
+package com.orange.signsatwork.biz.view.controller.testUI;
 
 /*
  * #%L
@@ -42,7 +42,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
-public class SignAdminController {
+public class SignTestUIController {
 
   @Autowired
   private UserService userService;
@@ -61,17 +61,17 @@ public class SignAdminController {
   @Autowired
   MessageByLocaleService messageByLocaleService;
 
-  @Secured("ROLE_ADMIN")
-  @RequestMapping("/sec/admin/signs")
+  @Secured("ROLE_USER")
+  @RequestMapping("/sec/testUI/signs")
   public String signs(Model model) {
     model.addAttribute("title", messageByLocaleService.getMessage("signs"));
     List<SignView> signsView = SignView.from(signService.all());
     model.addAttribute("signs", signsView);
-    return "admin/signs";
+    return "testUI/signs";
   }
 
-  @Secured("ROLE_ADMIN")
-  @RequestMapping(value = "/sec/admin/sign/{id}")
+  @Secured("ROLE_USER")
+  @RequestMapping(value = "/sec/testUI/sign/{id}")
   public String signDetails(@PathVariable long id, Model model) {
     Sign sign = signService.withIdLoadAssociates(id);
 
@@ -81,11 +81,11 @@ public class SignAdminController {
     SignProfileView signProfileView = new SignProfileView(sign, signService);
     model.addAttribute("signProfileView", signProfileView);
 
-    return "admin/sign";
+    return "testUI/sign";
   }
 
-  @Secured("ROLE_ADMIN")
-  @RequestMapping(value = "/sec/admin/sign/{signId}/add/signs", method = RequestMethod.POST)
+  @Secured("ROLE_USER")
+  @RequestMapping(value = "/sec/testUI/sign/{signId}/add/signs", method = RequestMethod.POST)
   public String changeSignAssociates(
           HttpServletRequest req, @PathVariable long signId, Model model) {
 

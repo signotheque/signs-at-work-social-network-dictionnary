@@ -26,7 +26,7 @@
 </head>
 <body>
 
-<div th:replace="fragments/header-admin :: header">&nbsp;</div>
+<div th:replace="fragments/header-testUI :: header">&nbsp;</div>
 
 
 <section class="jumbotron text-xs-center">
@@ -46,7 +46,7 @@
             </thead>
             <tbody>
             <tr th:each="community : ${communities}">
-                <td><a th:href="@{/sec/admin/community/{communityid}(communityid=${community.id})}" th:text="${community.id}"/></td>
+                <td><a th:href="@{/sec/testUI/community/{communityid}(communityid=${community.id})}" th:text="${community.id}"/></td>
                 <td th:text="${community.name}"></td>
             </tr>
             </tbody>

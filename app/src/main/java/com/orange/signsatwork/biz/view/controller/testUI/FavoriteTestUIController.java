@@ -1,4 +1,4 @@
-package com.orange.signsatwork.biz.view.controller.admin;
+package com.orange.signsatwork.biz.view.controller.testUI;
 
 /*
  * #%L
@@ -23,11 +23,11 @@ package com.orange.signsatwork.biz.view.controller.admin;
  */
 
 import com.orange.signsatwork.biz.domain.Favorite;
-import com.orange.signsatwork.biz.persistence.service.MessageByLocaleService;
-import com.orange.signsatwork.biz.view.model.FavoriteProfileView;
 import com.orange.signsatwork.biz.persistence.service.FavoriteService;
+import com.orange.signsatwork.biz.persistence.service.MessageByLocaleService;
 import com.orange.signsatwork.biz.persistence.service.SignService;
 import com.orange.signsatwork.biz.view.model.AuthentModel;
+import com.orange.signsatwork.biz.view.model.FavoriteProfileView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
@@ -43,7 +43,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
-public class FavoriteAdminController {
+public class FavoriteTestUIController {
 
   @Autowired
   private FavoriteService favoriteService;
@@ -52,8 +52,8 @@ public class FavoriteAdminController {
   @Autowired
   MessageByLocaleService messageByLocaleService;
 
-  @Secured("ROLE_ADMIN")
-  @RequestMapping(value = "/sec/admin/favorite/{id}")
+  @Secured("ROLE_USER")
+  @RequestMapping(value = "/sec/testUI/favorite/{id}")
   public String favoriteDetails(@PathVariable long id, Model model) {
     Favorite favorite = favoriteService.withId(id);
 
@@ -62,11 +62,11 @@ public class FavoriteAdminController {
     FavoriteProfileView favoriteProfileView = new FavoriteProfileView(favorite, signService);
     model.addAttribute("favoriteProfileView", favoriteProfileView);
 
-    return "admin/favorite";
+    return "testUI/favorite";
   }
 
-  @Secured("ROLE_ADMIN")
-  @RequestMapping(value = "/sec/admin/favorite/{favoriteId}/add/signs", method = RequestMethod.POST)
+  @Secured("ROLE_USER")
+  @RequestMapping(value = "/sec/testUI/favorite/{favoriteId}/add/signs", method = RequestMethod.POST)
   public String changeFavoriteSigns(
           HttpServletRequest req, @PathVariable long favoriteId, Model model) {
 

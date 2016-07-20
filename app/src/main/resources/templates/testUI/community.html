@@ -22,19 +22,34 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-    <meta charset="utf-8"/>
+    <th:block th:include="fragments/header-head :: head"></th:block>
 </head>
 <body>
 
-<header role="banner" th:fragment="header">
-    <nav role="navigation" class="navbar navbar-inverse" id="main_nav">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <a th:href="@{/sec/admin}" class="text-center" style="color: #FFFFFF" th:text="#{admin_home}"/>
-            </div>
-        </div>
-    </nav>
-</header>
+<div th:replace="fragments/header-testUI :: header">&nbsp;</div>
+
+
+<section class="jumbotron text-xs-center">
+    <div class="container">
+        <h1 class="jumbotron-heading" th:text="#{community_details}"/>
+    </div>
+    <br/>
+
+    <table class="table table-sm table-striped table-bordered" style="margin-top: 1%">
+        <thead>
+        <tr>
+            <th>#id</th>
+            <th th:text="#{name}"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td th:text="${community.id}"></td>
+            <td th:text="${community.name}"></td>
+        </tr>
+        </tbody>
+    </table>
+</section>
 
 </body>
 </html>

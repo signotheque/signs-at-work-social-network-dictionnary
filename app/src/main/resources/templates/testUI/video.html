@@ -26,14 +26,13 @@
 </head>
 <body>
 
-<div th:replace="fragments/header-admin :: header">&nbsp;</div>
+<div th:replace="fragments/header-testUI :: header">&nbsp;</div>
 
 
 <section class="jumbotron text-xs-center">
     <div class="container">
         <h1 class="jumbotron-heading" th:text="#{video_details}">
         </h1>
-        <a th:href="@{/sec/admin}" class="btn btn-primary" style="margin-top: 2%" th:text="#{home}"></a>
     </div>
     <br/>
 
@@ -71,7 +70,7 @@
     </div>
     <br/>
 
-    <form id="addcommenttovideoform" class="form-inline" action="#" th:action="@{/sec/admin/video/{videoid}/add/comment(videoid=${videoView.id})}"
+    <form id="addcommenttovideoform" class="form-inline" action="#" th:action="@{/sec/testUI/video/{videoid}/add/comment(videoid=${videoView.id})}"
           th:object="${commentView}" method="post">
         <div class="form-group">
             <label for="text" th:text="#{comment}"></label>
@@ -116,7 +115,7 @@
         </div>
     </div>
 
-    <form id="addratingtovideoform" class="form-inline" action="#" th:action="@{/sec/admin/video/{videoid}/add/rating(videoid=${videoView.id})}" th:object="${ratingView}" method="post">
+    <form id="addratingtovideoform" class="form-inline" action="#" th:action="@{/sec/testUI/video/{videoid}/add/rating(videoid=${videoView.id})}" th:object="${ratingView}" method="post">
 
         <div id="vote" class="form-group">
             <label th:each="rating : ${T(com.orange.signsatwork.biz.domain.Rating).values()}" th:for="${#ids.next('rating')}">

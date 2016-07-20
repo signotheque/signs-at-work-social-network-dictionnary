@@ -1,4 +1,4 @@
-package com.orange.signsatwork.biz.view.controller.admin;
+package com.orange.signsatwork.biz.view.controller.testUI;
 
 /*
  * #%L
@@ -40,7 +40,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
-public class UserAdminController {
+public class UserTestUIController {
 
   @Autowired
   private UserService userService;
@@ -53,18 +53,10 @@ public class UserAdminController {
   @Autowired
   MessageByLocaleService messageByLocaleService;
 
-  @Secured("ROLE_ADMIN")
-  @RequestMapping("/sec/admin/users")
-  public String users(Model model) {
 
-    AuthentModel.addAuthenticatedModel(model, true);
-    model.addAttribute("title", messageByLocaleService.getMessage("users"));
-    model.addAttribute("users", UserView.from(userService.all()));
-    return "admin/users";
-  }
 
-  @Secured("ROLE_ADMIN")
-  @RequestMapping(value = "/sec/admin/user/{id}")
+  @Secured("ROLE_USER")
+  @RequestMapping(value = "/sec/testUI/user/{id}")
   public String userDetails(@PathVariable long id, Model model) {
     User user = userService.withId(id);
 
@@ -78,11 +70,11 @@ public class UserAdminController {
     model.addAttribute("favoriteView", new FavoriteView());
     model.addAttribute("signView", new SignView());
 
-    return "admin/user";
+    return "testUI/user";
   }
 
-  @Secured("ROLE_ADMIN")
-  @RequestMapping(value = "/sec/admin/user/{userId}/add/communities", method = RequestMethod.POST)
+  @Secured("ROLE_USER")
+  @RequestMapping(value = "/sec/testUI/user/{userId}/add/communities", method = RequestMethod.POST)
   /**
    * We retrieve all form parameters directly from the raw request since in this case
    * we can not rely on a json object deserialization.
@@ -116,8 +108,8 @@ public class UserAdminController {
             .collect(Collectors.toList());
   }
 
-  @Secured("ROLE_ADMIN")
-  @RequestMapping(value = "/sec/admin/user/{userId}/add/request", method = RequestMethod.POST)
+  @Secured("ROLE_USER")
+  @RequestMapping(value = "/sec/testUI/user/{userId}/add/request", method = RequestMethod.POST)
   public String createUserRequest(
           HttpServletRequest req, @PathVariable long userId, Model model) {
 
@@ -129,8 +121,8 @@ public class UserAdminController {
     return userDetails(userId, model);
   }
 
-  @Secured("ROLE_ADMIN")
-  @RequestMapping(value = "/sec/admin/user/{userId}/add/favorite", method = RequestMethod.POST)
+  @Secured("ROLE_USER")
+  @RequestMapping(value = "/sec/testUI/user/{userId}/add/favorite", method = RequestMethod.POST)
   public String createUserFavorite(
           HttpServletRequest req, @PathVariable long userId, Model model) {
 
@@ -142,7 +134,7 @@ public class UserAdminController {
   }
 
   @Secured("ROLE_USER")
-  @RequestMapping(value = "sec/admin/user/{userId}/add/sign", method = RequestMethod.POST)
+  @RequestMapping(value = "sec/testUI/user/{userId}/add/sign", method = RequestMethod.POST)
   public String createUserSignVideo(
           HttpServletRequest req, @PathVariable long userId, Model model) {
 

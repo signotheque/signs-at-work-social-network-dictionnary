@@ -1,4 +1,4 @@
-package com.orange.signsatwork.biz.view.controller.admin;
+package com.orange.signsatwork.biz.view.controller.testUI;
 
 /*
  * #%L
@@ -22,16 +22,16 @@ package com.orange.signsatwork.biz.view.controller.admin;
  * #L%
  */
 
-import com.orange.signsatwork.biz.persistence.service.MessageByLocaleService;
-import com.orange.signsatwork.biz.persistence.service.UserService;
-import com.orange.signsatwork.biz.view.model.CommentView;
-import com.orange.signsatwork.biz.view.model.RatingView;
 import com.orange.signsatwork.biz.domain.Comments;
 import com.orange.signsatwork.biz.domain.Rating;
 import com.orange.signsatwork.biz.domain.Video;
 import com.orange.signsatwork.biz.persistence.service.CommentService;
+import com.orange.signsatwork.biz.persistence.service.MessageByLocaleService;
+import com.orange.signsatwork.biz.persistence.service.UserService;
 import com.orange.signsatwork.biz.persistence.service.VideoService;
 import com.orange.signsatwork.biz.view.model.AuthentModel;
+import com.orange.signsatwork.biz.view.model.CommentView;
+import com.orange.signsatwork.biz.view.model.RatingView;
 import com.orange.signsatwork.biz.view.model.VideoView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -45,7 +45,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 
 @Controller
-public class VideoAdminController {
+public class VideoTestUIController {
 
   @Autowired
   private UserService userService;
@@ -56,8 +56,8 @@ public class VideoAdminController {
   @Autowired
   MessageByLocaleService messageByLocaleService;
 
-  @Secured("ROLE_ADMIN")
-  @RequestMapping(value = "/sec/admin/video/{id}")
+  @Secured("ROLE_USER")
+  @RequestMapping(value = "/sec/testUI/video/{id}")
   public String videoDetails(@PathVariable long id, Model model) {
     Video video = videoService.withId(id);
 
@@ -72,11 +72,11 @@ public class VideoAdminController {
     Comments comments = commentService.forVideo(video.id);
     model.addAttribute("allCommentView", comments.list());
 
-    return "admin/video";
+    return "testUI/video";
   }
 
-  @Secured("ROLE_ADMIN")
-  @RequestMapping(value = "/sec/admin/video/{videoId}/add/comment", method = RequestMethod.POST)
+  @Secured("ROLE_USER")
+  @RequestMapping(value = "/sec/testUI/video/{videoId}/add/comment", method = RequestMethod.POST)
   public String createVideoComment(
           HttpServletRequest req, @PathVariable long videoId, Model model, Principal principal) {
 
@@ -88,8 +88,8 @@ public class VideoAdminController {
     return videoDetails(videoId, model);
   }
 
-  @Secured("ROLE_ADMIN")
-  @RequestMapping(value = "/sec/admin/video/{videoId}/add/rating", method = RequestMethod.POST)
+  @Secured("ROLE_USER")
+  @RequestMapping(value = "/sec/testUI/video/{videoId}/add/rating", method = RequestMethod.POST)
   public String createVideoRating(
           HttpServletRequest req, @PathVariable long videoId, Model model, Principal principal) {
 

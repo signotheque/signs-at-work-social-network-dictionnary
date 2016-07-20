@@ -26,7 +26,7 @@
 </head>
 <body>
 
-<div th:replace="fragments/header-admin :: header">&nbsp;</div>
+<div th:replace="fragments/header-testUI :: header">&nbsp;</div>
 
 
 <section class="jumbotron text-xs-center">
@@ -52,7 +52,7 @@
             </thead>
             <tbody>
             <tr th:each="user : ${users}">
-                <td><a th:href="@{/sec/admin/user/{userid}(userid=${user.id})}" th:text="${user.id}"/></td>
+                <td><a th:href="@{/sec/testUI/user/{userid}(userid=${user.id})}" th:text="${user.id}"/></td>
                 <td th:text="${user.username}"></td>
                 <td th:text="${user.firstName}"></td>
                 <td th:text="${user.lastName}"></td>
