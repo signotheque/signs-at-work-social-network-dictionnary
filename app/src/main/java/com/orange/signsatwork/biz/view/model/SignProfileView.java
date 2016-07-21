@@ -31,6 +31,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,6 +44,7 @@ public class SignProfileView {
   private boolean rateNeutral = true;
   private boolean rateNegative;
   private List<Long> associateSignsIds;
+  private List<Sign> associateSigns;
   private List<Sign> allSignsWithoutCurrentSign;
 
   public SignProfileView(Sign sign, SignService signService) {
@@ -54,6 +56,13 @@ public class SignProfileView {
     List<Long> associateIds = sign.associateSignsIds;
     associateIds.addAll(sign.referenceBySignsIds);
     this.associateSignsIds = associateIds;
+    Sign associateSign;
+
+    this.associateSigns = new ArrayList<>();
+    for(long id:associateIds) {
+      associateSign = signService.withId(id);
+      this.associateSigns.add(associateSign);
+    }
 
     this.allSignsWithoutCurrentSign = signService.all().list().stream()
             .filter(s -> s.id != sign.id)
