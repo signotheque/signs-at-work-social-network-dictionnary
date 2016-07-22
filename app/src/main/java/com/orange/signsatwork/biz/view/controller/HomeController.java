@@ -24,10 +24,9 @@ package com.orange.signsatwork.biz.view.controller;
 
 import com.orange.signsatwork.biz.persistence.service.MessageByLocaleService;
 import com.orange.signsatwork.biz.persistence.service.Services;
-import com.orange.signsatwork.biz.persistence.service.SignService;
-import com.orange.signsatwork.biz.persistence.service.UserService;
+import com.orange.signsatwork.biz.view.model.RequestCreationView;
 import com.orange.signsatwork.biz.view.model.SignView;
-import com.orange.signsatwork.biz.webservice.model.SignCreationView;
+import com.orange.signsatwork.biz.view.model.SignCreationView;
 import com.orange.signsatwork.biz.view.model.AuthentModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -35,7 +34,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.Principal;
-import java.security.SecureRandom;
 import java.util.List;
 
 @Controller

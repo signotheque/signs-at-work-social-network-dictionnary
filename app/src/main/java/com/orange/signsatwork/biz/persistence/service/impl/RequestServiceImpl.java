@@ -26,6 +26,7 @@ import com.orange.signsatwork.biz.domain.Request;
 import com.orange.signsatwork.biz.domain.Requests;
 import com.orange.signsatwork.biz.persistence.model.RequestDB;
 import com.orange.signsatwork.biz.persistence.model.SignDB;
+import com.orange.signsatwork.biz.persistence.model.UserDB;
 import com.orange.signsatwork.biz.persistence.repository.RequestRepository;
 import com.orange.signsatwork.biz.persistence.repository.SignRepository;
 import com.orange.signsatwork.biz.persistence.repository.UserRepository;
@@ -36,6 +37,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -71,6 +73,28 @@ public class RequestServiceImpl implements RequestService {
   }
 
   @Override
+  public Requests requestsforUserWithoutSignAssociate(long userId) {
+    return requestsFrom(
+            requestRepository.findByUserWithoutSignAssociate(userRepository.findOne(userId))
+    );
+  }
+
+
+  @Override
+  public Requests requestsforUserWithSignAssociate(long userId) {
+    return requestsFrom(
+            requestRepository.findByUserWithSignAssociate(userRepository.findOne(userId))
+    );
+  }
+
+  @Override
+  public Requests requestsforOtherUserWithoutSignAssociate(long userId) {
+    return requestsFrom(
+            requestRepository.findByOtherUserWithoutSignAssociate(userRepository.findOne(userId))
+    );
+  }
+
+  @Override
   public Request changeSignRequest(long requestId, long signId) {
     RequestDB requestDB = requestRepository.findOne(requestId);
     SignDB signDB = signRepository.findOne(signId);
@@ -83,6 +107,22 @@ public class RequestServiceImpl implements RequestService {
   @Override
   public Request create(Request request) {
     RequestDB requestDB = requestRepository.save(requestDBFrom(request));
+    return requestFrom(requestDB, services);
+  }
+
+  @Override
+  public Request create(long userId, String requestName) {
+    RequestDB requestDB;
+    UserDB userDB = userRepository.findOne(userId);
+
+    requestDB = new RequestDB();
+    requestDB.setRequestDate(new Date());
+    requestDB.setName(requestName);
+    requestRepository.save(requestDB);
+
+    userDB.getRequests().add(requestDB);
+    userRepository.save(userDB);
+
     return requestFrom(requestDB, services);
   }
 

@@ -26,7 +26,7 @@ import com.orange.signsatwork.biz.domain.Sign;
 import com.orange.signsatwork.biz.domain.User;
 import com.orange.signsatwork.biz.persistence.service.SignService;
 import com.orange.signsatwork.biz.persistence.service.UserService;
-import com.orange.signsatwork.biz.webservice.model.SignCreationView;
+import com.orange.signsatwork.biz.view.model.SignCreationView;
 import com.orange.signsatwork.biz.webservice.model.SignId;
 import com.orange.signsatwork.biz.webservice.model.SignView;
 import lombok.extern.slf4j.Slf4j;

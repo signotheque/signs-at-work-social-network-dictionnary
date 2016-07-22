@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <th:block th:include="fragments/header-head :: head"></th:block>
+</head>
+<header role="banner" th:replace="fragments/header-request :: header">&nbsp;</header>
+
+<body class="container-fluid">
+
+<div th:replace="fragments/modal-new-request :: div"/>
+
+<div class="row ">
+    <div class="col-md-4 col-xs-12 col-lg-12">
+        <aside class="sidebar">
+            <ul class="nav nav-list primary left-menu">
+                <li th:if="${isAuthenticated}" class="dotted-top">
+                    <a data-target="#new_request" data-toggle="modal" href="#">
+                    <div class="pull-right">
+                        <div class="containerRight_signes">
+                            <div class="containerRight_signes">
+                                <div class="pull-right add_whith_chevron"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <h2 th:text="#{request.new}"/>
+                    </a>
+                </li>
+
+                <li class="request_whitout_answer  aside_bckg_li">
+                    <div class="text-center" th:text="#{request.mine}"></div>
+                </li>
+
+                <div th:if="${not #lists.isEmpty(myRequestsWithoutSignAssociate)}">
+                    <div th:each="request:${myRequestsWithoutSignAssociate}" >
+                    <li class="request_whitout_answer">
+                        <div class="text-center" th:text="${request.name}"></div>
+                    </li>
+                    </div>
+                </div>
+
+
+                <div th:if="${not #lists.isEmpty(myRequestsWithSignAssociate)}">
+                    <div th:each="request:${myRequestsWithSignAssociate}" >
+                        <li class="dotted-top">
+                            <a href="#">
+                                <div class="pull-right">
+                                    <div class="containerRight_signes">
+                                        <div class="containerRight_signes">
+                                            <div class="pull-right add_whith_chevron"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <h2 th:text="${request.name}"/>
+                            </a>
+                        </li>
+                    </div>
+                </div>
+
+                <li class="request_whitout_answer  aside_bckg_li">
+                    <div class="text-center" th:text="#{request.other}"></div>
+                </li>
+                <div th:if="${not #lists.isEmpty(otherRequestsWithoutSignAssociate)}">
+                    <div th:each="request:${otherRequestsWithoutSignAssociate}" >
+                        <li class="request_whitout_answer">
+                            <div class="text-center" th:text="${request.name}"></div>
+                        </li>
+                    </div>
+                </div>
+            </ul>
+        </aside>
+    </div>
+</div>
+
+</body>
+
+
+
+
+</html>

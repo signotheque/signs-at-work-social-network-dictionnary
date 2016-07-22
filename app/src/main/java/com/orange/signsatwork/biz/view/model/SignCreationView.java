@@ -1,4 +1,4 @@
-package com.orange.signsatwork.biz.webservice.model;
+package com.orange.signsatwork.biz.view.model;
 
 /*
  * #%L

@@ -32,7 +32,7 @@
                     </a>
                 </li>
                 <li th:if="${isAuthenticated}" class="aside_bckg_li">
-                    <a href="request.html">
+                    <a th:href="@{/request}">
                         <div class="pull-left require"></div>
                         <h2 class="container_H2" th:text="#{sign.request}"></h2>
                             <div >

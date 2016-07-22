@@ -1,4 +1,4 @@
-package com.orange.signsatwork.biz.persistence.service;
+package com.orange.signsatwork.biz.view.model;
 
 /*
  * #%L
@@ -22,29 +22,17 @@ package com.orange.signsatwork.biz.persistence.service;
  * #L%
  */
 
-import com.orange.signsatwork.biz.domain.Request;
-import com.orange.signsatwork.biz.domain.Requests;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-public interface RequestService {
-  Requests all();
+import java.util.Date;
 
-  Requests requestsforUser(long id);
-
-  Requests requestsforUserWithoutSignAssociate(long userId);
-
-  Requests requestsforUserWithSignAssociate(long userId);
-
-  Requests requestsforOtherUserWithoutSignAssociate(long userId);
-
-  Request changeSignRequest(long requestId, long signId);
-
-  Request withId(long id);
-
-  Requests withName(String name);
-
-  Request create(Request request);
-
-  Request create(long userId, String requestName);
-
-  void delete(Request request);
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+public class RequestCreationView {
+  private String requestName;
 }

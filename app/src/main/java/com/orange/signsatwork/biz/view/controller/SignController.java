@@ -30,7 +30,7 @@ import com.orange.signsatwork.biz.persistence.service.SignService;
 import com.orange.signsatwork.biz.view.model.AuthentModel;
 import com.orange.signsatwork.biz.view.model.SignProfileView;
 import com.orange.signsatwork.biz.view.model.SignView;
-import com.orange.signsatwork.biz.webservice.model.SignCreationView;
+import com.orange.signsatwork.biz.view.model.SignCreationView;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
