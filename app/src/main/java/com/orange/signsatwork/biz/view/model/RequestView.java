@@ -24,6 +24,7 @@ package com.orange.signsatwork.biz.view.model;
 
 import com.orange.signsatwork.biz.domain.Request;
 import com.orange.signsatwork.biz.domain.Requests;
+import com.orange.signsatwork.biz.domain.Sign;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -41,13 +42,14 @@ public class RequestView {
   private long id;
   private String name;
   private Date requestDate;
+  private Sign sign;
 
   public Request toRequest() {
     return new Request(id, name, requestDate, null);
   }
 
   public static RequestView from(Request request) {
-    return new RequestView(request.id, request.name, request.requestDate);
+    return new RequestView(request.id, request.name, request.requestDate, request.sign);
   }
 
   public static List<RequestView> from(Requests requests) {

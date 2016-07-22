@@ -42,7 +42,7 @@
                 <div th:if="${not #lists.isEmpty(myRequestsWithSignAssociate)}">
                     <div th:each="request:${myRequestsWithSignAssociate}" >
                         <li class="dotted-top">
-                            <a href="#">
+                            <a th:href="@{/sign/} + ${request.sign.id}">
                                 <div class="pull-right">
                                     <div class="containerRight_signes">
                                         <div class="containerRight_signes">
