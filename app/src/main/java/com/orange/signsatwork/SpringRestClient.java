@@ -24,10 +24,15 @@ package com.orange.signsatwork;
 
 import com.orange.signsatwork.biz.domain.AuthTokenInfo;
 import org.springframework.http.*;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import sun.net.www.http.HttpClient;
 
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.LinkedHashMap;
@@ -69,7 +74,11 @@ public class SpringRestClient {
      */
     @SuppressWarnings({ "unchecked"})
 	public static AuthTokenInfo sendTokenRequest(){
-        RestTemplate restTemplate = new RestTemplate();
+
+        SimpleClientHttpRequestFactory clientHttpRequestFactory = new SimpleClientHttpRequestFactory();
+        Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("localhost", 3128));
+        clientHttpRequestFactory.setProxy(proxy);
+        RestTemplate restTemplate = new RestTemplate(clientHttpRequestFactory);
 
         MultiValueMap<String, String> body = new LinkedMultiValueMap<String, String>();
         body.add("grant_type", "password");
